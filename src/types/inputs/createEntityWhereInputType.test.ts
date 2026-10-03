@@ -1,6 +1,8 @@
 import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../../tsTypes';
 
-import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereInputType, {
+  createEntityWhereWithoutBooleanOperationsInputType,
+} from './createEntityWhereInputType';
 
 describe('createEntityWhereInputType', () => {
   test('should create empty string if there are not any index fields', () => {
@@ -53,32 +55,6 @@ describe('createEntityWhereInputType', () => {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  code_in: [String!]
-  code_nin: [String!]
-  code_ne: String
-  code_gt: String
-  code_gte: String
-  code_lt: String
-  code_lte: String
-  code_re: [RegExp!]
 }`,
       {},
     ];
@@ -146,44 +122,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: String
-  firstName_in: [String!]
-  firstName_nin: [String!]
-  firstName_ne: String
-  firstName_gt: String
-  firstName_gte: String
-  firstName_lt: String
-  firstName_lte: String
-  firstName_re: [RegExp!]
-  firstName_exists: Boolean
-  lastName: String
-  lastName_in: [String!]
-  lastName_nin: [String!]
-  lastName_ne: String
-  lastName_gt: String
-  lastName_gte: String
-  lastName_lt: String
-  lastName_lte: String
-  lastName_re: [RegExp!]
-  lastName_exists: Boolean
 }`,
       {},
     ];
@@ -301,61 +239,13 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
-}
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: String
-  firstName_in: [String!]
-  firstName_nin: [String!]
-  firstName_ne: String
-  firstName_gt: String
-  firstName_gte: String
-  firstName_lt: String
-  firstName_lte: String
-  firstName_re: [RegExp!]
-  firstName_exists: Boolean
-  lastName: String
-  lastName_in: [String!]
-  lastName_nin: [String!]
-  lastName_ne: String
-  lastName_gt: String
-  lastName_gte: String
-  lastName_lt: String
-  lastName_lte: String
-  lastName_re: [RegExp!]
-  lastName_exists: Boolean
-  spouse: ID
-  spouse_in: [ID!]
-  spouse_nin: [ID!]
-  spouse_ne: ID
-  spouse_: PersonWhereWithoutBooleanOperationsInput
-  spouse_exists: Boolean
-  partners_: PersonWhereWithoutBooleanOperationsInput
-  friends: ID
-  friends_in: [ID!]
-  friends_nin: [ID!]
-  friends_ne: ID
-  friends_: PersonWhereWithoutBooleanOperationsInput
-  friends_size: Int
-  friends_notsize: Int
-  fellows_: PersonWhereWithoutBooleanOperationsInput
 }`,
-      { PersonWhereInput: [createEntityWhereInputType, personConfig] },
+      {
+        PersonWhereWithoutBooleanOperationsInput: [
+          createEntityWhereWithoutBooleanOperationsInputType,
+          personConfig,
+        ],
+      },
     ];
 
     const result = createEntityWhereInputType(personConfig);
@@ -453,59 +343,13 @@ input PersonWhereWithoutBooleanOperationsInput {
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
-}
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: String
-  firstName_in: [String!]
-  firstName_nin: [String!]
-  firstName_ne: String
-  firstName_gt: String
-  firstName_gte: String
-  firstName_lt: String
-  firstName_lte: String
-  firstName_re: [RegExp!]
-  firstName_exists: Boolean
-  lastName: String
-  lastName_in: [String!]
-  lastName_nin: [String!]
-  lastName_ne: String
-  lastName_gt: String
-  lastName_gte: String
-  lastName_lt: String
-  lastName_lte: String
-  lastName_re: [RegExp!]
-  lastName_exists: Boolean
-  spouse: ID
-  spouse_in: [ID!]
-  spouse_nin: [ID!]
-  spouse_ne: ID
-  spouse_: PersonWhereWithoutBooleanOperationsInput
-  spouse_exists: Boolean
-  friends: ID
-  friends_in: [ID!]
-  friends_nin: [ID!]
-  friends_ne: ID
-  friends_: PersonWhereWithoutBooleanOperationsInput
-  friends_size: Int
-  friends_notsize: Int
 }`,
-      { PersonWhereInput: [createEntityWhereInputType, personConfig] },
+      {
+        PersonWhereWithoutBooleanOperationsInput: [
+          createEntityWhereWithoutBooleanOperationsInputType,
+          personConfig,
+        ],
+      },
     ];
 
     const result = createEntityWhereInputType(personConfig);
@@ -580,37 +424,6 @@ input PersonWhereWithoutBooleanOperationsInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  field1: WeekdaysEnumeration
-  field1_in: [WeekdaysEnumeration!]
-  field1_nin: [WeekdaysEnumeration!]
-  field1_ne: WeekdaysEnumeration
-  field1_re: [RegExp!]
-  field1_exists: Boolean
-  field4: CuisinesEnumeration
-  field4_in: [CuisinesEnumeration!]
-  field4_nin: [CuisinesEnumeration!]
-  field4_ne: CuisinesEnumeration
-  field4_re: [RegExp!]
-  field4_size: Int
-  field4_notsize: Int
 }`,
       {},
     ];
@@ -676,42 +489,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: Int
-  firstName_in: [Int!]
-  firstName_nin: [Int!]
-  firstName_ne: Int
-  firstName_gt: Int
-  firstName_gte: Int
-  firstName_lt: Int
-  firstName_lte: Int
-  firstName_exists: Boolean
-  lastName: Int
-  lastName_in: [Int!]
-  lastName_nin: [Int!]
-  lastName_ne: Int
-  lastName_gt: Int
-  lastName_gte: Int
-  lastName_lt: Int
-  lastName_lte: Int
-  lastName_exists: Boolean
 }`,
       {},
     ];
@@ -777,42 +554,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: Float
-  firstName_in: [Float!]
-  firstName_nin: [Float!]
-  firstName_ne: Float
-  firstName_gt: Float
-  firstName_gte: Float
-  firstName_lt: Float
-  firstName_lte: Float
-  firstName_exists: Boolean
-  lastName: Float
-  lastName_in: [Float!]
-  lastName_nin: [Float!]
-  lastName_ne: Float
-  lastName_gt: Float
-  lastName_gte: Float
-  lastName_lt: Float
-  lastName_lte: Float
-  lastName_exists: Boolean
 }`,
       {},
     ];
@@ -878,42 +619,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: DateTime
-  firstName_in: [DateTime!]
-  firstName_nin: [DateTime!]
-  firstName_ne: DateTime
-  firstName_gt: DateTime
-  firstName_gte: DateTime
-  firstName_lt: DateTime
-  firstName_lte: DateTime
-  firstName_exists: Boolean
-  lastName: DateTime
-  lastName_in: [DateTime!]
-  lastName_nin: [DateTime!]
-  lastName_ne: DateTime
-  lastName_gt: DateTime
-  lastName_gte: DateTime
-  lastName_lt: DateTime
-  lastName_lte: DateTime
-  lastName_exists: Boolean
 }`,
       {},
     ];
@@ -967,30 +672,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: Boolean
-  firstName_ne: Boolean
-  firstName_exists: Boolean
-  lastName: Boolean
-  lastName_ne: Boolean
-  lastName_exists: Boolean
 }`,
       {},
     ];
@@ -1040,31 +721,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  counter_in: [Int!]
-  counter_nin: [Int!]
-  counter_ne: Int
-  counter_gt: Int
-  counter_gte: Int
-  counter_lt: Int
-  counter_lte: Int
 }`,
       {},
     ];
@@ -1165,46 +821,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
-}
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  firstName: String
-  firstName_in: [String!]
-  firstName_nin: [String!]
-  firstName_ne: String
-  firstName_gt: String
-  firstName_gte: String
-  firstName_lt: String
-  firstName_lte: String
-  firstName_re: [RegExp!]
-  firstName_exists: Boolean
-  lastName: String
-  lastName_in: [String!]
-  lastName_nin: [String!]
-  lastName_ne: String
-  lastName_gt: String
-  lastName_gte: String
-  lastName_lt: String
-  lastName_lte: String
-  lastName_re: [RegExp!]
-  lastName_exists: Boolean
-  address: AddressWhereInput
-  address_exists: Boolean
 }`,
       { AddressWhereInput: [createEntityWhereInputType, addressConfig] },
     ];
@@ -1266,5 +882,114 @@ input PersonWhereWithoutBooleanOperationsInput {
 
     const result = createEntityWhereInputType(addressConfig);
     expect(result).toEqual(expectedResult);
+  });
+
+  test('should not chain inputs of not indexed relational & duplex fields', () => {
+    const cityConfig = {} as TangibleEntityConfig;
+    const countryConfig = {} as TangibleEntityConfig;
+
+    Object.assign(countryConfig, {
+      name: 'Country',
+      type: 'tangible',
+      duplexFields: [
+        {
+          name: 'cities',
+          oppositeName: 'country',
+          array: true,
+          config: cityConfig,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    Object.assign(cityConfig, {
+      name: 'City',
+      type: 'tangible',
+      relationalFields: [
+        { name: 'twin', oppositeName: 'twinOf', config: cityConfig, type: 'relationalFields' },
+        {
+          name: 'twinOf',
+          oppositeName: 'twin',
+          config: cityConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'country',
+          oppositeName: 'cities',
+          config: countryConfig,
+          index: true,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    expect(createEntityWhereInputType(countryConfig)[2]).toEqual({});
+
+    expect(createEntityWhereInputType(cityConfig)[2]).toEqual({
+      CountryWhereWithoutBooleanOperationsInput: [
+        createEntityWhereWithoutBooleanOperationsInputType,
+        countryConfig,
+      ],
+    });
+  });
+
+  test('should create "WhereWithoutBooleanOperationsInput" only for tangible entity', () => {
+    const addressConfig: EmbeddedEntityConfig = {
+      name: 'Address',
+      type: 'embedded',
+      textFields: [{ name: 'city', index: true, type: 'textFields' }],
+    };
+
+    const personConfig: TangibleEntityConfig = {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [{ name: 'name', unique: true, type: 'textFields' }],
+      embeddedFields: [
+        { name: 'address', config: addressConfig, index: true, type: 'embeddedFields' },
+      ],
+    };
+
+    expect(createEntityWhereWithoutBooleanOperationsInputType(addressConfig)).toEqual([
+      'AddressWhereWithoutBooleanOperationsInput',
+      '',
+      {},
+    ]);
+
+    expect(createEntityWhereWithoutBooleanOperationsInputType(personConfig)).toEqual([
+      'PersonWhereWithoutBooleanOperationsInput',
+      `input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  address: AddressWhereInput
+  address_exists: Boolean
+}`,
+      { AddressWhereInput: [createEntityWhereInputType, addressConfig] },
+    ]);
   });
 });

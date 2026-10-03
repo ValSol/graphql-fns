@@ -40,6 +40,9 @@ input GeospatialPointInput {
 input GeospatialLineStringInput {
   coordinates: [GeospatialPointInput!]!
 }
+input GeospatialMultiLineStringInput {
+  lineStrings: [GeospatialLineStringInput!]!
+}
 input GeospatialLineStringCorridorInput {
   coordinates: [GeospatialPointInput!]!
   distance: Float!
@@ -96,6 +99,9 @@ input GeospatialPointInput {
 }
 input GeospatialLineStringInput {
   coordinates: [GeospatialPointInput!]!
+}
+input GeospatialMultiLineStringInput {
+  lineStrings: [GeospatialLineStringInput!]!
 }
 input GeospatialLineStringCorridorInput {
   coordinates: [GeospatialPointInput!]!
@@ -159,6 +165,9 @@ input GeospatialPointInput {
 }
 input GeospatialLineStringInput {
   coordinates: [GeospatialPointInput!]!
+}
+input GeospatialMultiLineStringInput {
+  lineStrings: [GeospatialLineStringInput!]!
 }
 input GeospatialLineStringCorridorInput {
   coordinates: [GeospatialPointInput!]!
@@ -225,6 +234,9 @@ input GeospatialPointInput {
 }
 input GeospatialLineStringInput {
   coordinates: [GeospatialPointInput!]!
+}
+input GeospatialMultiLineStringInput {
+  lineStrings: [GeospatialLineStringInput!]!
 }
 input GeospatialLineStringCorridorInput {
   coordinates: [GeospatialPointInput!]!

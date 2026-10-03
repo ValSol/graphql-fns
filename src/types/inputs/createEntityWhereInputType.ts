@@ -30,12 +30,11 @@ const counterFields = `
   counter_lt: Int
   counter_lte: Int`;
 
-const composeInputFields = (
-  entityConfig: EntityConfig,
-  childChain: {
-    [inputSpecificName: string]: EntityConfig;
-  },
-): string => {
+type ChildChain = { [inputSpecificName: string]: [InputCreator, EntityConfig] };
+
+// "XWhereInput" & "XWhereWithoutBooleanOperationsInput" have the same fields ...
+// ... but the relational filters "x_" use only "XWhereWithoutBooleanOperationsInput"
+const composeInputFields = (entityConfig: EntityConfig, childChain: ChildChain): string => {
   const {
     booleanFields = [],
     dateTimeFields = [],
@@ -201,6 +200,11 @@ const composeInputFields = (
 
         if (oppositeField.index) {
           fields.push(`  ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
+
+          childChain[`${config.name}WhereWithoutBooleanOperationsInput`] = [
+            createEntityWhereWithoutBooleanOperationsInputType,
+            config,
+          ];
         }
 
         return;
@@ -211,6 +215,11 @@ const composeInputFields = (
   ${fieldName}_nin: [ID!]
   ${fieldName}_ne: ID
   ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
+
+        childChain[`${config.name}WhereWithoutBooleanOperationsInput`] = [
+          createEntityWhereWithoutBooleanOperationsInputType,
+          config,
+        ];
       }
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
@@ -219,8 +228,6 @@ const composeInputFields = (
         fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
       }
-
-      childChain[`${config.name}WhereInput`] = config;
     });
 
     duplexFields.forEach(({ name: fieldName, array, config, index, unique }) => {
@@ -230,6 +237,11 @@ const composeInputFields = (
   ${fieldName}_nin: [ID!]
   ${fieldName}_ne: ID
   ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
+
+        childChain[`${config.name}WhereWithoutBooleanOperationsInput`] = [
+          createEntityWhereWithoutBooleanOperationsInputType,
+          config,
+        ];
       }
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
@@ -238,8 +250,6 @@ const composeInputFields = (
         fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
       }
-
-      childChain[`${config.name}WhereInput`] = config;
     });
   }
 
@@ -247,7 +257,7 @@ const composeInputFields = (
     if (index) {
       fields.push(`  ${fieldName}: ${config.name}WhereInput`);
 
-      childChain[`${config.name}WhereInput`] = config;
+      childChain[`${config.name}WhereInput`] = [createEntityWhereInputType, config];
     }
     if (index && !array) {
       fields.push(`  ${fieldName}_exists: Boolean`);
@@ -265,9 +275,9 @@ const createEntityWhereInputType: InputCreator = (entityConfig) => {
   const { name, type: entityType } = entityConfig;
 
   const inputName = `${name}WhereInput`;
-  const preChildChain: Record<string, any> = {};
+  const childChain: ChildChain = {};
 
-  const fields = composeInputFields(entityConfig, preChildChain);
+  const fields = composeInputFields(entityConfig, childChain);
 
   const result =
     entityType === 'tangible'
@@ -278,18 +288,27 @@ const createEntityWhereInputType: InputCreator = (entityConfig) => {
   NOR: [${name}WhereInput!]
   OR: [${name}WhereInput!]
 }`,
-          `input ${name}WhereWithoutBooleanOperationsInput {`,
-          fields,
-          '}',
         ]
       : [`input ${name}WhereInput {`, fields, '}'];
 
   const inputDefinition = result.join('\n');
 
-  const childChain = Object.keys(preChildChain).reduce<Record<string, any>>((prev, inputName2) => {
-    prev[inputName2] = [createEntityWhereInputType, preChildChain[inputName2]];
-    return prev;
-  }, {});
+  return [inputName, inputDefinition, childChain];
+};
+
+// used only by the relational filters "x_" of tangible entities
+export const createEntityWhereWithoutBooleanOperationsInputType: InputCreator = (entityConfig) => {
+  const { name, type: entityType } = entityConfig;
+
+  const inputName = `${name}WhereWithoutBooleanOperationsInput`;
+
+  if (entityType !== 'tangible') return [inputName, '', {}];
+
+  const childChain: ChildChain = {};
+
+  const fields = composeInputFields(entityConfig, childChain);
+
+  const inputDefinition = [`input ${inputName} {`, fields, '}'].join('\n');
 
   return [inputName, inputDefinition, childChain];
 };

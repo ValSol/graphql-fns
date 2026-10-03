@@ -17,7 +17,48 @@ const collectGeospatialTypes = (
   return result;
 };
 
-const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
+// these geospatial inputs are declared in any case (if there are geospatial fields) to be used by custom actions ...
+// ... (see "commonInputTypes" in "fillInputDicForCustom"), the other types & inputs only if they are referenced
+const commonGeospatialInputNames = [
+  'GeospatialPointInput',
+  'GeospatialPolygonRingInput',
+  'GeospatialPolygonInput',
+  'GeospatialMultiPolygonInput',
+];
+
+// "typeDefsToUse" - all other type definitions, if it is set exclude not referenced geospatial types & inputs
+const excludeNotUsedDeclarations = (geospatialTypes: string, typeDefsToUse: string) => {
+  const declarations = geospatialTypes.split(/\n(?=type |input )/);
+
+  const nameOf = (declaration: string) => declaration.split(' ')[1];
+
+  const isReferenced = (name: string, text: string) => new RegExp(`\\b${name}\\b`).test(text);
+
+  const used = declarations.filter(
+    (declaration) =>
+      commonGeospatialInputNames.includes(nameOf(declaration)) ||
+      isReferenced(nameOf(declaration), typeDefsToUse),
+  );
+
+  // add declarations referenced by other used ones (e.g. "GeospatialPoint" by "GeospatialPolygonRing")
+  let changed = true;
+  while (changed) {
+    changed = false;
+
+    const usedText = used.join('\n');
+
+    declarations.forEach((declaration) => {
+      if (!used.includes(declaration) && isReferenced(nameOf(declaration), usedText)) {
+        used.push(declaration);
+        changed = true;
+      }
+    });
+  }
+
+  return declarations.filter((declaration) => used.includes(declaration)).join('\n');
+};
+
+const composeGeospatialTypes = (generalConfig: GeneralConfig, typeDefsToUse?: string): string => {
   const { allEntityConfigs, representations = {} } = generalConfig;
   let thereIsGeospatialPoint = false;
   let thereIsGeospatialLineString = false;
@@ -72,7 +113,7 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
     return '';
   }
 
-  return `type GeospatialPoint {
+  const geospatialTypeDefs = `type GeospatialPoint {
   lng: Float!
   lat: Float!
 }
@@ -82,6 +123,9 @@ input GeospatialPointInput {
 }
 input GeospatialLineStringInput {
   coordinates: [GeospatialPointInput!]!
+}
+input GeospatialMultiLineStringInput {
+  lineStrings: [GeospatialLineStringInput!]!
 }
 input GeospatialLineStringCorridorInput {
   coordinates: [GeospatialPointInput!]!
@@ -142,6 +186,10 @@ type GeospatialMultiLineString {
         }`
       : ''
   }`;
+
+  return typeDefsToUse === undefined
+    ? geospatialTypeDefs
+    : excludeNotUsedDeclarations(geospatialTypeDefs, typeDefsToUse);
 };
 
 export default composeGeospatialTypes;

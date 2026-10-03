@@ -275,24 +275,6 @@ input MenuWhereInput {
   NOR: [MenuWhereInput!]
   OR: [MenuWhereInput!]
 }
-input MenuWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 input MenuCloneWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -313,63 +295,6 @@ input MenuCloneWhereInput {
   AND: [MenuCloneWhereInput!]
   NOR: [MenuCloneWhereInput!]
   OR: [MenuCloneWhereInput!]
-}
-input MenuCloneWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
-input MenuCloneSectionWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  AND: [MenuCloneSectionWhereInput!]
-  NOR: [MenuCloneSectionWhereInput!]
-  OR: [MenuCloneSectionWhereInput!]
-}
-input MenuCloneSectionWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 input MenuSectionWhereInput {
   id_in: [ID!]
@@ -392,7 +317,7 @@ input MenuSectionWhereInput {
   NOR: [MenuSectionWhereInput!]
   OR: [MenuSectionWhereInput!]
 }
-input MenuSectionWhereWithoutBooleanOperationsInput {
+input MenuCloneSectionWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -409,6 +334,9 @@ input MenuSectionWhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [MenuCloneSectionWhereInput!]
+  NOR: [MenuCloneSectionWhereInput!]
+  OR: [MenuCloneSectionWhereInput!]
 }
 input MenuRestrictedWhereInput {
   id_in: [ID!]
@@ -537,14 +465,9 @@ input MenuCloneCreateInput {
   sections: MenuCloneSectionCreateOrPushChildrenInput
   name: String!
 }
-input MenuCloneCreateChildInput {
+input MenuCreateChildInput {
   connect: ID
-  create: MenuCloneCreateInput
-}
-input MenuCloneCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [MenuCloneCreateInput!]
-  createPositions: [Int!]
+  create: MenuCreateInput
 }
 input MenuCreateInput {
   id: ID
@@ -553,13 +476,13 @@ input MenuCreateInput {
   selectedSections: MenuSectionWhereInput!
   name: String!
 }
-input MenuCreateChildInput {
+input MenuCloneCreateChildInput {
   connect: ID
-  create: MenuCreateInput
+  create: MenuCloneCreateInput
 }
-input MenuCreateOrPushChildrenInput {
+input MenuSectionCreateOrPushChildrenInput {
   connect: [ID!]
-  create: [MenuCreateInput!]
+  create: [MenuSectionCreateInput!]
   createPositions: [Int!]
 }
 input MenuSectionCreateInput {
@@ -567,28 +490,15 @@ input MenuSectionCreateInput {
   menu: MenuCreateChildInput
   name: String!
 }
-input MenuSectionCreateChildInput {
-  connect: ID
-  create: MenuSectionCreateInput
-}
-input MenuSectionCreateOrPushChildrenInput {
+input MenuCloneSectionCreateOrPushChildrenInput {
   connect: [ID!]
-  create: [MenuSectionCreateInput!]
+  create: [MenuCloneSectionCreateInput!]
   createPositions: [Int!]
 }
 input MenuCloneSectionCreateInput {
   id: ID
   menu: MenuCloneCreateChildInput
   name: String!
-}
-input MenuCloneSectionCreateChildInput {
-  connect: ID
-  create: MenuCloneSectionCreateInput
-}
-input MenuCloneSectionCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [MenuCloneSectionCreateInput!]
-  createPositions: [Int!]
 }
 enum MenuCloneSectionSortEnum {
   id_ASC
@@ -1306,30 +1216,6 @@ input Example1WhereInput {
   NOR: [Example1WhereInput!]
   OR: [Example1WhereInput!]
 }
-input Example1WhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  position_exists: Boolean
-  position_withinPolygon: GeospatialPolygonInput
-  position_withinMultiPolygon: GeospatialMultiPolygonInput
-  position_withinSphere: GeospatialSphereInput
-  position_aroundLineString: GeospatialLineStringCorridorInput
-  position_aroundMultiLineString: GeospatialMultiLineStringCorridorInput
-}
 input Example2WhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1355,29 +1241,6 @@ input Example2WhereInput {
   AND: [Example2WhereInput!]
   NOR: [Example2WhereInput!]
   OR: [Example2WhereInput!]
-}
-input Example2WhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  area_exists: Boolean
-  area_intersectsPoint: GeospatialPointInput
-  area_intersectsPolygon: GeospatialPolygonInput
-  area_intersectsMultiPolygon: GeospatialMultiPolygonInput
-  area_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput
 }
 input Example1RestrictedWhereInput {
   id_in: [ID!]
@@ -1501,29 +1364,11 @@ input Example1CreateInput {
   textField3: String!
   position: GeospatialPointInput
 }
-input Example1CreateChildInput {
-  connect: ID
-  create: Example1CreateInput
-}
-input Example1CreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [Example1CreateInput!]
-  createPositions: [Int!]
-}
 input Example2CreateInput {
   id: ID
   textField1: [String!]
   textField2: [String!]!
   area: GeospatialPolygonInput
-}
-input Example2CreateChildInput {
-  connect: ID
-  create: Example2CreateInput
-}
-input Example2CreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [Example2CreateInput!]
-  createPositions: [Int!]
 }
 input Example1UpdateInput {
   textField1: String
@@ -1886,24 +1731,6 @@ input PersonWhereInput {
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
 }
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 input PlaceWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1924,24 +1751,6 @@ input PlaceWhereInput {
   AND: [PlaceWhereInput!]
   NOR: [PlaceWhereInput!]
   OR: [PlaceWhereInput!]
-}
-input PlaceWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 input PersonRestrictedWhereInput {
   id_in: [ID!]
@@ -2038,27 +1847,18 @@ input PersonCreateInput {
   firstName: String!
   lastName: String!
 }
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
   createPositions: [Int!]
 }
-input PlaceCreateInput {
-  id: ID
-  title: String!
-}
 input PlaceCreateChildInput {
   connect: ID
   create: PlaceCreateInput
 }
-input PlaceCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PlaceCreateInput!]
-  createPositions: [Int!]
+input PlaceCreateInput {
+  id: ID
+  title: String!
 }
 input PersonUpdateInput {
   firstName: String
@@ -2399,26 +2199,6 @@ input PersonWhereInput {
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
 }
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  place: AddressWhereInput
-  place_exists: Boolean
-}
 input AddressWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -2504,15 +2284,6 @@ input PersonCreateInput {
   locations: [AddressCreateInput!]!
   place: AddressCreateInput
   places: [AddressCreateInput!]
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-  createPositions: [Int!]
 }
 input AddressCreateInput {
   country: String!
@@ -2822,24 +2593,6 @@ input PersonWhereInput {
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
 }
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 input PlaceWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -2860,24 +2613,6 @@ input PlaceWhereInput {
   AND: [PlaceWhereInput!]
   NOR: [PlaceWhereInput!]
   OR: [PlaceWhereInput!]
-}
-input PlaceWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 input PersonRestrictedWhereInput {
   id_in: [ID!]
@@ -2982,14 +2717,10 @@ input PersonUpdateInput {
   location: PlaceCreateChildInput
   favoritePlace: PlaceCreateChildInput
 }
-input PersonCreateInput {
-  id: ID
-  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
-  enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput!
-  favoritePlace: PlaceCreateChildInput
-  firstName: String!
-  lastName: String!
+input PersonCreateOrPushThru_friends_FieldChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateThru_friends_FieldInput!]
+  createPositions: [Int!]
 }
 input PersonCreateThru_friends_FieldInput {
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput
@@ -2999,40 +2730,23 @@ input PersonCreateThru_friends_FieldInput {
   firstName: String!
   lastName: String!
 }
-input PersonCreateThru_location_FieldInput {
-  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
-  enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput
-  favoritePlace: PlaceCreateChildInput
-  firstName: String!
-  lastName: String!
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
   createPositions: [Int!]
 }
-input PersonCreateThru_friends_FieldChildInput {
+input PersonCreateInput {
+  id: ID
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
+  firstName: String!
+  lastName: String!
+}
+input PlaceCreateChildInput {
   connect: ID
-  create: PersonCreateThru_friends_FieldInput
-}
-input PersonCreateOrPushThru_friends_FieldChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateThru_friends_FieldInput!]
-  createPositions: [Int!]
-}
-input PersonCreateThru_location_FieldChildInput {
-  connect: ID
-  create: PersonCreateThru_location_FieldInput
-}
-input PersonCreateOrPushThru_location_FieldChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateThru_location_FieldInput!]
-  createPositions: [Int!]
+  create: PlaceCreateInput
 }
 input PlaceCreateInput {
   id: ID
@@ -3040,14 +2754,18 @@ input PlaceCreateInput {
   visitors: PersonCreateOrPushChildrenInput
   name: String
 }
-input PlaceCreateChildInput {
-  connect: ID
-  create: PlaceCreateInput
-}
-input PlaceCreateOrPushChildrenInput {
+input PersonCreateOrPushThru_location_FieldChildrenInput {
   connect: [ID!]
-  create: [PlaceCreateInput!]
+  create: [PersonCreateThru_location_FieldInput!]
   createPositions: [Int!]
+}
+input PersonCreateThru_location_FieldInput {
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
+  firstName: String!
+  lastName: String!
 }
 enum copyPersonThroughfriendsOptionsEnum {
   firstName
@@ -3343,24 +3061,6 @@ input ExampleWhereInput {
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 input ExampleRestrictedWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -3462,15 +3162,6 @@ input ExampleCreateInput {
   id: ID
   textField: String
 }
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
-}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -3501,34 +3192,6 @@ input ExampleWhereInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  textField: String
-  textField_in: [String!]
-  textField_nin: [String!]
-  textField_ne: String
-  textField_gt: String
-  textField_gte: String
-  textField_lt: String
-  textField_lte: String
-  textField_re: [RegExp!]
-  textField_exists: Boolean
 }
 input ExampleWhereOneInput {
   id: ID!
@@ -3617,24 +3280,6 @@ input ExampleWhereInput {
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 enum ExampleSortEnum {
   id_ASC
   id_DESC
@@ -3714,24 +3359,6 @@ input ExampleWhereInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 enum ExampleSortEnum {
   id_ASC
@@ -3836,31 +3463,8 @@ input CountryWhereInput {
   NOR: [CountryWhereInput!]
   OR: [CountryWhereInput!]
 }
-input CountryWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  code_in: [String!]
-  code_nin: [String!]
-  code_ne: String
-  code_gt: String
-  code_gte: String
-  code_lt: String
-  code_lte: String
-  code_re: [RegExp!]
+input CityWhereAndSearchInput {
+  where: CityWhereInput = {}
 }
 input CityWhereInput {
   id_in: [ID!]
@@ -3899,7 +3503,7 @@ input CityWhereInput {
   NOR: [CityWhereInput!]
   OR: [CityWhereInput!]
 }
-input CityWhereWithoutBooleanOperationsInput {
+input CountryWhereWithoutBooleanOperationsInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -3916,25 +3520,14 @@ input CityWhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-  name: String
-  name_in: [String!]
-  name_nin: [String!]
-  name_ne: String
-  name_gt: String
-  name_gte: String
-  name_lt: String
-  name_lte: String
-  name_re: [RegExp!]
-  name_exists: Boolean
-  country: ID
-  country_in: [ID!]
-  country_nin: [ID!]
-  country_ne: ID
-  country_: CountryWhereWithoutBooleanOperationsInput
-  country_exists: Boolean
-}
-input CityWhereAndSearchInput {
-  where: CityWhereInput = {}
+  code_in: [String!]
+  code_nin: [String!]
+  code_ne: String
+  code_gt: String
+  code_gte: String
+  code_lt: String
+  code_lte: String
+  code_re: [RegExp!]
 }
 type Query {
   node(id: ID!): Node
@@ -3988,15 +3581,6 @@ type Example implements Node {
 input ExampleCreateInput {
   id: ID
   textField: String
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }
 type Query {
   node(id: ID!): Node
@@ -4085,28 +3669,10 @@ input ExampleCreateInput {
   id: ID
   textField: String
 }
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
-}
 input Example2CreateInput {
   id: ID
   textField: String
   textField2: String
-}
-input Example2CreateChildInput {
-  connect: ID
-  create: Example2CreateInput
-}
-input Example2CreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [Example2CreateInput!]
-  createPositions: [Int!]
 }
 type Query {
   node(id: ID!): Node
@@ -4347,34 +3913,6 @@ input ExampleWhereInput {
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  textField: String
-  textField_in: [String!]
-  textField_nin: [String!]
-  textField_ne: String
-  textField_gt: String
-  textField_gte: String
-  textField_lt: String
-  textField_lte: String
-  textField_re: [RegExp!]
-  textField_exists: Boolean
-}
 enum ExampleSortEnum {
   id_ASC
   id_DESC
@@ -4422,34 +3960,6 @@ input ExampleForCatalogWhereInput {
   AND: [ExampleForCatalogWhereInput!]
   NOR: [ExampleForCatalogWhereInput!]
   OR: [ExampleForCatalogWhereInput!]
-}
-input ExampleForCatalogWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  textField: String
-  textField_in: [String!]
-  textField_nin: [String!]
-  textField_ne: String
-  textField_gt: String
-  textField_gte: String
-  textField_lt: String
-  textField_lte: String
-  textField_re: [RegExp!]
-  textField_exists: Boolean
 }
 enum ExampleForCatalogSortEnum {
   id_ASC
@@ -4594,33 +4104,24 @@ input MenuUpdateInput {
   menuName: String
   sections: MenuSectionCreateOrPushChildrenInput
 }
-input MenuSectionCreateInput {
-  id: ID
-  menu: MenuCreateChildInput
-  menuSectionName: String
-}
-input MenuSectionCreateChildInput {
-  connect: ID
-  create: MenuSectionCreateInput
-}
 input MenuSectionCreateOrPushChildrenInput {
   connect: [ID!]
   create: [MenuSectionCreateInput!]
   createPositions: [Int!]
 }
-input MenuCreateInput {
+input MenuSectionCreateInput {
   id: ID
-  sections: MenuSectionCreateOrPushChildrenInput
-  menuName: String
+  menu: MenuCreateChildInput
+  menuSectionName: String
 }
 input MenuCreateChildInput {
   connect: ID
   create: MenuCreateInput
 }
-input MenuCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [MenuCreateInput!]
-  createPositions: [Int!]
+input MenuCreateInput {
+  id: ID
+  sections: MenuSectionCreateOrPushChildrenInput
+  menuName: String
 }
 input MenuSectionWhereOneInput {
   id: ID!
@@ -4730,24 +4231,6 @@ input ExampleWhereInput {
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 input ExampleRestrictedWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -4813,24 +4296,6 @@ input ExampleForCatalogWhereInput {
   AND: [ExampleForCatalogWhereInput!]
   NOR: [ExampleForCatalogWhereInput!]
   OR: [ExampleForCatalogWhereInput!]
-}
-input ExampleForCatalogWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 enum ExampleForCatalogSortEnum {
   id_ASC
@@ -5044,24 +4509,6 @@ input ExampleForCatalogWhereInput {
   AND: [ExampleForCatalogWhereInput!]
   NOR: [ExampleForCatalogWhereInput!]
   OR: [ExampleForCatalogWhereInput!]
-}
-input ExampleForCatalogWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 enum ExampleForCatalogSortEnum {
   id_ASC

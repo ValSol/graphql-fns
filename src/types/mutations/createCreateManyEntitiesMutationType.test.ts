@@ -33,15 +33,6 @@ describe('createCreateManyEntitiesMutationType', () => {
       ExampleCreateInput: `input ExampleCreateInput {
   id: ID
   textField: String
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }`,
     };
 

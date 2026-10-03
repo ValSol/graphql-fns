@@ -58,19 +58,22 @@ const fillEntityTypeDic = (
     }
   });
 
-  [...embeddedFields, ...calculatedEmbdeedFields].forEach(({ config }) => {
-    const { root: rootName, representationKey } = parseEntityName(config.name, generalConfig);
+  // "XConnection" is used only by "…ThroughConnection" fields of embedded arrays with "connection" variant
+  embeddedFields
+    .filter(({ array, variants = [] }) => array && variants.includes('connection'))
+    .forEach(({ config }) => {
+      const { root: rootName, representationKey } = parseEntityName(config.name, generalConfig);
 
-    const config2 = actionReturnConfig(
-      allEntityConfigs[rootName],
-      generalConfig,
-      representationKey,
-    );
+      const config2 = actionReturnConfig(
+        allEntityConfigs[rootName],
+        generalConfig,
+        representationKey,
+      );
 
-    if (config2 && !entityTypeDic[config2.name]) {
-      fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic);
-    }
-  });
+      if (config2 && !entityTypeDic[config2.name]) {
+        fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic);
+      }
+    });
 };
 
 export default fillEntityTypeDic;

@@ -169,28 +169,19 @@ describe('createUpdateEntityMutationType', () => {
   location: PlaceCreateChildInput!
   favoritePlace: PlaceCreateChildInput
   address: AddressCreateInput
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-  createPositions: [Int!]
 }`,
       PlaceCreateInput: `input PlaceCreateInput {
   id: ID
   name: String
-}
-input PlaceCreateChildInput {
+}`,
+      PersonCreateOrPushChildrenInput: `input PersonCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+  createPositions: [Int!]
+}`,
+      PlaceCreateChildInput: `input PlaceCreateChildInput {
   connect: ID
   create: PlaceCreateInput
-}
-input PlaceCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PlaceCreateInput!]
-  createPositions: [Int!]
 }`,
 
       PersonWhereInput: `input PersonWhereInput {
@@ -213,64 +204,6 @@ input PlaceCreateOrPushChildrenInput {
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
-}
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}`,
-
-      PlaceWhereInput: `input PlaceWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  AND: [PlaceWhereInput!]
-  NOR: [PlaceWhereInput!]
-  OR: [PlaceWhereInput!]
-}
-input PlaceWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }`,
       AddressCreateInput: `input AddressCreateInput {
   city: String

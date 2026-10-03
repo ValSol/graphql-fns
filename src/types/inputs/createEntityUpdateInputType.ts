@@ -1,6 +1,6 @@
 import type { InputCreator } from '../../tsTypes';
 
-import createEntityCreateInputType from './createEntityCreateInputType';
+import { getChildInputNameAndCreator } from './createEntityCreateInputType';
 import createEntityWhereInputType from './createEntityWhereInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import isOppositeRequired from './isOppositeRequired';
@@ -71,48 +71,31 @@ const createEntityUpdateInputType: InputCreator = (entityConfig) => {
 
     relationalFields
       .filter(({ freeze, parent }) => !parent && !freeze)
-      .reduce((prev, { array, name: name2, config, config: { name: relationalEntityName } }) => {
-        prev.push(
-          `  ${name2}: ${relationalEntityName}${
-            array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
-          }`,
-        );
+      .reduce((prev, { array, name: name2, config }) => {
+        const [childInputName, childInputCreator] = getChildInputNameAndCreator(config, array);
 
-        childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config];
+        prev.push(`  ${name2}: ${childInputName}`);
+
+        childChain[childInputName] = [childInputCreator, config];
 
         return prev;
       }, entityTypeArray);
 
     duplexFields
       .filter(({ freeze }) => !freeze)
-      .reduce(
-        (
-          prev,
-          { array, name: name2, oppositeName, config, config: { name: relationalEntityName } },
-        ) => {
-          const oppositeRequired = isOppositeRequired(oppositeName, config);
-          if (oppositeRequired) {
-            prev.push(
-              `  ${name2}: ${relationalEntityName}${
-                array
-                  ? `CreateOrPushThru_${oppositeName}_FieldChildrenInput`
-                  : `CreateThru_${oppositeName}_FieldChildInput`
-              }`,
-            );
-          } else {
-            prev.push(
-              `  ${name2}: ${relationalEntityName}${
-                array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
-              }`,
-            );
-          }
+      .reduce((prev, { array, name: name2, oppositeName, config }) => {
+        const [childInputName, childInputCreator] = getChildInputNameAndCreator(
+          config,
+          array,
+          isOppositeRequired(oppositeName, config) ? oppositeName : undefined,
+        );
 
-          childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config];
+        prev.push(`  ${name2}: ${childInputName}`);
 
-          return prev;
-        },
-        entityTypeArray,
-      );
+        childChain[childInputName] = [childInputCreator, config];
+
+        return prev;
+      }, entityTypeArray);
 
     filterFields
       .filter(({ freeze }) => !freeze)

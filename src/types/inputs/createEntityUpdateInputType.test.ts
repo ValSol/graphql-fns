@@ -1,6 +1,11 @@
 import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../../tsTypes';
 
-import createEntityCreateInputType from './createEntityCreateInputType';
+import {
+  createEntityCreateChildInputType,
+  createEntityCreateOrPushChildrenInputType,
+  createEntityCreateOrPushThruFieldChildrenInputType,
+  createEntityCreateThruFieldChildInputType,
+} from './createEntityCreateInputType';
 import createEntityUpdateInputType from './createEntityUpdateInputType';
 import createEntityWhereInputType from './createEntityWhereInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
@@ -152,8 +157,8 @@ describe('createEntityUpdateInputType', () => {
   favoritePlace: PlaceCreateChildInput
 }`,
       {
-        PlaceCreateInput: [createEntityCreateInputType, placeConfig],
-        PersonCreateInput: [createEntityCreateInputType, personConfig],
+        PersonCreateOrPushChildrenInput: [createEntityCreateOrPushChildrenInputType, personConfig],
+        PlaceCreateChildInput: [createEntityCreateChildInputType, placeConfig],
       },
     ];
 
@@ -296,8 +301,16 @@ describe('createEntityUpdateInputType', () => {
   favoritePlace: PlaceCreateThru_visitors_FieldChildInput
 }`,
       {
-        PlaceCreateInput: [createEntityCreateInputType, placeConfig],
-        PersonCreateInput: [createEntityCreateInputType, personConfig],
+        PersonCreateOrPushThru_friends_FieldChildrenInput: [
+          createEntityCreateOrPushThruFieldChildrenInputType('friends'),
+          personConfig,
+        ],
+        PersonCreateOrPushChildrenInput: [createEntityCreateOrPushChildrenInputType, personConfig],
+        PlaceCreateChildInput: [createEntityCreateChildInputType, placeConfig],
+        PlaceCreateThru_visitors_FieldChildInput: [
+          createEntityCreateThruFieldChildInputType('visitors'),
+          placeConfig,
+        ],
       },
     ];
 

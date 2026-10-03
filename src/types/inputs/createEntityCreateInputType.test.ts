@@ -1,6 +1,13 @@
 import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../../tsTypes';
 
-import createEntityCreateInputType from './createEntityCreateInputType';
+import createEntityCreateInputType, {
+  composeCreateThruFieldInputCreators,
+  createEntityCreateChildInputType,
+  createEntityCreateOrPushChildrenInputType,
+  createEntityCreateOrPushThruFieldChildrenInputType,
+  createEntityCreateThruFieldChildInputType,
+  createEntityCreateThruFieldInputType,
+} from './createEntityCreateInputType';
 import createEntityWhereInputType from './createEntityWhereInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
@@ -47,15 +54,6 @@ describe('createEntityCreateInputType', () => {
   textField3: String!
   textField4: [String!]
   textField5: [String!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }`,
       {},
     ];
@@ -149,19 +147,10 @@ input ExampleCreateOrPushChildrenInput {
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
   favoritePlace: PlaceCreateChildInput
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-  createPositions: [Int!]
 }`,
       {
-        PersonCreateInput: [createEntityCreateInputType, personConfig],
-        PlaceCreateInput: [createEntityCreateInputType, placeConfig],
+        PersonCreateOrPushChildrenInput: [createEntityCreateOrPushChildrenInputType, personConfig],
+        PlaceCreateChildInput: [createEntityCreateChildInputType, placeConfig],
       },
     ];
 
@@ -270,15 +259,6 @@ input PersonCreateOrPushChildrenInput {
   locations: [AddressCreateInput!]!
   place: AddressCreateInput
   places: [AddressCreateInput!]
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-  createPositions: [Int!]
 }`,
       { AddressCreateInput: [createEntityCreateInputType, addressConfig] },
     ];
@@ -322,17 +302,13 @@ input PersonCreateOrPushChildrenInput {
         `input MenuCreateInput {
   id: ID
   sections: MenuSectionCreateOrPushThru_menu_FieldChildrenInput
-}
-input MenuCreateChildInput {
-  connect: ID
-  create: MenuCreateInput
-}
-input MenuCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [MenuCreateInput!]
-  createPositions: [Int!]
 }`,
-        { MenuSectionCreateInput: [createEntityCreateInputType, menuSectionConfig] },
+        {
+          MenuSectionCreateOrPushThru_menu_FieldChildrenInput: [
+            createEntityCreateOrPushThruFieldChildrenInputType('menu'),
+            menuSectionConfig,
+          ],
+        },
       ];
 
       const result = createEntityCreateInputType(menuConfig);
@@ -345,29 +321,8 @@ input MenuCreateOrPushChildrenInput {
         `input MenuSectionCreateInput {
   id: ID
   menu: MenuCreateChildInput!
-}
-input MenuSectionCreateThru_menu_FieldInput {
-  menu: MenuCreateChildInput
-}
-input MenuSectionCreateChildInput {
-  connect: ID
-  create: MenuSectionCreateInput
-}
-input MenuSectionCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [MenuSectionCreateInput!]
-  createPositions: [Int!]
-}
-input MenuSectionCreateThru_menu_FieldChildInput {
-  connect: ID
-  create: MenuSectionCreateThru_menu_FieldInput
-}
-input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
-  connect: [ID!]
-  create: [MenuSectionCreateThru_menu_FieldInput!]
-  createPositions: [Int!]
 }`,
-        { MenuCreateInput: [createEntityCreateInputType, menuConfig] },
+        { MenuCreateChildInput: [createEntityCreateChildInputType, menuConfig] },
       ];
 
       const result = createEntityCreateInputType(menuSectionConfig);
@@ -430,15 +385,6 @@ input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
   requiredPlace: PlaceWhereOneInput!
   firstName: String!
   lastName: String!
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-  createPositions: [Int!]
 }`,
       {
         PlaceWhereInput: [createEntityWhereInputType, placeConfig],
@@ -531,53 +477,18 @@ input PersonCreateOrPushChildrenInput {
   favoritePlace: PlaceCreateThru_visitors_FieldChildInput
   firstName: String!
   lastName: String!
-}
-input PersonCreateThru_friends_FieldInput {
-  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput!
-  favoritePlace: PlaceCreateThru_visitors_FieldChildInput
-  firstName: String!
-  lastName: String!
-}
-input PersonCreateThru_location_FieldInput {
-  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
-  enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput
-  favoritePlace: PlaceCreateThru_visitors_FieldChildInput
-  firstName: String!
-  lastName: String!
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-  createPositions: [Int!]
-}
-input PersonCreateThru_friends_FieldChildInput {
-  connect: ID
-  create: PersonCreateThru_friends_FieldInput
-}
-input PersonCreateOrPushThru_friends_FieldChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateThru_friends_FieldInput!]
-  createPositions: [Int!]
-}
-input PersonCreateThru_location_FieldChildInput {
-  connect: ID
-  create: PersonCreateThru_location_FieldInput
-}
-input PersonCreateOrPushThru_location_FieldChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateThru_location_FieldInput!]
-  createPositions: [Int!]
 }`,
       {
-        PersonCreateInput: [createEntityCreateInputType, personConfig],
-        PlaceCreateInput: [createEntityCreateInputType, placeConfig],
+        PersonCreateOrPushThru_friends_FieldChildrenInput: [
+          createEntityCreateOrPushThruFieldChildrenInputType('friends'),
+          personConfig,
+        ],
+        PersonCreateOrPushChildrenInput: [createEntityCreateOrPushChildrenInputType, personConfig],
+        PlaceCreateChildInput: [createEntityCreateChildInputType, placeConfig],
+        PlaceCreateThru_visitors_FieldChildInput: [
+          createEntityCreateThruFieldChildInputType('visitors'),
+          placeConfig,
+        ],
       },
     ];
 
@@ -652,15 +563,6 @@ input PersonCreateOrPushThru_location_FieldChildrenInput {
   precedingArea: GeospatialPolygonInput
   favoriteAreas: [GeospatialPolygonInput!]!
   worstAreas: [GeospatialPolygonInput!]
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }`,
       {},
     ];
@@ -708,15 +610,6 @@ input ExampleCreateOrPushChildrenInput {
   field2: [CuisinesEnumeration!]
   field3: WeekdaysEnumeration!
   field4: [CuisinesEnumeration!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }`,
       {},
     ];
@@ -767,15 +660,6 @@ input ExampleCreateOrPushChildrenInput {
   intField3: Int!
   intField4: [Int!]
   intField5: [Int!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }`,
       {},
     ];
@@ -826,15 +710,6 @@ input ExampleCreateOrPushChildrenInput {
   floatField3: Float!
   floatField4: [Float!]
   floatField5: [Float!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }`,
       {},
     ];
@@ -885,20 +760,128 @@ input ExampleCreateOrPushChildrenInput {
   booleanField3: Boolean!
   booleanField4: [Boolean!]
   booleanField5: [Boolean!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
 }`,
       {},
     ];
 
     const result = createEntityCreateInputType(entityConfig);
     expect(result).toEqual(expectedResult);
+  });
+
+  describe('inputs of relational & duplex fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+    const placeConfig = {} as TangibleEntityConfig;
+
+    Object.assign(placeConfig, {
+      name: 'Place',
+      type: 'tangible',
+      textFields: [{ name: 'name', type: 'textFields' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    Object.assign(personConfig, {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [{ name: 'firstName', required: true, type: 'textFields' }],
+      duplexFields: [
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    test('should create "CreateChildInput" & "CreateOrPushChildrenInput"', () => {
+      expect(createEntityCreateChildInputType(placeConfig)).toEqual([
+        'PlaceCreateChildInput',
+        `input PlaceCreateChildInput {
+  connect: ID
+  create: PlaceCreateInput
+}`,
+        { PlaceCreateInput: [createEntityCreateInputType, placeConfig] },
+      ]);
+
+      expect(createEntityCreateOrPushChildrenInputType(placeConfig)).toEqual([
+        'PlaceCreateOrPushChildrenInput',
+        `input PlaceCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [PlaceCreateInput!]
+  createPositions: [Int!]
+}`,
+        { PlaceCreateInput: [createEntityCreateInputType, placeConfig] },
+      ]);
+    });
+
+    test('should create "Thru" inputs of required duplex field', () => {
+      expect(createEntityCreateThruFieldInputType('location')(personConfig)).toEqual([
+        'PersonCreateThru_location_FieldInput',
+        `input PersonCreateThru_location_FieldInput {
+  location: PlaceCreateChildInput
+  firstName: String!
+}`,
+        { PlaceCreateChildInput: [createEntityCreateChildInputType, placeConfig] },
+      ]);
+
+      const thruFieldInputChain = {
+        PersonCreateThru_location_FieldInput: [
+          createEntityCreateThruFieldInputType('location'),
+          personConfig,
+        ],
+      };
+
+      expect(createEntityCreateThruFieldChildInputType('location')(personConfig)).toEqual([
+        'PersonCreateThru_location_FieldChildInput',
+        `input PersonCreateThru_location_FieldChildInput {
+  connect: ID
+  create: PersonCreateThru_location_FieldInput
+}`,
+        thruFieldInputChain,
+      ]);
+
+      expect(createEntityCreateOrPushThruFieldChildrenInputType('location')(personConfig)).toEqual([
+        'PersonCreateOrPushThru_location_FieldChildrenInput',
+        `input PersonCreateOrPushThru_location_FieldChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateThru_location_FieldInput!]
+  createPositions: [Int!]
+}`,
+        thruFieldInputChain,
+      ]);
+
+      // the opposite field uses only "children" input because it is array
+      expect(createEntityCreateInputType(placeConfig)[2]).toEqual({
+        PersonCreateOrPushThru_location_FieldChildrenInput: [
+          createEntityCreateOrPushThruFieldChildrenInputType('location'),
+          personConfig,
+        ],
+      });
+    });
+
+    test('should not create "Thru" inputs of not required duplex field', () => {
+      expect(createEntityCreateThruFieldChildInputType('citizens')(placeConfig)).toEqual([
+        'PlaceCreateThru_citizens_FieldChildInput',
+        '',
+        {},
+      ]);
+
+      expect(composeCreateThruFieldInputCreators(placeConfig)).toEqual([]);
+
+      expect(composeCreateThruFieldInputCreators(personConfig)).toEqual([
+        createEntityCreateThruFieldInputType('location'),
+        createEntityCreateThruFieldChildInputType('location'),
+        createEntityCreateOrPushThruFieldChildrenInputType('location'),
+      ]);
+    });
   });
 });

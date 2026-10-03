@@ -79,35 +79,6 @@ describe('composeChildActionSignature util', () => {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  textField: String
-  textField_in: [String!]
-  textField_nin: [String!]
-  textField_ne: String
-  textField_gt: String
-  textField_gte: String
-  textField_lt: String
-  textField_lte: String
-  textField_re: [RegExp!]
-  textField_size: Int
-  textField_notsize: Int
 }`,
       PaginationInput: `input PaginationInput {
   skip: Int

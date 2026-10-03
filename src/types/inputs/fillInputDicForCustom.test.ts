@@ -136,12 +136,8 @@ describe('fillInputDicForCustom', () => {
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
   favoritePlace: PlaceCreateChildInput
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
+}`,
+      PersonCreateOrPushChildrenInput: `input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
   createPositions: [Int!]
@@ -155,15 +151,10 @@ input PersonCreateOrPushChildrenInput {
       PlaceCreateInput: `input PlaceCreateInput {
   id: ID
   name: String
-}
-input PlaceCreateChildInput {
+}`,
+      PlaceCreateChildInput: `input PlaceCreateChildInput {
   connect: ID
   create: PlaceCreateInput
-}
-input PlaceCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PlaceCreateInput!]
-  createPositions: [Int!]
 }`,
     };
 
@@ -211,19 +202,18 @@ input PlaceCreateOrPushChildrenInput {
     const inputDic: { [inputName: string]: string } = {};
 
     const expectedInputDic = {
-      '!PersonCreateChildInput': 'defined',
+      PersonCreateChildInput: `input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}`,
       PersonCreateInput: `input PersonCreateInput {
   id: ID
   friends: PersonCreateOrPushChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
   favoritePlace: PlaceCreateChildInput
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
+}`,
+      PersonCreateOrPushChildrenInput: `input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
   createPositions: [Int!]
@@ -231,15 +221,10 @@ input PersonCreateOrPushChildrenInput {
       PlaceCreateInput: `input PlaceCreateInput {
   id: ID
   name: String
-}
-input PlaceCreateChildInput {
+}`,
+      PlaceCreateChildInput: `input PlaceCreateChildInput {
   connect: ID
   create: PlaceCreateInput
-}
-input PlaceCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PlaceCreateInput!]
-  createPositions: [Int!]
 }`,
     };
 

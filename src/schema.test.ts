@@ -736,7 +736,7 @@ describe('graphql schema', () => {
       /\n  sections: SectionCreateOrPushThru_menu_FieldChildrenInput\n/,
     );
 
-    // created sections get "menu" from the menu they are pushed into, so "menu" is optional
+    // created sections get "menu" from the menu they are created for, so "menu" is optional
     expect(sectionCreateThruInput).toMatch(/\n  menu: MenuCreateChildInput\n/);
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();

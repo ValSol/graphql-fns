@@ -132,7 +132,14 @@ input CountryWhereInput {
   NOR: [CountryWhereInput!]
   OR: [CountryWhereInput!]
 }
-input CountryWhereWithoutBooleanOperationsInput {
+input CountryRestrictedWhereAndTargetInput {
+  target: CountryTextNamesEnum!
+  where: CountryRestrictedWhereInput
+}
+enum CountryTextNamesEnum {
+  code
+}
+input CountryRestrictedWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -157,6 +164,9 @@ input CountryWhereWithoutBooleanOperationsInput {
   code_lt: String
   code_lte: String
   code_re: [RegExp!]
+  AND: [CountryRestrictedWhereInput!]
+  NOR: [CountryRestrictedWhereInput!]
+  OR: [CountryRestrictedWhereInput!]
 }
 input CityWhereInput {
   id_in: [ID!]
@@ -206,59 +216,7 @@ input CityWhereInput {
   NOR: [CityWhereInput!]
   OR: [CityWhereInput!]
 }
-input CityWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  name: String
-  name_in: [String!]
-  name_nin: [String!]
-  name_ne: String
-  name_gt: String
-  name_gte: String
-  name_lt: String
-  name_lte: String
-  name_re: [RegExp!]
-  name_exists: Boolean
-  tags: String
-  tags_in: [String!]
-  tags_nin: [String!]
-  tags_ne: String
-  tags_gt: String
-  tags_gte: String
-  tags_lt: String
-  tags_lte: String
-  tags_re: [RegExp!]
-  tags_size: Int
-  tags_notsize: Int
-  country: ID
-  country_in: [ID!]
-  country_nin: [ID!]
-  country_ne: ID
-  country_: CountryWhereWithoutBooleanOperationsInput
-  country_exists: Boolean
-}
-input CountryRestrictedWhereAndTargetInput {
-  target: CountryTextNamesEnum!
-  where: CountryRestrictedWhereInput
-}
-enum CountryTextNamesEnum {
-  code
-}
-input CountryRestrictedWhereInput {
+input CountryWhereWithoutBooleanOperationsInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -283,9 +241,6 @@ input CountryRestrictedWhereInput {
   code_lt: String
   code_lte: String
   code_re: [RegExp!]
-  AND: [CountryRestrictedWhereInput!]
-  NOR: [CountryRestrictedWhereInput!]
-  OR: [CountryRestrictedWhereInput!]
 }
 input CityRestrictedWhereAndTargetInput {
   target: CityTextNamesEnum!

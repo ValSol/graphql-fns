@@ -1,7 +1,10 @@
 import createCopyEntityOptionsInputType from './createCopyEntityOptionsInputType';
 import createDeleteEntityWithChildrenOptionsInputType from './createDeleteEntityWithChildrenOptionsInputType';
 import createEntityWhereKeyToSourceInputType from './createEntityWhereKeyToSourceInputType';
-import createEntityCreateInputType from './createEntityCreateInputType';
+import createEntityCreateInputType, {
+  createEntityCreateChildInputType,
+  createEntityCreateOrPushChildrenInputType,
+} from './createEntityCreateInputType';
 import createEntityDistinctValuesOptionsInputType from './createEntityDistinctValuesOptionsInputType';
 import createEntityNearInputType from './createEntityNearInputType';
 import createEntityRestrictedWhereAndTargetInputType from './createEntityRestrictedWhereAndTargetInputType';
@@ -13,18 +16,24 @@ import createEntityWhereAndSearchInputType from './createEntityWhereAndSearchInp
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';
 import createEntityWhereCompoundOneAndDataInputType from './createEntityWhereCompoundOneAndDataInputType';
 import createEntityWhereCompoundOneInputType from './createEntityWhereCompoundOneInputType';
-import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereInputType, {
+  createEntityWhereWithoutBooleanOperationsInputType,
+} from './createEntityWhereInputType';
 import createEntityWhereOneAndDataInputType from './createEntityWhereOneAndDataInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import createEntityWherePayloadInputType from './createEntityWherePayloadInputType';
 import createEntityWhichUpdatedInputType from './createEntityWhichUpdatedInputType';
 import createPaginationInputType from './createPaginationInputType';
 
+// creators of the inputs of an entity that custom actions can use (see "fillInputDicForCustom"), ...
+// ... creators of the "Thru" inputs of required duplex fields are added by "composeCreateThruFieldInputCreators"
 const inputs = [
   createCopyEntityOptionsInputType,
   createDeleteEntityWithChildrenOptionsInputType,
   createEntityWhereKeyToSourceInputType,
   createEntityCreateInputType,
+  createEntityCreateChildInputType,
+  createEntityCreateOrPushChildrenInputType,
   createEntityDistinctValuesOptionsInputType,
   createEntityNearInputType,
   createEntityRestrictedWhereAndTargetInputType,
@@ -37,6 +46,7 @@ const inputs = [
   createEntityWhereCompoundOneAndDataInputType,
   createEntityWhereCompoundOneInputType,
   createEntityWhereInputType,
+  createEntityWhereWithoutBooleanOperationsInputType,
   createEntityWhereOneAndDataInputType,
   createEntityWhereOneInputType,
   createEntityWherePayloadInputType,

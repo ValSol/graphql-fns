@@ -194,10 +194,21 @@ ${subscriptionTypes.join('\n')}
 
   const resultArray = composeCommonUseTypes();
 
+  // enums are added in any case (they can be used by manually created actions), ...
+  // ... geospatial types (except common geospatial inputs) only if they are used
+  const typeDefsToUse = [
+    interfaces,
+    entityTypes,
+    inputs,
+    queryTypes2,
+    mutationTypes2,
+    subscriptionTypes2,
+  ].join('\n');
+
   const enumTypes = composeEnumTypes(generalConfig);
   if (enumTypes) resultArray.push(enumTypes);
 
-  const geospatialTypes = composeGeospatialTypes(generalConfig);
+  const geospatialTypes = composeGeospatialTypes(generalConfig, typeDefsToUse);
   if (geospatialTypes) resultArray.push(geospatialTypes);
 
   if (interfaces) resultArray.push(interfaces);

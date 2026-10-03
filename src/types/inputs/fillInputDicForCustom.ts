@@ -1,6 +1,7 @@
 import type { GeneralConfig } from '../../tsTypes';
 
 import composeRepresentationConfig from '../../utils/composeRepresentationConfig';
+import { composeCreateThruFieldInputCreators } from './createEntityCreateInputType';
 import fillInputDic from './fillInputDic';
 import inputs from './index';
 
@@ -72,18 +73,12 @@ const fillInputDicForCustom = (
             )
           : allEntityConfigs[entityName];
 
-        for (let k = 0; k < inputs.length; k += 1) {
-          const inputCreator = inputs[k];
+        if (!entityConfig) continue;
 
-          // const entityConfig = representationKey
-          //   ? composeRepresentationConfig(
-          //       representation[representationKey],
-          //       allEntityConfigs[entityName],
-          //       generalConfig,
-          //     )
-          //   : allEntityConfigs[entityName];
+        const inputCreators = [...inputs, ...composeCreateThruFieldInputCreators(entityConfig)];
 
-          if (!entityConfig) continue;
+        for (let k = 0; k < inputCreators.length; k += 1) {
+          const inputCreator = inputCreators[k];
 
           const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
 
