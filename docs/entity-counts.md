@@ -56,6 +56,7 @@
 | ID | Fact |
 |---|---|
 | EC11 | ✅ `entityCounts` is a root `Query` action of `inventory` (`{ Query: { entityCounts: ['Country'] } }`); `unwindInverntoryOptions` lists it for every tangible entity. |
-| EC12 | 📖 There is no child query `childEntityCounts` (no `citiesCounts` field), so `addChildActions` does not map `entityCounts`, and `composeQueryResolver` has no `Counts` suffix. |
+| EC12 | 📖 There is no child query `childEntityCounts` (no `citiesCounts` field), so `addChildActions` does not map `entityCounts`. |
+| EC12a | ✅ `composeQueryResolver('X_Counts', generalConfig, serversideConfig)` returns the raw resolver (created with `inAnyCase`, so regardless of `inventory`): mongo ids in `where` and `restrictedWhere`, `involvedFilters` in the 5th argument, as the other `X_…` keys ([resolver-decorators.md](./resolver-decorators.md) §1). |
 | EC13 | 📖 `createEntityCountsQueryResolver` is exported from the package, as `createEntityCountQueryResolver`. |
 | EC14 | 📖 An entity whose name ends with `Restricted` collides with another entity: `FooRestrictedWhereInput` is both the where of `FooRestricted` and the restricted where of `Foo`. This is not checked. |

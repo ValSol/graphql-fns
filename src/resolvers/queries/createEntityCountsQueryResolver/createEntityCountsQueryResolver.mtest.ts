@@ -7,6 +7,7 @@ import sleep from '../../../utils/sleep';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 import createEntityCountsQueryResolver from './index';
 
 mongoose.set('strictQuery', false);
@@ -196,6 +197,32 @@ describe('createEntityCountsQueryResolver', () => {
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       ),
     ).rejects.toThrow('Relational field: "friends_" forbidden in restricted where');
+
+    // raw resolver got by "composeQueryResolver" is created regardless of "inventory"
+    const generalConfigWithInventory: GeneralConfig = {
+      ...generalConfig,
+      inventory: { name: 'test', include: { Query: { entities: ['Person'] } } },
+    };
+
+    expect(
+      createEntityCountsQueryResolver(personConfig, generalConfigWithInventory, serversideConfig),
+    ).toBeNull();
+
+    const PersonCounts2 = composeQueryResolver(
+      'Person_Counts',
+      generalConfigWithInventory,
+      serversideConfig,
+    );
+
+    const counts8 = await PersonCounts2(
+      null,
+      { where, restrictedWhere },
+      { mongooseConn, pubsub },
+      null,
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
+    );
+
+    expect(counts8).toEqual(counts2);
   });
 
   test('should create query entity counts resolver to aggregate result', async () => {
