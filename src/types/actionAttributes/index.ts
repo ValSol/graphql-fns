@@ -33,7 +33,6 @@ import deleteManyEntities from './deleteManyEntitiesMutationAttributes';
 import deleteManyEntitiesWithChildren from './deleteManyEntitiesWithChildrenMutationAttributes';
 import deleteEntity from './deleteEntityMutationAttributes';
 import deleteEntityWithChildren from './deleteEntityWithChildrenMutationAttributes';
-import pushIntoEntity from './pushIntoEntityMutationAttributes';
 import updatedEntity from './updatedEntitySubscriptionAttributes';
 import updateFilteredEntities from './updateFilteredEntitiesMutationAttributes';
 import updateFilteredEntitiesReturnScalar from './updateFilteredEntitiesReturnScalarMutationAttributes';
@@ -65,7 +64,6 @@ const actionAttributes = {
   deleteManyEntitiesWithChildren,
   deleteEntity,
   deleteEntityWithChildren,
-  pushIntoEntity,
   entityCount,
   entityCounts,
   entityExistences,

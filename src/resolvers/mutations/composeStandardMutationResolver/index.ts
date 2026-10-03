@@ -35,9 +35,6 @@ import produceResult from './produceResult';
 
 type Args = {
   data: any;
-  positions: {
-    [key: string]: Array<number>;
-  };
   token?: string;
 };
 

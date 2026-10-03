@@ -6,7 +6,7 @@ import type { PreparedData } from '@/resolvers/tsTypes';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import processCreateInputData from '.';
 
-describe('processCreateInputData for "push" into duplex field with required opposite', () => {
+describe('processCreateInputData for "update" of duplex field with required opposite', () => {
   test('should fill opposite field of created children with id of the parent', () => {
     const simplifiedEntityConfigs: SimplifiedEntityConfig[] = [
       {
@@ -37,7 +37,7 @@ describe('processCreateInputData for "push" into duplex field with required oppo
       { id: menuId, sections: { create: [{ title: 'Section 1' }] } },
       preparedData,
       menuConfig as TangibleEntityConfig,
-      'push',
+      'update',
     );
 
     const [

@@ -705,7 +705,7 @@ describe('graphql schema', () => {
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });
 
-  test('should not require parent in "pushInto" input for duplex field with required opposite (B7)', () => {
+  test('should not require parent in "update" input for duplex field with required opposite (B7)', () => {
     const simplifiedEntityConfigs: SimplifiedEntityConfig[] = [
       {
         name: 'Menu',
@@ -727,16 +727,11 @@ describe('graphql schema', () => {
 
     const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
 
-    const pushIntoMenuInput = typeDefs.match(/input PushIntoMenuInput \{[^}]*\}/)?.[0];
     const menuUpdateInput = typeDefs.match(/input MenuUpdateInput \{[^}]*\}/)?.[0];
     const sectionCreateThruInput = typeDefs.match(
       /input SectionCreateThru_menu_FieldInput \{[^}]*\}/,
     )?.[0];
 
-    // the same child input as for "update"
-    expect(pushIntoMenuInput).toMatch(
-      /\n  sections: SectionCreateOrPushThru_menu_FieldChildrenInput\n/,
-    );
     expect(menuUpdateInput).toMatch(
       /\n  sections: SectionCreateOrPushThru_menu_FieldChildrenInput\n/,
     );

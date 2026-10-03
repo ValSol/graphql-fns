@@ -83,11 +83,6 @@ describe('mutations without "pubsub"', () => {
         `mutation { updateCountry(whereOne: { id: "${countryId}" }, data: { code: "PL" }) { id } }`,
     ],
     ['deleteCountry', () => `mutation { deleteCountry(whereOne: { id: "${countryId}" }) { id } }`],
-    [
-      'pushIntoCountry',
-      () =>
-        `mutation { pushIntoCountry(whereOne: { id: "${countryId}" }, data: { tags: ["b"] }) { id } }`,
-    ],
   ])('"%s" should fail without changes in database', async (actionName, composeSource) => {
     const { errors } = await run(composeSource(), false);
 

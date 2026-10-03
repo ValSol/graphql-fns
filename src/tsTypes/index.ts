@@ -748,7 +748,7 @@ export type InventoryOptions = {
     | true
     | {
         // 'mutationName' may be: 'copyEntity', 'createEntity', 'createManyEntities', 'updateManyEntities', 'updateEntity', 'deleteEntity', ...
-        // ... 'pushIntoEntity', or custom mutation
+        // ... or custom mutation
 
         [mutationName: string]: entityNamesList;
       };
@@ -798,7 +798,6 @@ export type RepresentationAttributesActionName =
   | 'deleteManyEntitiesWithChildren'
   | 'deleteEntity'
   | 'deleteEntityWithChildren'
-  | 'pushIntoEntity'
   | 'updateFilteredEntities'
   | 'updateFilteredEntitiesReturnScalar'
   | 'updateManyEntities'
@@ -916,7 +915,7 @@ export type TwoSegmentInventoryChain =
   | [
       'Mutation', // "string" for 'copyEntity', 'copyManyEntities', 'copyEntityWithChildren', 'copyManyEntitiesWithChildren', 'createEntity', 'createManyEntities',
       // ... 'updateFilteredEntities', 'updateManyEntities', 'updateEntity', 'deleteFilteredEntities', 'deleteManyEntities', ...
-      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity' or custom mutation
+      // ... 'deleteEntity', 'deleteEntityWithChildren' or custom mutation
       string,
     ]
   | [
@@ -933,7 +932,7 @@ export type ThreeSegmentInventoryChain =
   | [
       'Mutation', // "string" for 'copyEntity', 'copyManyEntities', 'copyEntityWithChildren', 'copyManyEntitiesWithChildren', 'createEntity', 'createManyEntities',
       // ... 'updateFilteredEntities', 'updateManyEntities', 'updateEntity', 'deleteFilteredEntities', 'deleteManyEntities', ...
-      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity' or custom mutation
+      // ... 'deleteEntity', 'deleteEntityWithChildren' or custom mutation
       string, //  second "string" for entity name
       string,
     ]

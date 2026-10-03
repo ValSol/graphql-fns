@@ -619,7 +619,7 @@ describe('workOutMutations', () => {
     expect(result.name).toBe('Name2');
   });
 
-  test('should create resolver for chain of 2 createEntity & 2 pushIntoEntity', async () => {
+  test('should create resolver for chain of 2 createEntity & 2 updateEntity', async () => {
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
@@ -655,17 +655,16 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgs = [
       {
-        actionGeneralName: 'pushIntoEntity',
+        actionGeneralName: 'updateEntity',
         entityConfig: exampleCloneConfig,
         args: {
           whereOne: { id: createdExampleClone.id },
-          data: { counts: [0, 20, 40, 60] },
-          positions: { counts: [0, 2, 4, 6] },
+          data: { counts: [0, 10, 20, 30, 40, 50, 60] },
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'pushIntoEntity',
+        actionGeneralName: 'updateEntity',
         entityConfig: exampleConfig,
         args: {
           whereOne: { id: createdExample.id },

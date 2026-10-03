@@ -131,7 +131,6 @@ describe('processCreateInputData', () => {
       preparedData,
       entityConfig,
       'create',
-      undefined,
       mongooseTypes,
     );
 
@@ -211,7 +210,6 @@ describe('processCreateInputData', () => {
       preparedData,
       entityConfig,
       'create',
-      undefined,
       mongooseTypes,
     );
 
@@ -331,7 +329,6 @@ describe('processCreateInputData', () => {
       preparedData,
       entityConfig,
       'create',
-      undefined,
       mongooseTypes,
     );
 
@@ -473,7 +470,6 @@ describe('processCreateInputData', () => {
       preparedData,
       personConfig,
       'create',
-      undefined,
       mongooseTypes,
     );
 
@@ -667,7 +663,6 @@ describe('processCreateInputData', () => {
       preparedData,
       personConfig,
       'create',
-      undefined,
       mongooseTypes,
     );
 
@@ -891,7 +886,6 @@ describe('processCreateInputData', () => {
       preparedData,
       personConfig,
       'create',
-      undefined,
       mongooseTypes,
     );
 
@@ -1022,7 +1016,6 @@ describe('processCreateInputData', () => {
       preparedData,
       entityConfig,
       'update',
-      undefined,
       mongooseTypes,
     );
 
@@ -1124,7 +1117,6 @@ describe('processCreateInputData', () => {
       preparedData,
       entityConfig,
       'updateMany',
-      undefined,
       mongooseTypes,
     );
 
@@ -1192,7 +1184,6 @@ describe('processCreateInputData', () => {
       preparedData2,
       entityConfig,
       'updateMany',
-      undefined,
       mongooseTypes,
     );
 
@@ -1373,7 +1364,6 @@ describe('processCreateInputData', () => {
       preparedData,
       restaurantConfig,
       'update',
-      undefined,
       mongooseTypes,
     );
 

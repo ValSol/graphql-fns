@@ -29,7 +29,6 @@ import createDeleteFilteredEntitiesMutationResolver from '@/resolvers/mutations/
 import createDeleteFilteredEntitiesWithChildrenMutationResolver from '@/resolvers/mutations/createDeleteFilteredEntitiesWithChildrenMutationResolver';
 import createDeleteManyEntitiesMutationResolver from '@/resolvers/mutations/createDeleteManyEntitiesMutationResolver';
 import createDeleteManyEntitiesWithChildrenMutationResolver from '@/resolvers/mutations/createDeleteManyEntitiesWithChildrenMutationResolver';
-import createPushIntoEntityMutationResolver from '@/resolvers/mutations/createPushIntoEntityMutationResolver';
 import createUpdateEntityMutationResolver from '@/resolvers/mutations/createUpdateEntityMutationResolver';
 import createUpdateFilteredEntitiesMutationResolver from '@/resolvers/mutations/createUpdateFilteredEntitiesMutationResolver';
 import createUpdateFilteredEntitiesReturnScalarMutationResolver from '@/resolvers/mutations/createUpdateFilteredEntitiesReturnScalarMutationResolver';
@@ -123,7 +122,6 @@ export {
   createDeleteFilteredEntitiesWithChildrenMutationResolver,
   createDeleteManyEntitiesMutationResolver,
   createDeleteManyEntitiesWithChildrenMutationResolver,
-  createPushIntoEntityMutationResolver,
   createUpdateFilteredEntitiesMutationResolver,
   createUpdateFilteredEntitiesReturnScalarMutationResolver,
   createUpdateManyEntitiesMutationResolver,

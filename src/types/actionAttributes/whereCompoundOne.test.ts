@@ -9,7 +9,6 @@ import deleteEntityMutationAttributes from './deleteEntityMutationAttributes';
 import deleteEntityWithChildrenMutationAttributes from './deleteEntityWithChildrenMutationAttributes';
 import deleteManyEntitiesMutationAttributes from './deleteManyEntitiesMutationAttributes';
 import deleteManyEntitiesWithChildrenMutationAttributes from './deleteManyEntitiesWithChildrenMutationAttributes';
-import pushIntoEntityMutationAttributes from './pushIntoEntityMutationAttributes';
 import updateEntityMutationAttributes from './updateEntityMutationAttributes';
 import updateManyEntitiesMutationAttributes from './updateManyEntitiesMutationAttributes';
 
@@ -84,11 +83,6 @@ describe('whereCompoundOne args of mutations', () => {
       'whereCompoundOne: PersonBackupWhereCompoundOneInput',
       'options: deletePersonBackupWithChildrenOptionsInput',
       'token: String',
-    ]);
-
-    expect(composeArgs(pushIntoEntityMutationAttributes, PersonBackup).slice(0, 2)).toEqual([
-      'whereOne: PersonBackupWhereOneInput',
-      'whereCompoundOne: PersonBackupWhereCompoundOneInput',
     ]);
 
     expect(composeArgs(updateManyEntitiesMutationAttributes, PersonBackup)).toEqual([

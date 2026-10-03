@@ -56,7 +56,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
-    expect(typeof result.Mutation.pushIntoExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
     expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
@@ -123,8 +122,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyExample2s).toBe('function');
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
-    expect(typeof result.Mutation.pushIntoExample1).toBe('undefined');
-    expect(typeof result.Mutation.pushIntoExample2).toBe('function');
     expect(typeof result.Mutation.updateExample1).toBe('function');
     expect(typeof result.Mutation.updateExample2).toBe('function');
     expect(typeof result.Mutation.deleteExample1).toBe('function');
@@ -252,8 +249,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyPlaces).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
-    expect(typeof result.Mutation.pushIntoPerson).toBe('function');
-    expect(typeof result.Mutation.pushIntoPlace).toBe('undefined');
     expect(typeof result.Mutation.updatePerson).toBe('function');
     expect(typeof result.Mutation.updatePlace).toBe('function');
     expect(typeof result.Mutation.deletePerson).toBe('function');
@@ -443,8 +438,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyPeople).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
-    expect(typeof result.Mutation.pushIntoPerson).toBe('function');
-    expect(typeof result.Mutation.pushIntoPlace).toBe('function');
     expect(typeof result.Mutation.updatePerson).toBe('function');
     expect(typeof result.Mutation.updatePlace).toBe('function');
     expect(typeof result.Mutation.deletePerson).toBe('function');
@@ -533,7 +526,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
-    expect(typeof result.Mutation.pushIntoExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
     expect(typeof result.Example.pointField1).toBe('function');
@@ -597,7 +589,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.node).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
-    expect(typeof result.Mutation.pushIntoExample).toBe('undefined');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
     expect(result.Subscription).toBeUndefined();

@@ -68,7 +68,7 @@ describe('fillInputDicForCustom', () => {
     name: 'entityTimeRangeInput',
     specificName: ({ name }: any) => `${name}TimeRangeInput`,
     fieldNames: () => ['start', 'end', 'data'],
-    fieldTypes: () => ['DateTime!', 'DateTime!', '[PushIntoExampleForCatalogInput!]!'],
+    fieldTypes: () => ['DateTime!', 'DateTime!', '[ExampleForCatalogUpdateInput!]!'],
   };
 
   const custom = {
@@ -90,16 +90,18 @@ describe('fillInputDicForCustom', () => {
     expect(inputDic).toEqual(expectedInputDic);
   });
 
-  test('update nothing for argType = "PushIntoExampleInput"', () => {
-    const argType = 'PushIntoExampleInput';
+  test('update nothing for argType = "ExampleUpdateInput"', () => {
+    const argType = 'ExampleUpdateInput';
     const inputDic = {
-      PushIntoExampleInput: `input PushIntoExampleInput {
+      ExampleUpdateInput: `input ExampleUpdateInput {
+  textField: String
   textArrayField: [String!]
 }`,
     };
 
     const expectedInputDic = {
-      PushIntoExampleInput: `input PushIntoExampleInput {
+      ExampleUpdateInput: `input ExampleUpdateInput {
+  textField: String
   textArrayField: [String!]
 }`,
     };
@@ -108,12 +110,13 @@ describe('fillInputDicForCustom', () => {
     expect(inputDic).toEqual(expectedInputDic);
   });
 
-  test('update inputDic for argType = "PushIntoExampleInput"', () => {
-    const argType = 'PushIntoExampleInput';
+  test('update inputDic for argType = "ExampleUpdateInput"', () => {
+    const argType = 'ExampleUpdateInput';
     const inputDic: { [inputName: string]: string } = {};
 
     const expectedInputDic = {
-      PushIntoExampleInput: `input PushIntoExampleInput {
+      ExampleUpdateInput: `input ExampleUpdateInput {
+  textField: String
   textArrayField: [String!]
 }`,
     };
@@ -168,12 +171,13 @@ input PlaceCreateOrPushChildrenInput {
     expect(inputDic).toEqual(expectedInputDic);
   });
 
-  test('update inputDic for argType = "PushIntoExampleForCatalogInput"', () => {
-    const argType = 'PushIntoExampleForCatalogInput';
+  test('update inputDic for argType = "ExampleForCatalogUpdateInput"', () => {
+    const argType = 'ExampleForCatalogUpdateInput';
     const inputDic: { [inputName: string]: string } = {};
 
     const expectedInputDic = {
-      PushIntoExampleForCatalogInput: `input PushIntoExampleForCatalogInput {
+      ExampleForCatalogUpdateInput: `input ExampleForCatalogUpdateInput {
+  textField: String
   textArrayField: [String!]
 }`,
     };
@@ -190,9 +194,10 @@ input PlaceCreateOrPushChildrenInput {
       ExampleTimeRangeInput: `input ExampleTimeRangeInput {
   start: DateTime!
   end: DateTime!
-  data: [PushIntoExampleForCatalogInput!]!
+  data: [ExampleForCatalogUpdateInput!]!
 }`,
-      PushIntoExampleForCatalogInput: `input PushIntoExampleForCatalogInput {
+      ExampleForCatalogUpdateInput: `input ExampleForCatalogUpdateInput {
+  textField: String
   textArrayField: [String!]
 }`,
     };

@@ -20,7 +20,6 @@ import createObjectBoundStore from '@/utils/createObjectBoundStore';
 const argTypesPrefixPlusSuffixes = [
   // prefixPlusSuffix, transformer, notUseConfig
   ['CreateInput', transformData, true],
-  ['PushIntoInput', transformData, true],
   ['UpdateInput', transformData, true],
   ['WhereInput', transformWhere, false],
   ['RestrictedWhereInput', transformWhere, false],

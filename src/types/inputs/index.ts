@@ -19,7 +19,6 @@ import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import createEntityWherePayloadInputType from './createEntityWherePayloadInputType';
 import createEntityWhichUpdatedInputType from './createEntityWhichUpdatedInputType';
 import createPaginationInputType from './createPaginationInputType';
-import createPushIntoEntityInputType from './createPushIntoEntityInputType';
 
 const inputs = [
   createCopyEntityOptionsInputType,
@@ -43,7 +42,6 @@ const inputs = [
   createEntityWherePayloadInputType,
   createEntityWhichUpdatedInputType,
   createPaginationInputType,
-  createPushIntoEntityInputType,
 ];
 
 export default inputs;

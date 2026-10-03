@@ -769,18 +769,6 @@ enum deleteMenuCloneWithChildrenOptionsEnum {
 input deleteMenuCloneWithChildrenOptionsInput {
   fieldsToDelete: [deleteMenuCloneWithChildrenOptionsEnum]
 }
-input PushIntoMenuInput {
-  sections: MenuSectionCreateOrPushChildrenInput
-}
-input MenuPushPositionsInput {
-  sections: [Int!]
-}
-input PushIntoMenuCloneInput {
-  sections: MenuCloneSectionCreateOrPushChildrenInput
-}
-input MenuClonePushPositionsInput {
-  sections: [Int!]
-}
 input MenuWhereOneAndDataInput {
   whereOne: MenuWhereOneInput!
   data: MenuUpdateInput!
@@ -1087,8 +1075,6 @@ type Mutation {
   deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection!
   deleteMenuWithChildren(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, options: deleteMenuWithChildrenOptionsInput, token: String): Menu!
   deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): MenuClone!
-  pushIntoMenu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, data: PushIntoMenuInput!, positions: MenuPushPositionsInput, token: String): Menu!
-  pushIntoMenuClone(whereOne: MenuCloneWhereOneInput!, data: PushIntoMenuCloneInput!, positions: MenuClonePushPositionsInput, token: String): MenuClone!
   updateFilteredMenus(where: MenuWhereInput, data: MenuUpdateInput!, token: String): [Menu!]!
   updateFilteredMenuClones(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!, token: String): [MenuClone!]!
   updateFilteredMenuSections(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!, token: String): [MenuSection!]!
@@ -1539,14 +1525,6 @@ input Example2CreateOrPushChildrenInput {
   create: [Example2CreateInput!]
   createPositions: [Int!]
 }
-input PushIntoExample2Input {
-  textField1: [String!]
-  textField2: [String!]
-}
-input Example2PushPositionsInput {
-  textField1: [Int!]
-  textField2: [Int!]
-}
 input Example1UpdateInput {
   textField1: String
   textField2: String
@@ -1722,7 +1700,6 @@ type Mutation {
   deleteManyExample2s(whereOne: [Example2WhereOneInput!]!, token: String): [Example2!]!
   deleteExample1(whereOne: Example1WhereOneInput!, token: String): Example1!
   deleteExample2(whereOne: Example2WhereOneInput!, token: String): Example2!
-  pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput, token: String): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
   updateFilteredExample2s(where: Example2WhereInput, near: Example2NearInput, data: Example2UpdateInput!, token: String): [Example2!]!
   updateFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): Int!
@@ -2083,14 +2060,6 @@ input PlaceCreateOrPushChildrenInput {
   create: [PlaceCreateInput!]
   createPositions: [Int!]
 }
-input PushIntoPersonInput {
-  friends: PersonCreateOrPushChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-}
-input PersonPushPositionsInput {
-  friends: [Int!]
-  enemies: [Int!]
-}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -2261,7 +2230,6 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): [Place!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
@@ -2550,14 +2518,6 @@ input AddressCreateInput {
   country: String!
   province: String
 }
-input PushIntoPersonInput {
-  locations: [AddressCreateInput!]
-  places: [AddressCreateInput!]
-}
-input PersonPushPositionsInput {
-  locations: [Int!]
-  places: [Int!]
-}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -2681,7 +2641,6 @@ type Mutation {
   deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
   updateManyPeople(whereOneAndData: [PersonWhereOneAndDataInput!]!, token: String): [Person!]!
@@ -3116,22 +3075,6 @@ input copyPersonOptionsInput {
   friends: copyPersonThroughfriendsOptionInput
   enemies: copyPersonThroughenemiesOptionInput
 }
-input PushIntoPersonInput {
-  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-}
-input PersonPushPositionsInput {
-  friends: [Int!]
-  enemies: [Int!]
-}
-input PushIntoPlaceInput {
-  citizens: PersonCreateOrPushThru_location_FieldChildrenInput
-  visitors: PersonCreateOrPushChildrenInput
-}
-input PlacePushPositionsInput {
-  citizens: [Int!]
-  visitors: [Int!]
-}
 input PlaceUpdateInput {
   name: String
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
@@ -3308,8 +3251,6 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
-  pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput, token: String): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): [Place!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!

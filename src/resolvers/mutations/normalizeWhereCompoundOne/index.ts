@@ -12,7 +12,6 @@ const whereOneActionGeneralNames = new Set([
   'deleteEntityWithChildren',
   'deleteManyEntities',
   'deleteManyEntitiesWithChildren',
-  'pushIntoEntity',
   'updateEntity',
 ]);
 

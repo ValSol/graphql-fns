@@ -174,7 +174,6 @@ describe('whereCompoundOne in mutations', () => {
     [
       'updateCity(whereOne: CityWhereOneInput, whereCompoundOne: CityWhereCompoundOneInput, data: CityUpdateInput!, token: String): City!',
       'deleteCity(whereOne: CityWhereOneInput, whereCompoundOne: CityWhereCompoundOneInput, token: String): City!',
-      'pushIntoCity(whereOne: CityWhereOneInput, whereCompoundOne: CityWhereCompoundOneInput, data: PushIntoCityInput!, positions: CityPushPositionsInput, token: String): City!',
       'updateManyCities(whereOneAndData: [CityWhereOneAndDataInput!], whereCompoundOneAndData: [CityWhereCompoundOneAndDataInput!], token: String): [City!]!',
       'deleteManyCities(whereOne: [CityWhereOneInput!], whereCompoundOne: [CityWhereCompoundOneInput!], token: String): [City!]!',
       'updateCityForCatalog(whereOne: CityForCatalogWhereOneInput, whereCompoundOne: CityForCatalogWhereCompoundOneInput, data: CityForCatalogUpdateInput!, token: String): CityForCatalog!',
@@ -205,7 +204,7 @@ describe('whereCompoundOne in mutations', () => {
     expect(sdl).not.toMatch(/WhereCompoundOneInput \{[^}]*_exists/);
   });
 
-  test('updateCity / pushIntoCity / deleteCity by whereCompoundOne', async () => {
+  test('updateCity / deleteCity by whereCompoundOne', async () => {
     const kyiv = await createCity(`name: "Kyiv", postcode: "01001", country: { connect: "${ua}" }`);
     const lviv = await createCity(`name: "Lviv", postcode: "79000", country: { connect: "${ua}" }`);
     const lvivPl = await createCity(
@@ -230,10 +229,10 @@ describe('whereCompoundOne in mutations', () => {
 
     // the second index
     const r3 = await run(`mutation {
-      pushIntoCity(whereCompoundOne: { postcode: "79000", country: "${ua}" }, data: { tags: ["old"] }) { id tags }
+      updateCity(whereCompoundOne: { postcode: "79000", country: "${ua}" }, data: { tags: ["old"] }) { id tags }
     }`);
     expect(r3.errors).toBeUndefined();
-    expect(r3.data).toEqual({ pushIntoCity: { id: lviv, tags: ['old'] } });
+    expect(r3.data).toEqual({ updateCity: { id: lviv, tags: ['old'] } });
 
     // "null" matches an absent value
     const r4 = await run(`mutation {

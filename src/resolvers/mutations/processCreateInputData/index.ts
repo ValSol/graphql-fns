@@ -9,7 +9,6 @@ import whereFromGlobalIds from '@/resolvers/utils/whereFromGlobalIds';
 import multiPolygonFromGqlToMongo from './multiPolygonFromGqlToMongo';
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
-import processForPushEach from './processForPushEach';
 import renumeratePositions from './renumeratePositions';
 import lineStringFromGqlToMongo from './lineStringFromGqlToMongo';
 import multiLineStringFromGqlToMongo from './multiLineStringFromGqlToMongo';
@@ -35,8 +34,7 @@ const processCreateInputData = (
   data: any,
   preparedData: PreparedData,
   entityConfig: TangibleEntityConfig,
-  processingKind: 'create' | 'update' | 'push' | 'updateMany',
-  rootFieldsPositions: any = {},
+  processingKind: 'create' | 'update' | 'updateMany',
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes: any = Types,
 ): PreparedData => {
@@ -472,15 +470,6 @@ const processCreateInputData = (
             },
           },
         ];
-      } else if (processingKind === 'push') {
-        const { _id, ...rest } = document;
-
-        item = processForPushEach(rest, rootFieldsPositions).map((update) => ({
-          updateOne: {
-            filter: { _id },
-            update,
-          },
-        }));
       } else if (processingKind === 'updateMany') {
         const { _id, ...$set } = document;
         const arr = core.get(config);

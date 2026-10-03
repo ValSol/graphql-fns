@@ -77,7 +77,7 @@ describe('compressInventory', () => {
           Mutation: {
             cloneLevelOfThing: ['Restaurant'],
             improvedUpdateThing: ['RestaurantLevel'],
-            pushIntoEntity: ['RestaurantLevel'],
+            updateEntity: ['RestaurantLevel'],
           },
         },
       },
@@ -267,7 +267,7 @@ describe('compressInventory', () => {
           Mutation: {
             cloneLevelOfThing: ['Restaurant'],
             improvedUpdateThing: ['RestaurantLevel'],
-            pushIntoEntity: ['RestaurantLevel'],
+            updateEntity: ['RestaurantLevel'],
           },
         },
       },

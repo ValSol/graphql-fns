@@ -12,7 +12,6 @@ import transformWhereKeyToSource from './transformWhereKeyToSource';
 const argTypesInParts = [
   // prefx, suffix, transformer, notUseConfig
   ['', 'CreateInput', transformData, true],
-  ['PushInto', 'Input', transformData, true],
   ['', 'UpdateInput', transformData, true],
   ['', 'WhereInput', transformWhere, false],
   ['', 'RestrictedWhereInput', transformWhere, false],

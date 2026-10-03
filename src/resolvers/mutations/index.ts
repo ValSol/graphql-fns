@@ -12,7 +12,6 @@ import deleteFilteredEntitiesWithChildren from './createDeleteFilteredEntitiesWi
 import deleteFilteredEntitiesWithChildrenReturnScalar from './createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver';
 import deleteManyEntities from './createDeleteManyEntitiesMutationResolver';
 import deleteManyEntitiesWithChildren from './createDeleteManyEntitiesWithChildrenMutationResolver';
-import pushIntoEntity from './createPushIntoEntityMutationResolver';
 import updateEntity from './createUpdateEntityMutationResolver';
 import updateFilteredEntities from './createUpdateFilteredEntitiesMutationResolver';
 import updateFilteredEntitiesReturnScalar from './createUpdateFilteredEntitiesReturnScalarMutationResolver';
@@ -33,7 +32,6 @@ const mutations = {
   deleteFilteredEntitiesReturnScalar,
   deleteManyEntities,
   deleteManyEntitiesWithChildren,
-  pushIntoEntity,
   updateFilteredEntities,
   updateFilteredEntitiesReturnScalar,
   updateManyEntities,

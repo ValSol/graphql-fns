@@ -4,10 +4,8 @@ import type { GeneralConfig, ServersideConfig, EntityConfig } from '@/tsTypes';
 import composeFieldsObject from '@/utils/composeFieldsObject';
 import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
-import transformDataForPush from './transformDataForPush';
 
 type Arg = {
-  processingKind: 'create' | 'update' | 'push';
   projection: {
     [missingFieldName: string]: 1;
   };
@@ -15,9 +13,6 @@ type Arg = {
     whereOne: any;
     data: {
       [fieldName: string]: any;
-    };
-    positions?: {
-      [fieldName: string]: Array<number>;
     };
   };
   entityConfig: EntityConfig;
@@ -28,7 +23,6 @@ type Arg = {
 };
 
 const getMissingData = async ({
-  processingKind,
   projection,
   args,
   entityConfig,
@@ -54,9 +48,6 @@ const getMissingData = async ({
 
   if (!instance) return null;
 
-  const instance2 =
-    processingKind === 'push' ? transformDataForPush(instance, args, entityConfig) : instance;
-
   const { fieldsObject: fieldsObj } = composeFieldsObject(entityConfig);
 
   const result: Record<string, any> = {};
@@ -69,19 +60,19 @@ const getMissingData = async ({
       if (fieldType === 'duplexFields' || fieldType === 'relationalFields') {
         if (array) {
           result[key] =
-            instance2[key] !== null && instance2[key] !== undefined
-              ? { connect: instance2[key].map((item: Types.ObjectId) => item.toString()) }
+            instance[key] !== null && instance[key] !== undefined
+              ? { connect: instance[key].map((item: Types.ObjectId) => item.toString()) }
               : { connect: [] };
         } else {
           result[key] = {
             connect:
-              instance2[key] !== null && instance2[key] !== undefined
-                ? instance2[key].toString()
+              instance[key] !== null && instance[key] !== undefined
+                ? instance[key].toString()
                 : null,
           };
         }
       } else {
-        result[key] = instance2[key];
+        result[key] = instance[key];
       }
     }
   });

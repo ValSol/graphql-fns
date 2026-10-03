@@ -3,7 +3,6 @@ import mingo from 'mingo';
 import type { ResolverCreatorArg, ResolverArg } from '@/tsTypes';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import extractExternalReferences from './extractExternalReferences';
-import extractMissingAndPushDataFields from './extractMissingAndPushDataFields';
 import extractMissingDataFields from './extractMissingDataFields';
 import getExternalReferences from './getExternalReferences';
 import getMissingData from './getMissingData';
@@ -13,7 +12,7 @@ const checkData = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   preFilter: Array<any>,
-  processingKind: 'create' | 'update' | 'push',
+  processingKind: 'create' | 'update',
   session: any,
 ): Promise<boolean> => {
   const id = `[${`${Math.random()}`.slice(2, 5)}]`;
@@ -32,9 +31,6 @@ const checkData = async (
     data: {
       [fieldName: string]: any;
     };
-    positions?: {
-      [fieldName: string]: Array<number>;
-    };
   };
 
   const { data: preData } = args as { data: any; whereOne: any };
@@ -45,23 +41,6 @@ const checkData = async (
     if (Object.keys(projection).length > 0) {
       preData2 = await getMissingData({
         args: { ...args, data: preData },
-        processingKind,
-        projection,
-        entityConfig,
-        generalConfig,
-        serversideConfig,
-        context,
-        session,
-      });
-
-      if (!preData2) return false;
-    }
-  } else if (processingKind === 'push') {
-    const projection = extractMissingAndPushDataFields(preData, preFilter, entityConfig);
-    if (Object.keys(projection).length > 0) {
-      preData2 = await getMissingData({
-        args: { ...args, data: preData },
-        processingKind,
         projection,
         entityConfig,
         generalConfig,
