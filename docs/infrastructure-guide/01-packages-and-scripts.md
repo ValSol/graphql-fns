@@ -10,7 +10,7 @@
     "@swc/core": "^1.16.2",
     "fast-deep-equal": "^3.1.3",
     "graphql": "^17.0.2",
-    "graphql-fns": "0.1.2-beta.1158",
+    "graphql-fns": "0.1.2-beta.1165",
     "graphql-yoga": "^5.24.1",
     "mongoose": "^9.10.1",
     "next": "^16.3.7",

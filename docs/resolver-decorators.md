@@ -1,8 +1,8 @@
 # Resolver decorators: arguments in, results out
 
 > How generated resolvers are wrapped: global ids, argument transformers, result transformation, authorization hand-off.
-> Identifiers: `RD…` facts, `?RD…` open questions. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
-> Authorization itself (`executeAuthorisation`) is described in [schema-and-resolvers-analysis.md §13](./schema-and-resolvers-analysis.md#13-user-authorization).
+> Identifiers: `RD…` facts. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
+> Authorization itself (`executeAuthorisation`) is described in [schema-and-resolvers-analysis.md §11](./schema-and-resolvers-analysis.md#11-user-authorization).
 
 ## 1. Layers
 
@@ -40,9 +40,9 @@ Transformers are chosen by the GraphQL type of the argument without the entity n
 
 | Argument type suffix | Transformer | Uses entity config |
 |---|---|---|
-| `CreateInput`, `PushIntoInput`, `UpdateInput` | `transformData`: `id`, `connect` (scalar or array) from global ids; recursive into `create` | no |
+| `CreateInput`, `UpdateInput` | `transformData`: `id`, `connect` (scalar or array) from global ids; recursive into `create` | no |
 | `WhereInput`, `RestrictedWhereInput`, `WhereByUniqueInput`, `WhereCompoundOneInput`, `WhereOneInput` | `whereFromGlobalIds`: `id`, `id_in`, `id_nin`; relational/duplex fields `x`, `x_ne`, `x_in`, `x_nin` (`x_exists` as is); recursive into `x_` (the related entity's where) and `AND`/`OR`/`NOR`; an unknown suffix of a relational field throws | yes (to know relational/duplex fields) |
-| `WhereAndSearchInput` | `transformWhereAndSearch`: `whereFromGlobalIds` for `where` of every item (single or list); `search` as is | yes |
+| `WhereAndSearchInput`, `RestrictedWhereAndTargetInput` | `transformWhereAndSearch`: `whereFromGlobalIds` for `where` of every item (single or list); `search` / `target` as is | yes |
 | `WhereKeyToSourceInput` | `transformWhereKeyToSource`: `id` of every duplex field key | yes |
 
 | ID | Fact |
@@ -64,7 +64,7 @@ Transformers are chosen by the GraphQL type of the argument without the entity n
 |---|---|
 | RD7 | 📖 `resolverDecorator` calls it with `generalConfig = null` (global ids without representation key, entity name from the config), `customResolverDecorator` with `generalConfig` (global ids of representation configs carry the root name and the representation key, from `parseEntityName`). |
 | RD8 | 📖 Subscription resolvers call `transformAfter({}, node, entityConfig, generalConfig)` for `node`, `previousNode` and `actor`, so `_token` is `undefined` there. |
-| RD9 | ✅ Code that rebuilds an entity after the root resolver passes on the hidden context of calculated fields with `copyCalculatedContext` ([calculated-fields.md](./calculated-fields.md) D5): `transformAfter` and `createNodeQueryResolver` (it adds `__typename` with a spread; fixed `0dd27898`, ?13). Connections keep node references. |
+| RD9 | ✅ Code that rebuilds an entity after the root resolver passes on the hidden context of calculated fields with `copyCalculatedContext` ([calculated-fields.md](./calculated-fields.md) CF17): `transformAfter` and `createNodeQueryResolver` (it adds `__typename` with a spread). Connections keep node references. |
 | RD10 | ✅ Entities returned by resolvers are compared with Jest `toEqual` in tests (ours and projects'), and `toEqual` also compares own enumerable `Symbol` properties, so nothing that holds `context`/`info` may be put into an entity as an enumerable property. |
 
 ## 5. `authDecorator`: the 5th argument
@@ -81,8 +81,6 @@ Options passed by the caller of a decorated resolver are not forwarded. Raw reso
 
 📖 Decorated resolvers are cached per `(generalConfig, serversideConfig, actionAttributes | signatureMethods)` and entity name via `createObjectBoundStore`, except under Jest (`JEST_WORKER_ID`). Argument transformer maps are built on the first call.
 
-## 7. Open questions
-
-| ID | Question |
+| ID | Fact |
 |---|---|
-| ?RD1 | ✅ **[fixed `0c4a030d`]** `createResolverCreator` (representation resolvers) cached resolver creators in a module-level object keyed by the action name only and checked `if (!resolverCreator) return null` (always truthy). The cache key now includes the representation key (the creator composes the representation config for calculated fields) and the check is `if (!regularResolver)`. The cache is still module-level: the creator gets the configs as arguments. |
+| RD11 | ✅ `createResolverCreator` (representation resolvers) caches resolver creators in a module-level object keyed by the action name and the representation key (the creator composes the representation config for calculated fields); the configs are passed to the creator as arguments. |

@@ -26,9 +26,9 @@ In `inventory` actions are named by **general names**, with `Entity` / `Entities
 
 | Type | General action names (for `Country`: the generated name) |
 |---|---|
-| `Query`, root | `entity` (`Country`), `entities` (`Countries`), `entitiesThroughConnection`, `entitiesByUnique`, `entityCount`, `entityCounts`, `entityExistences`, `entityDistinctValues` |
+| `Query`, root | `entity` (`Country`), `entities` (`Countries`), `entitiesThroughConnection`, `entitiesByUnique`, `entityCount`, `entityCounts`, `entityExistences`, `entityDistinctValues`, `entityManyDistinctValues` |
 | `Query`, child fields | `childEntity` (scalar link: `City.country`), `childEntities` (array link: `Country.cities`), `childEntitiesThroughConnection` (`citiesThroughConnection`), `childEntityCount` (`citiesCount`), `childEntityDistinctValues` (`citiesDistinctValues`), `childEntityGetOrCreate` (`…GetOrCreate` of duplex fields) |
-| `Mutation` | `createEntity`, `createManyEntities`, `updateEntity`, `updateManyEntities`, `updateFilteredEntities`, `updateFilteredEntitiesReturnScalar`, `pushIntoEntity`, `deleteEntity`, `deleteManyEntities`, `deleteFilteredEntities`, `deleteFilteredEntitiesReturnScalar`, `deleteEntityWithChildren`, `deleteManyEntitiesWithChildren`, `deleteFilteredEntitiesWithChildren`, `deleteFilteredEntitiesWithChildrenReturnScalar`, `copyEntity`, `copyManyEntities`, `copyEntityWithChildren`, `copyManyEntitiesWithChildren` |
+| `Mutation` | `createEntity`, `createManyEntities`, `updateEntity`, `updateManyEntities`, `updateFilteredEntities`, `updateFilteredEntitiesReturnScalar`, `deleteEntity`, `deleteManyEntities`, `deleteFilteredEntities`, `deleteFilteredEntitiesReturnScalar`, `deleteEntityWithChildren`, `deleteManyEntitiesWithChildren`, `deleteFilteredEntitiesWithChildren`, `deleteFilteredEntitiesWithChildrenReturnScalar`, `copyEntity`, `copyManyEntities`, `copyEntityWithChildren`, `copyManyEntitiesWithChildren` |
 | `Subscription` | `createdEntity`, `updatedEntity`, `deletedEntity` |
 
 Custom actions (part 7) and actions of representations (part 8) are named by their general names too (`entitySummary`, `entitiesForCatalog`, …) 📖.
@@ -37,7 +37,7 @@ Custom actions (part 7) and actions of representations (part 8) are named by the
 
 - a key other than `name`, `include`, `exclude`, or a type other than `Query` / `Mutation` / `Subscription`;
 - an unknown action name; for a generated name the message suggests the general one: `Countries` → `{ Query: { entities: ["Country"] } }`;
-- an unknown entity, or an entity for which the action is not possible (e.g. `pushIntoEntity` for an entity without array fields, `…WithChildren` without a duplex parent link, part 2); the message lists the entities the action is available for:
+- an unknown entity, or an entity for which the action is not possible (e.g. `…WithChildren` without a duplex parent link, part 2); the message lists the entities the action is available for:
 
   ```
   Incorrect entity name: "Contry" in "Query": "entities" of inventory "G" (include): entity not found!
@@ -78,7 +78,7 @@ const generalConfig: GeneralConfig = {
 
 ✅ Checked on the generated schema.
 
-- Root → child: `entity` → `childEntity`, `entities` → `childEntities`, `entitiesThroughConnection` → `childEntitiesThroughConnection`, `entityCount` → `childEntityCount`, `entityDistinctValues` → `childEntityDistinctValues`, the same for representation keys; `childEntityGetOrCreate` is never added ✅; `entityCounts` and `entityExistences` have no child queries 📖.
+- Root → child: `entity` → `childEntity`, `entities` → `childEntities`, `entitiesThroughConnection` → `childEntitiesThroughConnection`, `entityCount` → `childEntityCount`, `entityDistinctValues` → `childEntityDistinctValues`, the same for representation keys; `childEntityGetOrCreate` is never added ✅; `entityCounts`, `entityExistences` and `entityManyDistinctValues` have no child queries 📖.
 - An entity is added only where the child query is possible: `entities: ['Country', 'City']` adds `childEntities: ['City']` (for `Country.cities`), but not `Country`, which is referred to only by scalar fields ✅.
 - Child queries already listed are kept; `exclude`, `Mutation`, `Subscription` are not changed; an `include` without an object `Query` is returned as is ✅.
 - The helper is not applied implicitly: call it for `generalConfig.inventory` and, if needed, separately for every role of `inventoryByRoles` (step 5) ✅.

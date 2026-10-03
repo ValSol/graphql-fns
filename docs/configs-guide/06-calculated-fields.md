@@ -1,6 +1,6 @@
 ## Part 6. Calculated fields
 
-A calculated field is computed when it is read and is never stored. It is the first feature of this guide that needs **both** configs: the shape of the field goes to `graphql-fns.general.config.ts` (safe for the client), the functions go to `graphql-fns.serverSide.config.ts`. This part is a short walkthrough; all details, the edge cases and the design are in [calculated-fields.md](../calculated-fields.md) (§0 "How to use"), upgrading an older project in [migration.md](../migration.md). As before, subscriptions are excluded by `inventory`.
+A calculated field is computed when it is read and is never stored. It is the first feature of this guide that needs **both** configs: the shape of the field goes to `graphql-fns.general.config.ts` (safe for the client), the functions go to `graphql-fns.serverSide.config.ts`. This part is a short walkthrough; all details, the edge cases and the design are in [calculated-fields.md](../calculated-fields.md) (§1 "How to use"). As in the previous parts, subscriptions are excluded by `inventory`.
 
 ### Step 1. Declare the fields in the general config
 
@@ -122,8 +122,8 @@ The fields used in the selector must be available for filtering in the target en
 ### Step 5. Where the values appear
 
 - In every query and in the results of mutations (`updateCountry(…) { density largestCity }`) ✅.
-- In subscriptions: see [calculated-fields.md](../calculated-fields.md) §0 (`allowedCalculatedWithAsyncFuncFieldNames`).
-- Resolvers called from your own code (`composeQueryResolver(…)`, mutation resolvers, `workOutMutations`) return calculated values only with `materializeCalculatedFields: true` in their options; otherwise the values are computed only when the result goes through GraphQL ([calculated-fields.md](../calculated-fields.md) §0).
+- In subscriptions: see [calculated-fields.md](../calculated-fields.md) §5.3 (`allowedCalculatedWithAsyncFuncFieldNames`).
+- Resolvers called from your own code (`composeQueryResolver(…)`, mutation resolvers, `workOutMutations`) return calculated values only with `materializeCalculatedFields: true` in their options; otherwise the values are computed only when the result goes through GraphQL ([calculated-fields.md](../calculated-fields.md) CF20).
 
 ### Checklist
 

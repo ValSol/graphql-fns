@@ -1,11 +1,11 @@
 # Representations
 
 > A representation is an alternative view of existing entities (e.g. `ForCatalog`, `ForAdmin`) with its own set of fields and actions, but the same collections.
-> Identifiers: `RP…` facts, `?RP…` open questions. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
+> Identifiers: `RP…` facts. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
 
 ## 1. Declaration
 
-`generalConfig.representations: { [representationKey]: RepresentationAttributes }`, usually composed with `composeRepresentations([ForCatalog, ForAdmin], allEntityConfigs)` (it checks that the keys are unique and correct and validates `involvedOutputRepresentationKeys`; the old names `generalConfig.representation` / `composeRepresentation` are described in [migration.md](./migration.md) §7):
+`generalConfig.representations: { [representationKey]: RepresentationAttributes }`, usually composed with `composeRepresentations([ForCatalog, ForAdmin], allEntityConfigs)` (it checks that the keys are unique and correct and validates `involvedOutputRepresentationKeys`):
 
 | Property | Meaning |
 |---|---|
@@ -39,7 +39,7 @@
 
 | ID | Fact |
 |---|---|
-| RP4 | ✅ **[fixed `51d51101`]** Step 5 used to `push` into field arrays shared with the root config (step 3 is a shallow copy), so fields of `addFields` were also added to the **root** entity config. |
+| RP4 | ✅ Step 5 builds new field arrays instead of changing the arrays shared with the root config (step 3 is a shallow copy), so fields of `addFields` never get into the **root** entity config. |
 | RP5 | 📖 The result is cached per `generalConfig` by representation config name (not under Jest). |
 | RP6 | 📖 `composeRepresentationConfigByName(key, rootConfig, generalConfig)` is the same, but throws instead of returning `null`. |
 
@@ -49,12 +49,7 @@
 |---|---|
 | RP7 | 📖 `mergeRepresentationIntoCustom(generalConfig, variant)` turns every allowed standard action of every representation into a custom action signature (`composeCustomAction`) and merges them with `generalConfig.custom`; the SDL and the resolvers of representations are then produced as for custom actions. Variants: `forGqlResolvers` (no child actions), `forCustomResolver` (with child actions, used by field resolvers of representation types), `forClient` (without `childEntity`/`childEntities`). |
 | RP8 | 📖 `createCustomResolver` uses `serversideConfig.Query/Mutation[actionName]` if set, otherwise a resolver generated from the standard one (`generateRepresentationResolvers` → `createResolverCreator`), wrapped with `customResolverDecorator` ([resolver-decorators.md](./resolver-decorators.md) RD2). |
-| RP9 | 📖 **The generated representation resolver is the standard raw resolver of the ROOT entity config**: `createCustomResolver` is called with the root config from `allEntityConfigs`, so the Mongo model/collection is the root one. The representation config is used for the SDL, the argument transformers and `transformAfter` (global ids with the representation key); ✅ for calculated fields `createResolverCreator` passes it to the raw resolver as `resolverOptions.calculatedFieldsConfig` (see ?RP1). |
+| RP9 | 📖 **The generated representation resolver is the standard raw resolver of the ROOT entity config**: `createCustomResolver` is called with the root config from `allEntityConfigs`, so the Mongo model/collection is the root one. The representation config is used for the SDL, the argument transformers and `transformAfter` (global ids with the representation key); ✅ for calculated fields `createResolverCreator` passes it to the raw resolver as `resolverOptions.calculatedFieldsConfig` ([calculated-fields.md](./calculated-fields.md) CF23). |
 | RP10 | 📖 Field resolvers of representation types (`composeEntityResolvers(representationConfig)`) are composed in `composeGqlResolvers` for every representation config that is in the SDL; child resolvers of representation types call `childEntities<Key>` etc. through `createCustomResolver`. |
-| RP11 | ✅ Callbacks of calculated fields are looked up by the representation config name first, then by the root name ([calculated-fields.md](./calculated-fields.md), `getCalculatedFieldCallbacks`), and checked at compose time for every representation config in the SDL (`checkCalculatedFieldsCallbacks`). ✅ **[fixed `371e9ac7`]** `fieldsToUseNames` are checked against the fields of the config the callbacks are taken from: a calculated field the representation inherits (callbacks under the root name) may use root fields hidden by `excludeFields`/`includeFields`, because of RP9 the root collection is queried and the projection is not filtered by the representation's fields; callbacks under the representation's own name (fields of `addFields`) are checked against the representation config. |
-
-## 5. Open questions
-
-| ID | Question |
-|---|---|
-| ?RP1 | ✅ **[fixed `0c4a030d`]** Because of RP9, calculated fields added by a representation (`addFields`) were unknown to the root resolver: no `fieldsToUseNames` in the projection, no batched `asyncFunc` (before the calculated fields redesign they were not calculated at all). Now `createResolverCreator` passes the representation config as `resolverOptions.calculatedFieldsConfig`; root query resolvers, `getPrevious` of mutations, `produceResult`, `getAsyncFuncResults` and `addCalculatedFieldsToEntity` take calculated fields from it (`getCalculatedFieldsConfig`), while `asyncFunc` still gets the root `resolverCreatorArg`. Tested for queries, lists, `create…` and `delete…` of a representation. ✅ **[fixed `0dd27898`]** Connection actions (`XsThroughConnectionForY`) and `node(id:)` with a representation global id still lost it: the connection resolver passed only `{ involvedFilters }` to the list resolver, `createNodeQueryResolver` did not pass it at all ([calculated-fields.md](./calculated-fields.md) ?12, ?13); both are tested now. |
+| RP11 | ✅ Callbacks of calculated fields are looked up by the representation config name first, then by the root name ([calculated-fields.md](./calculated-fields.md), `getCalculatedFieldCallbacks`), and checked at compose time for every representation config in the SDL (`checkCalculatedFieldsCallbacks`). ✅ `fieldsToUseNames` are checked against the fields of the config the callbacks are taken from: a calculated field the representation inherits (callbacks under the root name) may use root fields hidden by `excludeFields`/`includeFields`, because of RP9 the root collection is queried and the projection is not filtered by the representation's fields; callbacks under the representation's own name (fields of `addFields`) are checked against the representation config. |
+| RP12 | ✅ Calculated fields added by a representation (`addFields`) get the projection of their `fieldsToUseNames` and the batched `asyncFunc`: `createResolverCreator` passes the representation config as `resolverOptions.calculatedFieldsConfig`, and the root resolvers, connections and `node(id:)` with a representation global id take calculated fields from it ([calculated-fields.md](./calculated-fields.md) CF23). Tested for queries, lists, connections, `node`, `create…` and `delete…` of a representation. |

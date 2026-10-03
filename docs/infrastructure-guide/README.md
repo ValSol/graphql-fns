@@ -1,7 +1,8 @@
 # Setting up the infrastructure: Next.js + GraphQL Yoga + Relay
 
 > How to wire `graphql-fns` into an application: from the two configs to a page that renders data. The example is a Next.js (App Router) project with GraphQL Yoga as the server and Relay as the client. All parts are listed in the [Contents](#contents).
-> Marks: ✅ verified by running the example project of this guide (graphql-fns 0.1.2-beta.1158, Next.js 16.3, graphql-yoga 5.24, react-relay / relay-compiler 21.0, graphql 17, mongoose 9.10, MongoDB 8.0); 📖 conclusion from reading the code only.
+> Describes graphql-fns 0.1.2-beta.1165.
+> Marks: ✅ verified by running the example project of this guide (Next.js 16.3, graphql-yoga 5.24, react-relay / relay-compiler 21.0, graphql 17, mongoose 9.10, MongoDB 8.0); 📖 conclusion from reading the code only.
 
 The guide is about the **plumbing** around the library. What to write inside the configs is the subject of the [guide to the configs](../configs-guide/README.md); here they stay as small as possible.
 

@@ -40,7 +40,7 @@ A city name is not unique by itself, but it is unique within a country. `uniqueC
 | Action | Argument |
 |---|---|
 | query `City` | `whereCompoundOne` |
-| `updateCity`, `deleteCity`, `pushIntoCity`, `deleteCityWithChildren` | `whereCompoundOne` |
+| `updateCity`, `deleteCity`, `deleteCityWithChildren` | `whereCompoundOne` |
 | `deleteManyCities`, `deleteManyCitiesWithChildren` | `whereCompoundOne: [CityWhereCompoundOneInput!]` |
 | `updateManyCities` | `whereCompoundOneAndData: [CityWhereCompoundOneAndDataInput!]`, items `{ whereCompoundOne, data }` |
 | `copyCity`, `copyCityWithChildren` | `whereCompoundTarget` next to `whereTarget` (the entity copied **into**); the source is still selected by `whereKeyToSource` |

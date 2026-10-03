@@ -29,7 +29,7 @@ The same for a chain of mutations executed by `workOutMutations` (step 3): with 
 
 ### Step 2. What `transactions: true` does
 
-- Every mutation resolver (`create…`, `update…`, `delete…`, `copy…`, `pushInto…`, generated, of representations, and the ones you call from code, part 7) runs in its own MongoDB session and transaction: the lookup of the previous state, all writes and the counters are committed together or not at all 📖.
+- Every mutation resolver (`create…`, `update…`, `delete…`, `copy…`, generated, of representations, and the ones you call from code, part 7) runs in its own MongoDB session and transaction: the lookup of the previous state, all writes and the counters are committed together or not at all 📖.
 - Every call of `workOutMutations` runs **all its mutations in one transaction** (step 3) 📖.
 - A transaction that fails with a transient error (`TransientTransactionError`, `WriteConflict`: two requests changed the same documents) is retried, up to 7 attempts with a growing pause; a commit with an unknown result (`UnknownTransactionCommitResult`) is retried as a commit. Other errors are returned at once. Without transactions nothing is retried, so that partially done writes are not repeated 📖.
 - Queries do not use transactions.
@@ -169,7 +169,7 @@ An item of the chain 📖:
 
 | Key | Meaning |
 |---|---|
-| `actionGeneralName` | the general name of a standard mutation: `createEntity`, `createManyEntities`, `updateEntity`, `updateManyEntities`, `updateFilteredEntities`, `pushIntoEntity`, `deleteEntity`, `deleteManyEntities`, `deleteFilteredEntities`, `copyEntity`, `copyManyEntities` and their `…WithChildren` / `…ReturnScalar` variants |
+| `actionGeneralName` | the general name of a standard mutation: `createEntity`, `createManyEntities`, `updateEntity`, `updateManyEntities`, `updateFilteredEntities`, `deleteEntity`, `deleteManyEntities`, `deleteFilteredEntities`, `copyEntity`, `copyManyEntities` and their `…WithChildren` / `…ReturnScalar` variants |
 | `entityConfig` | the entity of the mutation, from `generalConfig.allEntityConfigs` |
 | `args` | the arguments of the mutation, as in the GraphQL API but with Mongo ids |
 | `returnResult` | required. `true`: the result of the mutation is put into the returned array; `false`: `null` is put there. The array has the order of the chain |

@@ -1,7 +1,7 @@
 # Inventory
 
 > `generalConfig.inventory` selects which actions exist in the schema; `serversideConfig.inventoryByRoles` selects which of them every role may call.
-> Identifiers: `IN…` facts, `?IN…` open questions. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
+> Identifiers: `IN…` facts. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
 
 ## 1. Shape
 
@@ -55,7 +55,7 @@ Keys of the second level are **general** action names (`entity`, `entities`, `cr
 
 | ID | Fact |
 |---|---|
-| IN14 | 📖 `executeAuthorisation` puts `subscriptionCreatedEntityName` / `subscriptionUpdatedEntityName` / `subscriptionDeletedEntityName` into `resolverOptions.subscriptionEntityNames` when the matching subscription is allowed by the inventory; the `report` of `createEntity`, `updateEntity` (and `pushIntoEntity`), `deleteEntity` then returns a function that publishes the event after writes (`composeReport`); other mutations (`createManyEntities`, `updateFilteredEntities`, …) do not report. |
+| IN14 | 📖 `executeAuthorisation` puts `subscriptionCreatedEntityName` / `subscriptionUpdatedEntityName` / `subscriptionDeletedEntityName` into `resolverOptions.subscriptionEntityNames` when the matching subscription is allowed by the inventory; the `report` of `createEntity`, `updateEntity`, `deleteEntity` then returns a function that publishes the event after writes (`composeReport`); other mutations (`createManyEntities`, `updateFilteredEntities`, …) do not report. |
 | IN15 | ✅ `composeStandardMutationResolver` and `workOutMutations` (with `returnResult` and `returnReport`) compose the report before any write and call `checkPubsub(context)` if there is one, so without `context.pubsub` such a mutation throws `PubSub not found! If you don't use "Subscription" exclude it in "inventory"!` without changes in the database (`src/resolvers/mutations/missingPubsub.mtest.ts`). `composeReport` keeps the same check for other callers. |
 
 ## 6. Adding child queries (`addChildActions`)
@@ -64,7 +64,7 @@ Keys of the second level are **general** action names (`entity`, `entities`, `cr
 
 | ID | Fact |
 |---|---|
-| IN16 | ✅ Root → child: `entity` → `childEntity`, `entities` → `childEntities`, `entitiesThroughConnection` → `childEntitiesThroughConnection`, `entityCount` → `childEntityCount`, `entityDistinctValues` → `childEntityDistinctValues`; the same with every representation key (`entitiesForCatalog` → `childEntitiesForCatalog`). `childEntityGetOrCreate` has no root query and is never added; `entityCounts` and `entityExistences` have no child queries and add nothing. |
+| IN16 | ✅ Root → child: `entity` → `childEntity`, `entities` → `childEntities`, `entitiesThroughConnection` → `childEntitiesThroughConnection`, `entityCount` → `childEntityCount`, `entityDistinctValues` → `childEntityDistinctValues`; the same with every representation key (`entitiesForCatalog` → `childEntitiesForCatalog`). `childEntityGetOrCreate` has no root query and is never added; `entityCounts`, `entityExistences` and `entityManyDistinctValues` have no child queries and add nothing. |
 | IN17 | ✅ An entity is added only if the child query is possible for it (the lists of IN7), e.g. `entities: ['Country', 'City']` adds `childEntities: ['City']` for `Country.cities` but not `Country`, which is referred only by scalar fields. Root `true` is unwound to the entity list first. |
 | IN18 | ✅ Already listed child queries are kept (entities are appended, `true` stays); `exclude`, `Mutation`, `Subscription` and the argument are not changed. `include` that is `true`, absent, without `Query` or with `Query: true` is returned as is (the same object). |
 | IN19 | ✅ `include.Query` is validated as in IN9. The helper is not applied implicitly: it can be used for `generalConfig.inventory` and, separately, for every role of `inventoryByRoles` (`src/utils/inventory/addChildActions.test.ts`, `addChildActions.mtest.ts`). |

@@ -251,7 +251,7 @@ The opposite side of an indexed relational link gets only `x_`: `Currencies(wher
 
 - `updateX(data: { currency: { connect: "<id>" } })` replaces a scalar link; `{ connect: null }` removes it ✅.
 - `updateCountryGroup(data: { countries: { … } })` replaces the stored selector of a filter field; `freeze: true` forbids that after create.
-- `updateX(data: { neighbours: { connect: [...] } })` **replaces** the whole list (`connect: []` clears it) ✅. To add to a list use `pushIntoX(data: { neighbours: { connect: [...] } })` 📖.
+- `updateX(data: { neighbours: { connect: [...] } })` **replaces** the whole list (`connect: []` clears it) ✅. To add to a list, send the whole new list.
 - **Deleting a linked entity cleans the links** to it: after `deleteCurrency(UAH)` the `currency` of Ukraine is unset, after `deleteCountry(PL)` Poland is pulled from `neighbours` of Ukraine ✅.
 - If the entity is referenced by a **`required`** duplex field, it cannot be deleted while such references exist: `deleteCountry(UA)` with cities fails with `Try unset required field: "country" for entity: "City"!` ✅ Either move/delete the cities first or use `deleteCountryWithChildren`, which deletes the country together with its cities ✅.
 

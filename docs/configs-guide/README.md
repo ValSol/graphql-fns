@@ -1,7 +1,8 @@
 # Writing `graphql-fns.general.config` and `graphql-fns.serverSide.config`
 
 > A step-by-step guide, from the simplest case to the full set of options. All parts are listed in the [Contents](#contents).
-> Marks: ✅ verified by running code (against the MongoDB replica set of the library's tests, versions from 0.1.2-beta.1155 on); 📖 conclusion from reading the code only.
+> Describes graphql-fns 0.1.2-beta.1165.
+> Marks: ✅ verified by running code (against the MongoDB replica set of the library's tests); 📖 conclusion from reading the code only.
 
 ## The two configs
 

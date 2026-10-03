@@ -1,6 +1,6 @@
 ## Part 10. Authorization and limits
 
-Authorization lives entirely in the server-side config. It decides per request which actions a user may call (by roles) and which entities these actions may see or change (by filters). The design and the risks are in [schema-and-resolvers-analysis.md](../schema-and-resolvers-analysis.md) §13, an integration with an authentication library in [better-auth-integration.md](../better-auth-integration.md). The example below continues the countries: `Country`, `City` (with `published`, `population` and the relational `country`) and a `User` entity; it was run on MongoDB with subscriptions excluded ✅.
+Authorization lives entirely in the server-side config. It decides per request which actions a user may call (by roles) and which entities these actions may see or change (by filters). The design and the risks are in [schema-and-resolvers-analysis.md](../schema-and-resolvers-analysis.md) §11, an integration with an authentication library in [better-auth-integration.md](../better-auth-integration.md). The example below continues the countries: `Country`, `City` (with `published`, `population` and the relational `country`) and a `User` entity; it was run on MongoDB with subscriptions excluded ✅.
 
 ### Step 1. The whole server-side config
 

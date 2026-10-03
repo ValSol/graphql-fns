@@ -1,7 +1,7 @@
 # `whereCompoundOne`: selecting one entity by a unique compound index
 
 > How `uniqueCompoundIndexes` of an entity become the `whereCompoundOne` / `whereCompoundTarget` arguments of the `X` query and of mutations, and how they are resolved.
-> Identifiers: `WC…` facts, `?WC…` open questions. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
+> Identifiers: `WC…` facts. Marks: ✅ verified by running code or tests; 📖 conclusion from reading the code only.
 > The list of actions and their SDL is in [schema-and-resolvers-analysis.md](./schema-and-resolvers-analysis.md) §3 (Q1) and §4 (notes `***`, `****`).
 
 ## 1. Config and MongoDB index
@@ -17,7 +17,7 @@
 | ID | Fact |
 |---|---|
 | WC4 | ✅ `createEntityWhereCompoundOneInputType` makes one `XWhereCompoundOneInput` with the fields of **all** indexes of X (each field once, all optional, no `…_exists`), typed as in `XWhereInput`: text `String`, int `Int`, float `Float`, dateTime `DateTime`, relational (not `parent`) and duplex `ID`. Without `uniqueCompoundIndexes` the input is empty, so every argument of this type is hidden (`composeActionSignature` hides args with an empty input). |
-| WC5 | ✅ The query `X` and the mutations `updateX`, `deleteX`, `pushIntoX`, `deleteXWithChildren`, `deleteManyXs`, `deleteManyXsWithChildren` have `whereOne` + `whereCompoundOne` (`updateManyXs` has `whereOneAndData` + `whereCompoundOneAndData` with the same optionality, see [paired-items-args.md](./paired-items-args.md)); with `uniqueCompoundIndexes` `whereOne` is optional (`XWhereOneInput` / `[XWhereOneInput!]`), without them the signature is unchanged (`XWhereOneInput!` / `[XWhereOneInput!]!`). The argument types are functions of the entity config in `src/types/actionAttributes/*Attributes.ts`. |
+| WC5 | ✅ The query `X` and the mutations `updateX`, `deleteX`, `deleteXWithChildren`, `deleteManyXs`, `deleteManyXsWithChildren` have `whereOne` + `whereCompoundOne` (`updateManyXs` has `whereOneAndData` + `whereCompoundOneAndData` with the same optionality, see [paired-items-args.md](./paired-items-args.md)); with `uniqueCompoundIndexes` `whereOne` is optional (`XWhereOneInput` / `[XWhereOneInput!]`), without them the signature is unchanged (`XWhereOneInput!` / `[XWhereOneInput!]!`). The argument types are functions of the entity config in `src/types/actionAttributes/*Attributes.ts`. |
 | WC6 | ✅ `copyX`, `copyXWithChildren` have `whereCompoundTarget` next to `whereTarget` (input creator `whereCompoundTargetInputCreator`: only if `canBeCopyTarget(X)`); `copyManyXs…` have `whereCompoundTarget` inside the items of `sourceAndCompoundTarget…` ([paired-items-args.md](./paired-items-args.md) PI3, PI4). `whereKeyToSource` selects the source (another entity) only by its `WhereOneInput`: a compound variant is not planned. |
 | WC7 | ✅ Actions of representations are composed from the same attributes (`composeCustomAction`). `composeRepresentationConfig` keeps `uniqueCompoundIndexes` of the root only if **all** fields of **all** indexes are left in the representation (after `includeFields`, `excludeFields` and `addFields`, which may replace a field, e.g. by a calculated one); if at least one field is missing, `uniqueCompoundIndexes` is dropped entirely. So `XForKey` actions either get the same `whereCompoundOne: XForKeyWhereCompoundOneInput` as X, or keep required `whereOne` without `whereCompoundOne`. |
 
@@ -35,11 +35,3 @@
 | WC15 | ✅ `lockedData.args` of `workOutMutations` are args of the `X` query, so `lockedData.args.whereCompoundOne` works as in WC10. |
 | WC16 | ✅ In `workOutMutations` all writes of the chain are executed together at the end, so an entity created by an earlier mutation of the same chain cannot be found by a later `whereCompoundOne` (nor by `whereOne`). |
 | WC17 | ✅ Results of `…Many…` mutations are in the order of MongoDB, not of the `whereCompoundOne` items (the same holds for `whereOne`, see analysis §4). |
-
-## 4. Resolved questions
-
-| ID | Decision |
-|---|---|
-| ?WC1 | ✅ An index field of a kind absent in `XWhereCompoundOneInput` (enum, boolean, …) made the index unusable. Now `composeEntityConfig` rejects such fields (WC1). |
-| ?WC2 | ✅ A representation that excluded a field of an index kept the index, so it could not be used through the representation. Now a representation without at least one field of the indexes has no `uniqueCompoundIndexes` at all (WC7). |
-| ?WC3 | ✅ `uniqueCompoundIndexes: []` made `whereOne` optional and an input without fields. Now it throws in `composeEntityConfig` (WC1). |

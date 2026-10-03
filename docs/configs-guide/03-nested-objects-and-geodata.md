@@ -192,8 +192,7 @@ Distances (`radius`, `distance`, `maxDistance`, `minDistance`) are in meters ✅
 ### Step 7. Change
 
 - `updateX(data: { capital: {…} })` **replaces the whole nested object**: `updateCountry(data: { capital: { population: 3000000 } })` leaves `name` and `location` empty ✅. Send the complete object.
-- `updateX(data: { names: [...] })` replaces the whole array ✅.
-- `pushIntoX(data: { names: [...] })` appends to the array; with `positions: { names: [0, 1] }` the new elements are inserted at these positions, one position per element (a different length fails) ✅.
+- `updateX(data: { names: [...] })` replaces the whole array ✅. To add or insert elements, send the whole new array.
 - Geometries are replaced as a whole, like any scalar value.
 
 ### Checklist

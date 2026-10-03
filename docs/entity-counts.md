@@ -20,7 +20,7 @@
 
 | ID | Fact |
 |---|---|
-| EC1 | ✅ `XCounts(where: XWhereInput, restrictedWhere: [XRestrictedWhereInput!]!, search: String, token: String): [Int!]!` for every tangible X (`entityCountsQueryAttributes`). `search` exists only if X has a text field with `weight`, as in `XCount`. There is no `near` (as in `XCount`, see analysis I10). |
+| EC1 | ✅ `XCounts(where: XWhereInput, restrictedWhere: [XRestrictedWhereInput!]!, search: String, token: String): [Int!]!` for every tangible X (`entityCountsQueryAttributes`). `search` exists only if X has a text field with `weight`, as in `XCount`. There is no `near` (as in `XCount`, see [schema-and-resolvers-analysis.md](./schema-and-resolvers-analysis.md) DD3). |
 | EC2 | ✅ `XRestrictedWhereInput` (`createEntityRestrictedWhereInputType`) has the same fields as `XWhereInput` (`id_in`, `createdAt_…`, `updatedAt_…`, `counter_…`, operators of indexed and unique fields, `AND` / `OR` / `NOR`) **except relational filters** `x_` (of relational, parent relational and duplex fields). Relational and duplex fields themselves are kept (`x`, `x_in`, `x_nin`, `x_ne`, `x_exists` / `x_size`). |
 | EC3 | ✅ An indexed embedded field is `x: ERestrictedWhereInput` (`ERestrictedWhereInput` has the fields of `EWhereInput`). There is no `XRestrictedWhereWithoutBooleanOperationsInput`: in `XWhereInput` that input is used only by `x_`. |
 | EC4 | ✅ The general action name is `entityCounts`; `actionName` gives `${name}Counts`, with a representation key `${name}Counts${key}`. |

@@ -1,6 +1,6 @@
 # Integrating graphql-fns with better-auth
 
-> The better-auth API was checked against the source code of the `better-auth@1.7.6` and `@better-auth/mongo-adapter@1.7.6` npm packages. The graphql-fns authorization mechanism itself is described in [schema-and-resolvers-analysis.md, §13](./schema-and-resolvers-analysis.md#13-user-authorization).
+> The better-auth API was checked against the source code of the `better-auth@1.7.6` and `@better-auth/mongo-adapter@1.7.6` npm packages. The graphql-fns authorization mechanism itself is described in [schema-and-resolvers-analysis.md, §11](./schema-and-resolvers-analysis.md#11-user-authorization).
 
 ## 1. Principle
 
@@ -13,7 +13,7 @@ getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: 
 - `roles` is required. The other fields (`id`, `email`, `organizationId`…) are passed to `filters` functions next to `role`.
 - `id` is needed for `personalFilters`: it is the id of a User entity record **in graphql-fns** (see §5). A user without `id` (e.g. a guest) gets no access to entities with a personal filter; to give guests access to them, return the id of a service guest User record (§4).
 - `token` is the value of the `token: String` argument of root queries and mutations. `node` and subscriptions have no such argument (Relay requires exactly `node(id: ID!): Node`), so they rely on `context` (cookies / headers) only.
-- The library calls the function **once** per (`context`, `token`) pair and caches the result (B23). So `context` must be created per request.
+- The library calls the function **once** per (`context`, `token`) pair and caches the result ([schema-and-resolvers-analysis.md](./schema-and-resolvers-analysis.md) §11.3). So `context` must be created per request.
 
 The integration task: in `getUserAttributes`, get the better-auth session and turn it into `{ id, roles, … }`.
 
@@ -151,7 +151,7 @@ const serversideConfig = composeServersideConfig(generalConfig, {
 ```
 
 - Every role better-auth can issue must be in `containedRoles` and `inventoryByRoles` (`composeServersideConfig` checks that the keys match).
-- graphql-fns ignores a role absent from `containedRoles`: it grants no access and does not break the request (B24). So a new role created in better-auth will not expose data until it is described in the config.
+- graphql-fns ignores a role absent from `containedRoles`: it grants no access and does not break the request ([schema-and-resolvers-analysis.md](./schema-and-resolvers-analysis.md) A2). So a new role created in better-auth will not expose data until it is described in the config.
 - At startup `filters` functions are called for every role from `containedRoles` with test attributes, so for known roles they must return a value rather than throw; return `null` in the `default` branch.
 
 ## 5. The User entity and `personalFilters`
@@ -182,7 +182,7 @@ const syncGraphqlFnsUser = async (user) => {
 
 ## 6. Subscriptions
 
-- Events are checked only by `subscribePayloadFilters` (`filters` do not apply to them), so with `filters` and available subscriptions `composeServersideConfig` requires `subscribePayloadFilters` (B27). They receive the same attributes as `filters` and are applied to the event payload, so they may use only fields of the entity itself.
+- Events are checked only by `subscribePayloadFilters` (`filters` do not apply to them), so with `filters` and available subscriptions `composeServersideConfig` requires `subscribePayloadFilters` ([schema-and-resolvers-analysis.md](./schema-and-resolvers-analysis.md) A5). They receive the same attributes as `filters` and are applied to the event payload, so they may use only fields of the entity itself.
 - Authorization runs **once**, when subscribing. If a session is revoked or the user is banned, they keep receiving events until reconnecting. Close the user's WebSocket connections on sign-out or ban.
 - Subscriptions have no `token` argument; the user is determined from `context` only. With `graphql-ws`, put the upgrade request headers or a token from `connectionParams` into `context`:
 
@@ -202,7 +202,7 @@ useServer(
 ```
 
   and in `getUserAttributes` use `token ?? context.connectionToken` as the bearer token.
-- The `context` function is called for every operation, so the `userAttributes` cache (B23) does not outlive a single subscription. Do not pass a static object shared by the whole connection as `context`: the attributes would be fixed for its whole lifetime.
+- The `context` function is called for every operation, so the `userAttributes` cache does not outlive a single subscription. Do not pass a static object shared by the whole connection as `context`: the attributes would be fixed for its whole lifetime.
 
 ## 7. Security
 
