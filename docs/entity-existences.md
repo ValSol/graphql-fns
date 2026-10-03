@@ -36,6 +36,7 @@ Entity.find(where + filter, { _id: 1 }).limit(1)
 // otherwise
 [
   { $match: { $text: { $search } } },    // only with "search"
+  { $match: preMatch },                  // merged into the "$text" match with "search", see aggregate-pre-match.md
   ...lookups,                            // of the relational filters "x_" of "where"
   { $match: where + filter },            // only if not empty
   { $limit: 1 },

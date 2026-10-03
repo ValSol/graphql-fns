@@ -3,6 +3,7 @@ import type { GetPrevious } from '@/resolvers/tsTypes';
 
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import getInputAndOutputFilters from '@/resolvers/utils/getInputAndOutputFilters';
+import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import checkData from '@/resolvers/mutations/checkData';
 
@@ -86,11 +87,7 @@ const getPrevious: GetPrevious = async (
   let whereOne3 = whereOne2;
 
   if (lookups.length) {
-    const pipeline = [...lookups];
-
-    if (Object.keys(whereOne2).length) {
-      pipeline.push({ $match: whereOne2 });
-    }
+    const pipeline = composeAggregateHead({ where: whereOne2, lookups });
 
     pipeline.push({ $project: { _id: 1 } });
 

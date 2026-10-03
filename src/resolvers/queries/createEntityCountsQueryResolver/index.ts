@@ -12,6 +12,7 @@ import type {
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
+import composeAggregateHead from '../../utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import composeWhereInput from '../../utils/mergeWhereAndFilter/composeWhereInput';
 import composeFacet from './composeFacet';
@@ -66,15 +67,7 @@ const createEntityCountsQueryResolver = (
       (item) => composeWhereInput(item, entityConfig, { forRestrictedWhere: true }).where,
     );
 
-    const pipeline: Record<string, any>[] = [...lookups];
-
-    if (search) {
-      pipeline.unshift({ $match: { $text: { $search: search } } });
-    }
-
-    if (Object.keys(where2).length) {
-      pipeline.push({ $match: where2 });
-    }
+    const pipeline = composeAggregateHead({ where: where2, lookups, search });
 
     pipeline.push(composeFacet(restrictedWhere2));
 

@@ -1,4 +1,4 @@
-import type { EntityConfig, GraphqlObject, PipelineMongoDB } from '@/tsTypes';
+import type { EntityConfig, GraphqlObject, LookupMongoDB } from '@/tsTypes';
 
 import addFilter from './addFilter';
 import composeWhereInput from './composeWhereInput';
@@ -10,7 +10,7 @@ const mergeWhereAndFilter = (
   options: { forRestrictedWhere?: boolean; notCreateObjectId?: boolean } = {},
 ): {
   where: any;
-  lookups: PipelineMongoDB;
+  lookups: LookupMongoDB[];
 } => composeWhereInput(addFilter(filter, where), entityConfig, options);
 
 export default mergeWhereAndFilter;

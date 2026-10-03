@@ -13,6 +13,7 @@ import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mapWithConcurrency from '../../../utils/mapWithConcurrency';
+import composeAggregateHead from '../../utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 type Args = {
@@ -76,15 +77,7 @@ const createEntityExistencesQueryResolver = (
         const { lookups, where: where2 } = mergeWhereAndFilter(filter, where || {}, entityConfig);
 
         if (lookups.length || search) {
-          const pipeline: Record<string, any>[] = [...lookups];
-
-          if (search) {
-            pipeline.unshift({ $match: { $text: { $search: search } } });
-          }
-
-          if (Object.keys(where2).length) {
-            pipeline.push({ $match: where2 });
-          }
+          const pipeline = composeAggregateHead({ where: where2, lookups, search });
 
           pipeline.push({ $limit: 1 }, { $project: { _id: 1 } });
 

@@ -24,6 +24,7 @@ import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
+import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import composeNearInput from '../utils/composeNearInput';
 import getLimit from '../utils/getLimit';
@@ -142,22 +143,13 @@ const createEntitiesQueryResolver = (
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
     if (lookups.length > 0 || objectIdsFromParent) {
-      const pipeline = [...lookups];
-
-      if (near) {
-        const geoNear = composeNearForAggregateInput(near, entityConfig);
-
-        pipeline.unshift({ $geoNear: geoNear });
-      }
-
-      if (search) {
-        pipeline.unshift({ $sort: { score: { $meta: 'textScore' } } });
-        pipeline.unshift({ $match: { $text: { $search: search } } });
-      }
-
-      if (Object.keys(where2).length > 0) {
-        pipeline.push({ $match: where2 });
-      }
+      const pipeline = composeAggregateHead({
+        where: where2,
+        lookups,
+        geoNear: near ? composeNearForAggregateInput(near, entityConfig) : undefined,
+        search,
+        sortByTextScore: true,
+      });
 
       if (sort) {
         const { sortBy } = sort;

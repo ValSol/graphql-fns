@@ -13,6 +13,7 @@ import type {
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
+import composeAggregateHead from '../../utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 type Args = {
@@ -64,16 +65,12 @@ const createEntityDistinctValuesQueryResolver = (
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 
     if (lookups.length > 0) {
-      const pipeline = [...lookups];
-
-      if (search) {
-        pipeline.unshift({ $sort: { score: { $meta: 'textScore' } } });
-        pipeline.unshift({ $match: { $text: { $search: search } } });
-      }
-
-      if (Object.keys(where2).length > 0) {
-        pipeline.push({ $match: where2 });
-      }
+      const pipeline = composeAggregateHead({
+        where: where2,
+        lookups,
+        search,
+        sortByTextScore: true,
+      });
 
       if (!search) {
         // not use "$project" if used "search" to prevent error: field names may not start with '$'

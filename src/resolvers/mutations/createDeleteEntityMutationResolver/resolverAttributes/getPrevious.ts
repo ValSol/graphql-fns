@@ -2,6 +2,7 @@ import type { GetPrevious } from '@/resolvers/tsTypes';
 
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 
 const getPrevious: GetPrevious = async (
@@ -40,11 +41,7 @@ const getPrevious: GetPrevious = async (
   let conditions = preConditions;
 
   if (lookups.length > 0) {
-    const pipeline = [...lookups];
-
-    if (Object.keys(preConditions).length > 0) {
-      pipeline.push({ $match: preConditions });
-    }
+    const pipeline = composeAggregateHead({ where: preConditions, lookups });
 
     pipeline.push({ $project: { _id: 1 } });
 

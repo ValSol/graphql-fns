@@ -19,6 +19,7 @@ import removeCalculatedFieldValues from '@/resolvers/utils/removeCalculatedField
 import prepareCalculatedFields from '@/resolvers/utils/prepareCalculatedFields';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
@@ -114,11 +115,7 @@ const createEntityQueryResolver = (
     );
 
     if (lookups.length > 0) {
-      const pipeline = [...lookups];
-
-      if (Object.keys(conditions).length > 0) {
-        pipeline.push({ $match: conditions });
-      }
+      const pipeline = composeAggregateHead({ where: conditions, lookups });
 
       pipeline.push({ $project: projection });
 

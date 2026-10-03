@@ -1086,6 +1086,7 @@ export type NearForAggregateMongodb = {
   distanceField: string;
   key: string;
   spherical: true;
+  query?: DataObject;
 };
 
 export type LookupMongoDB = {

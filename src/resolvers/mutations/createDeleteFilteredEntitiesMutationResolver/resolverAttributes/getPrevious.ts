@@ -4,6 +4,7 @@ import type { GetPrevious } from '@/resolvers/tsTypes';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
@@ -38,21 +39,12 @@ const getPrevious: GetPrevious = async (
   let conditions = preConditions;
 
   if (lookups.length > 0 || near || search) {
-    const pipeline = [...lookups];
-
-    if (near) {
-      const geoNear = composeNearForAggregateInput(near as NearInput, entityConfig);
-
-      pipeline.unshift({ $geoNear: geoNear });
-    }
-
-    if (search) {
-      pipeline.unshift({ $match: { $text: { $search: search } } });
-    }
-
-    if (Object.keys(conditions).length > 0) {
-      pipeline.push({ $match: conditions });
-    }
+    const pipeline = composeAggregateHead({
+      where: conditions,
+      lookups,
+      geoNear: near ? composeNearForAggregateInput(near as NearInput, entityConfig) : undefined,
+      search: search as string | undefined,
+    });
 
     pipeline.push({ $project: { _id: 1 } });
 
