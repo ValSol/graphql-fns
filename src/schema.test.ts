@@ -824,6 +824,9 @@ describe('graphql schema', () => {
     expect(typeDefs).not.toMatch(/tagsDistinctValues/);
     expect(resolvers.Query.TagDistinctValues).toBeUndefined();
     expect(resolvers.Post.tagsDistinctValues).toBeUndefined();
+    expect(typeDefs).not.toMatch(/TagManyDistinctValues/);
+    expect(typeDefs).not.toMatch(/TagRestrictedWhereAndTargetInput/);
+    expect(resolvers.Query.TagManyDistinctValues).toBeUndefined();
 
     // "Place" has indexed "title" only
     expect(typeDefs).toMatch(/\nenum PlaceTextNamesEnum \{\n  title\n\}/);
@@ -832,6 +835,16 @@ describe('graphql schema', () => {
       /\n  placesDistinctValues\(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!\)/,
     );
     expect(resolvers.Post.placesDistinctValues).toBeDefined();
+
+    // the same enum is the target of "PlaceManyDistinctValues" (defined once)
+    expect(typeDefs.match(/\nenum PlaceTextNamesEnum \{/g)).toHaveLength(1);
+    expect(typeDefs).toMatch(
+      /\n  PlaceManyDistinctValues\(where: PlaceWhereInput, restrictedWhereAndTarget: \[PlaceRestrictedWhereAndTargetInput!\]!, token: String\): \[\[String!\]!\]!\n/,
+    );
+    expect(typeDefs).toMatch(
+      /\ninput PlaceRestrictedWhereAndTargetInput \{\n  target: PlaceTextNamesEnum!\n  where: PlaceRestrictedWhereInput\n\}/,
+    );
+    expect(resolvers.Query.PlaceManyDistinctValues).toBeDefined();
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });

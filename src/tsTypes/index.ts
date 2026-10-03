@@ -777,6 +777,7 @@ export type RepresentationAttributesActionName =
   | 'entityCounts'
   | 'entityExistences'
   | 'entityDistinctValues'
+  | 'entityManyDistinctValues'
   | 'entities'
   | 'entitiesThroughConnection'
   | 'childEntities'

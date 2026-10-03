@@ -9,6 +9,7 @@ import createEntityCountQueryResolver from '../queries/createEntityCountQueryRes
 import createEntityCountsQueryResolver from '../queries/createEntityCountsQueryResolver';
 import createEntityDistinctValuesQueryResolver from '../queries/createEntityDistinctValuesQueryResolver';
 import createEntityExistencesQueryResolver from '../queries/createEntityExistencesQueryResolver';
+import createEntityManyDistinctValuesQueryResolver from '../queries/createEntityManyDistinctValuesQueryResolver';
 import createEntityQueryResolver from '../queries/createEntityQueryResolver';
 import createChildEntityDistinctValuesQueryResolver from '../queries/createChildEntityDistinctValuesQueryResolver';
 import createObjectBoundStore from '@/utils/createObjectBoundStore';
@@ -108,6 +109,25 @@ const composeQueryResolver = (
           if (!queryResolversStore[key]) {
             throw new TypeError(
               `DistinctValues query resolver for entityName: "${entityName}" not created!`,
+            );
+          }
+
+          return queryResolversStore[key];
+        }
+
+        case 'ManyDistinctValues': {
+          if (process.env.JEST_WORKER_ID || !queryResolversStore[key]) {
+            queryResolversStore[key] = createEntityManyDistinctValuesQueryResolver(
+              entityConfig,
+              generalConfig,
+              serversideConfig,
+              inAnyCase,
+            );
+          }
+
+          if (!queryResolversStore[key]) {
+            throw new TypeError(
+              `ManyDistinctValues query resolver for entityName: "${entityName}" not created!`,
             );
           }
 

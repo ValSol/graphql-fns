@@ -49,6 +49,15 @@ describe('getTransformerAndConfig', () => {
     expect(result).toEqual([transformWhereAndSearch, personConfig]);
   });
 
+  test('should return transformer for list of restricted where and target inputs', () => {
+    const result = getTransformerAndConfig(
+      '[PersonRestrictedWhereAndTargetInput!]!',
+      generalConfig,
+    );
+
+    expect(result).toEqual([transformWhereAndSearch, personConfig]);
+  });
+
   test('should return transformer for create input', () => {
     const result = getTransformerAndConfig('PersonCreateInput', generalConfig);
 

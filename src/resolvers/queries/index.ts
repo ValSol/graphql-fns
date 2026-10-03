@@ -12,6 +12,7 @@ import entityDistinctValues from './createEntityDistinctValuesQueryResolver';
 import entityCount from './createEntityCountQueryResolver';
 import entityCounts from './createEntityCountsQueryResolver';
 import entityExistences from './createEntityExistencesQueryResolver';
+import entityManyDistinctValues from './createEntityManyDistinctValuesQueryResolver';
 
 const queries = {
   childEntities,
@@ -24,6 +25,7 @@ const queries = {
   entityCounts,
   entityExistences,
   entityDistinctValues,
+  entityManyDistinctValues,
   entity,
   entities,
   entitiesThroughConnection,

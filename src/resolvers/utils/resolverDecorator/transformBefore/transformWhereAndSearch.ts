@@ -7,7 +7,8 @@ type WhereAndSearch = { where?: any; search?: string };
 const processItem = (item: WhereAndSearch, entityConfig: EntityConfig): WhereAndSearch =>
   item.where ? { ...item, where: whereFromGlobalIds(item.where, entityConfig) } : item;
 
-// only "where" of every item has global ids, "search" is kept as is
+// only "where" of every item has global ids, "search" (or "target" of "RestrictedWhereAndTargetInput") ...
+// ... is kept as is
 const transformWhereAndSearch = (
   whereAndSearch: WhereAndSearch | WhereAndSearch[],
   entityConfig: EntityConfig,

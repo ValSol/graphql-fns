@@ -18,6 +18,7 @@ import entityDistinctValues from './entityDistinctValuesQueryAttributes';
 import entityCount from './entityCountQueryAttributes';
 import entityCounts from './entityCountsQueryAttributes';
 import entityExistences from './entityExistencesQueryAttributes';
+import entityManyDistinctValues from './entityManyDistinctValuesQueryAttributes';
 import entity from './entityQueryAttributes';
 import entities from './entitiesQueryAttributes';
 import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
@@ -69,6 +70,7 @@ const actionAttributes = {
   entityCounts,
   entityExistences,
   entityDistinctValues,
+  entityManyDistinctValues,
   entity,
   entities,
   entitiesThroughConnection,

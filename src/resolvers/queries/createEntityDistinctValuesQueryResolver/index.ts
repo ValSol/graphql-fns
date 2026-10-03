@@ -15,6 +15,7 @@ import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import composeAggregateHead from '../../utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import composeDistinctValuesStages from '../../utils/composeDistinctValuesStages';
 
 type Args = {
   where?: any;
@@ -65,23 +66,14 @@ const createEntityDistinctValuesQueryResolver = (
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 
     if (lookups.length > 0) {
-      const pipeline = composeAggregateHead({
-        where: where2,
-        lookups,
-        search,
-        sortByTextScore: true,
-      });
+      // one aggregate: the distinct values are got after the lookups without fetching the ids
+      const pipeline = composeAggregateHead({ where: where2, lookups, search });
 
-      if (!search) {
-        // not use "$project" if used "search" to prevent error: field names may not start with '$'
-        pipeline.push({ $project: { _id: 1 } });
-      }
+      pipeline.push(...composeDistinctValuesStages(target));
 
-      const ids = await Entity.aggregate(pipeline).exec();
+      const result = await Entity.aggregate(pipeline).exec();
 
-      const result = await Entity.distinct(target, { _id: { $in: ids } });
-
-      return result.filter(Boolean);
+      return result.map(({ _id }) => _id).filter(Boolean);
     }
 
     let query = Entity.distinct(target);

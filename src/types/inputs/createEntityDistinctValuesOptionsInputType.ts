@@ -1,27 +1,25 @@
-import type { InputCreator, TangibleEntityConfig } from '@/tsTypes';
+import type { EntityConfig, InputCreator } from '@/tsTypes';
+
+import createEntityTextNamesEnumType from './createEntityTextNamesEnumType';
 
 const createEntityDistinctValuesOptionsInputType: InputCreator = (entityConfig) => {
-  const { name, enumFields = [], textFields = [] } = entityConfig as TangibleEntityConfig;
+  const { name } = entityConfig;
 
   const inputName = `${name}DistinctValuesOptionsInput`;
 
-  // only indexed fields (unique field is indexed too) to not execute "distinct" on the whole collection
-  const fieldLines = [
-    ...enumFields.filter(({ index }) => index),
-    ...textFields.filter(({ index, unique }) => index || unique),
-  ].map(({ name: fieldName }) => `  ${fieldName}`);
+  const [enumName, enumDefinition] = createEntityTextNamesEnumType(entityConfig);
 
-  const inputDefinition =
-    fieldLines.length > 0
-      ? `enum ${name}TextNamesEnum {
-${fieldLines.join('\n')}
-}
-input ${name}DistinctValuesOptionsInput {
-  target: ${name}TextNamesEnum!
+  const inputDefinition = enumDefinition
+    ? `input ${inputName} {
+  target: ${enumName}!
 }`
-      : '';
+    : '';
 
-  return [inputName, inputDefinition, {}];
+  const childChain: Record<string, [InputCreator, EntityConfig]> = enumDefinition
+    ? { [enumName]: [createEntityTextNamesEnumType, entityConfig] }
+    : {};
+
+  return [inputName, inputDefinition, childChain];
 };
 
 export default createEntityDistinctValuesOptionsInputType;

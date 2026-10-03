@@ -1,6 +1,7 @@
 import type { EntityConfig } from '../../tsTypes';
 
 import createEntityDistinctValuesOptionsInputType from './createEntityDistinctValuesOptionsInputType';
+import createEntityTextNamesEnumType from './createEntityTextNamesEnumType';
 
 describe('createEntityDistinctValuesOptionsInputType', () => {
   test('should create empty string if there are not any text fields', () => {
@@ -57,16 +58,10 @@ describe('createEntityDistinctValuesOptionsInputType', () => {
     };
     const expectedResult = [
       'ExampleDistinctValuesOptionsInput',
-      `enum ExampleTextNamesEnum {
-  enumField
-  textField
-  textFieldArray
-  uniqueTextField
-}
-input ExampleDistinctValuesOptionsInput {
+      `input ExampleDistinctValuesOptionsInput {
   target: ExampleTextNamesEnum!
 }`,
-      {},
+      { ExampleTextNamesEnum: [createEntityTextNamesEnumType, entityConfig] },
     ];
 
     const result = createEntityDistinctValuesOptionsInputType(entityConfig);

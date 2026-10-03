@@ -25,6 +25,7 @@ const argTypesPrefixPlusSuffixes = [
   ['WhereInput', transformWhere, false],
   ['RestrictedWhereInput', transformWhere, false],
   ['WhereAndSearchInput', transformWhereAndSearch, false],
+  ['RestrictedWhereAndTargetInput', transformWhereAndSearch, false],
   ['WhereByUniqueInput', transformWhere, false],
   ['WhereOneInput', transformWhereOne, false],
   ['WhereCompoundOneInput', transformWhere, false],

@@ -4,9 +4,10 @@ import createEntityWhereKeyToSourceInputType from './createEntityWhereKeyToSourc
 import createEntityCreateInputType from './createEntityCreateInputType';
 import createEntityDistinctValuesOptionsInputType from './createEntityDistinctValuesOptionsInputType';
 import createEntityNearInputType from './createEntityNearInputType';
-import createEntityPushPositionsInputType from './createEntityPushPositionsInputType';
+import createEntityRestrictedWhereAndTargetInputType from './createEntityRestrictedWhereAndTargetInputType';
 import createEntityRestrictedWhereInputType from './createEntityRestrictedWhereInputType';
 import createEntitySortInputType from './createEntitySortInputType';
+import createEntityTextNamesEnumType from './createEntityTextNamesEnumType';
 import createEntityUpdateInputType from './createEntityUpdateInputType';
 import createEntityWhereAndSearchInputType from './createEntityWhereAndSearchInputType';
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';
@@ -27,9 +28,10 @@ const inputs = [
   createEntityCreateInputType,
   createEntityDistinctValuesOptionsInputType,
   createEntityNearInputType,
-  createEntityPushPositionsInputType,
+  createEntityRestrictedWhereAndTargetInputType,
   createEntityRestrictedWhereInputType,
   createEntitySortInputType,
+  createEntityTextNamesEnumType,
   createEntityUpdateInputType,
   createEntityWhereAndSearchInputType,
   createEntityWhereByUniqueInputType,
