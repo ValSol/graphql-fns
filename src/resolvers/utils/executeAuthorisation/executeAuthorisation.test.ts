@@ -595,6 +595,39 @@ describe('executeAuthorisation', () => {
     expect(result3).toEqual(expectedResult3);
   });
 
+  test('should return "null" payload filter for "Guest" role for "Subscription"', async () => {
+    const inventoryChain: InventoryChain = [
+      'Subscription',
+      'updatedEntityForCatalog',
+      'Restaurant',
+    ];
+    const getUserAttributes = async () => ({ roles: [guest] });
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+      subscribePayloadFilters,
+    };
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForCatalog' },
+      {},
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = {
+      involvedFilters: { inputOutputFilterAndLimit: null },
+      subscribePayloadMongoFilter: null,
+      subscriptionUpdatedFields: ['title', 'restaurantEditors'],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should returnv [Object] for "Admin" role', async () => {
     const inventoryChain: InventoryChain = ['Query', 'entityForCatalog', 'Restaurant'];
     const getUserAttributes = async () => {

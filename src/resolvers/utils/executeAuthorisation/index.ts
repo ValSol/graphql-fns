@@ -85,16 +85,19 @@ export const composeSubscribePayloadMongoFilter = (
   involvedEntityNames: ActionInvolvedEntityNames,
   userAttributes: UserAttributes,
   entityConfig: EntityConfig,
-) =>
-  mergeWhereAndFilter(
-    composeUserFilter(
-      involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
-      userAttributes,
-      subscribePayloadFilters,
-    ),
-    {},
-    composeSubscriptionDummyEntityConfig(entityConfig),
-  ).where;
+) => {
+  const userFilter = composeUserFilter(
+    involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
+    userAttributes,
+    subscribePayloadFilters,
+  );
+
+  // "null" means no access: subscription resolvers deliver no events with it
+  return (
+    userFilter &&
+    mergeWhereAndFilter(userFilter, {}, composeSubscriptionDummyEntityConfig(entityConfig)).where
+  );
+};
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
