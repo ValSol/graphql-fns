@@ -87,4 +87,73 @@ describe('testSubscriptionNode', () => {
       });
     });
   });
+
+  describe('dates', () => {
+    const { Event: eventConfig } = composeAllEntityConfigs([
+      { name: 'Slot', type: 'embedded', dateTimeFields: [{ name: 'start' }] },
+      {
+        name: 'Event',
+        dateTimeFields: [{ name: 'startsAt' }, { name: 'reminders', array: true }],
+        embeddedFields: [{ name: 'slots', configName: 'Slot', array: true }],
+        calculatedFields: [
+          { name: 'endsAt', calculatedType: 'dateTimeFields' } as any,
+          { name: 'mainSlot', calculatedType: 'embeddedFields', configName: 'Slot' } as any,
+        ],
+      },
+    ]);
+
+    const date = new Date('2026-05-01T10:00:00.000Z');
+    const before = new Date('2026-04-01T00:00:00.000Z');
+    const after = new Date('2026-06-01T00:00:00.000Z');
+
+    // an in-memory PubSub publishes the dates as Dates, a serializing one (JSON, Redis) as strings,
+    // while "wherePayload" gets Dates from the "DateTime" scalar
+    const nodes = {
+      'Dates (in-memory PubSub)': {
+        createdAt: date,
+        startsAt: date,
+        reminders: [date],
+        endsAt: date,
+        slots: [{ start: date }],
+        mainSlot: { start: date },
+      },
+      'strings (serializing PubSub)': JSON.parse(
+        JSON.stringify({
+          createdAt: date,
+          startsAt: date,
+          reminders: [date],
+          endsAt: date,
+          slots: [{ start: date }],
+          mainSlot: { start: date },
+        }),
+      ),
+    };
+
+    Object.entries(nodes).forEach(([kind, node]) => {
+      test(`should filter by date fields holding ${kind} with "wherePayload"`, () => {
+        const check = (wherePayload: Record<string, any>) =>
+          testSubscriptionNode([node], wherePayload, {} as any, eventConfig);
+
+        expect(check({ createdAt_gt: before })).toBe(true);
+        expect(check({ createdAt_gt: after })).toBe(false);
+        expect(check({ startsAt: date })).toBe(true);
+        expect(check({ startsAt_lt: before })).toBe(false);
+        expect(check({ reminders: date })).toBe(true);
+        expect(check({ endsAt_gte: date })).toBe(true);
+        expect(check({ endsAt_gt: date })).toBe(false);
+        expect(check({ mainSlot: { start: date } })).toBe(true);
+        expect(check({ mainSlot: { start: after } })).toBe(false);
+      });
+
+      test(`should filter by date fields holding ${kind} with payload filter`, () => {
+        const check = (filter: Record<string, any>) =>
+          testSubscriptionNode([node], {}, filter as any, eventConfig);
+
+        expect(check({ updatedAt: { $exists: false } })).toBe(true);
+        expect(check({ startsAt: { $gt: before } })).toBe(true);
+        expect(check({ 'slots.start': { $lt: after } })).toBe(true);
+        expect(check({ 'slots.start': { $gt: after } })).toBe(false);
+      });
+    });
+  });
 });
