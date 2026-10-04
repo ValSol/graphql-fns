@@ -1,5 +1,6 @@
 import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
+import composePreMatch from './composePreMatch';
 import composeWhereInput from './composeWhereInput';
 
 describe('composeWhereInput', () => {
@@ -58,6 +59,15 @@ describe('composeWhereInput', () => {
         index: true,
         variants: ['plain'],
         type: 'embeddedFields',
+      },
+    ],
+
+    geospatialFields: [
+      {
+        name: 'place',
+        geospatialType: 'Point',
+        index: true,
+        type: 'geospatialFields',
       },
     ],
   };
@@ -173,6 +183,19 @@ describe('composeWhereInput', () => {
         geospatialType: 'Point',
         type: 'geospatialFields',
       },
+      {
+        name: 'positions',
+        geospatialType: 'Point',
+        array: true,
+        index: true,
+        type: 'geospatialFields',
+      },
+      {
+        name: 'area',
+        geospatialType: 'Polygon',
+        index: true,
+        type: 'geospatialFields',
+      },
     ],
   });
 
@@ -270,7 +293,7 @@ describe('composeWhereInput', () => {
         intFields2: { $not: { $size: 0 } },
         relationalField: { $eq: null },
         relationalFields: { $size: 1 },
-        position: {
+        'position.coordinates': {
           $geoWithin: {
             $geometry: {
               coordinates: [
@@ -292,6 +315,147 @@ describe('composeWhereInput', () => {
     };
 
     expect(result).toEqual(expectedResult);
+  });
+
+  const polygon = {
+    externalRing: {
+      ring: [
+        { lat: 50.42551, lng: 30.42759 },
+        { lat: 50.42551, lng: 30.42761 },
+        { lat: 50.42549, lng: 30.42761 },
+        { lat: 50.42549, lng: 30.42759 },
+        { lat: 50.42551, lng: 30.42759 },
+      ],
+    },
+  };
+
+  const mongoPolygon = {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [30.42759, 50.42551],
+        [30.42761, 50.42551],
+        [30.42761, 50.42549],
+        [30.42759, 50.42549],
+        [30.42759, 50.42551],
+      ],
+    ],
+  };
+
+  const sphere = { center: { lng: 50.435766, lat: 30.515742 }, radius: 6378100 };
+
+  test('should use "coordinates" path of "Point" field for "_withinMultiPolygon"', () => {
+    const where = { position_withinMultiPolygon: { polygons: [polygon] } };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        'position.coordinates': {
+          $geoWithin: {
+            $geometry: { type: 'MultiPolygon', coordinates: [mongoPolygon.coordinates] },
+          },
+        },
+      },
+      lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should use "coordinates" path of "Point" field for "_aroundLineString"', () => {
+    const where = {
+      position_aroundLineString: {
+        coordinates: [
+          { lat: 50.4, lng: 30.4 },
+          { lat: 50.5, lng: 30.5 },
+        ],
+        distance: 100,
+      },
+    };
+
+    const { where: result } = composeWhereInput(where, entityConfig);
+
+    expect(result).toEqual({
+      'position.coordinates': {
+        $geoWithin: { $geometry: expect.objectContaining({ type: 'Polygon' }) },
+      },
+    });
+  });
+
+  test('should use "coordinates" path of "Point" array field', () => {
+    const where = { positions_withinSphere: sphere, positions_size: 2 };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        'positions.coordinates': { $geoWithin: { $centerSphere: [[50.435766, 30.515742], 1] } },
+        positions: { $size: 2 },
+      },
+      lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should keep the field path of not "Point" field', () => {
+    const where = { area_withinSphere: sphere, area_withinPolygon: polygon };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        area: {
+          $geoWithin: {
+            $centerSphere: [[50.435766, 30.515742], 1],
+            $geometry: mongoPolygon,
+          },
+        },
+      },
+      lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should use "coordinates" path of embedded "Point" field', () => {
+    const where = { embedded: { place_withinPolygon: polygon } };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        'embedded.place.coordinates': { $geoWithin: { $geometry: mongoPolygon } },
+      },
+      lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should use "coordinates" path of "Point" field in relational where', () => {
+    const where = { name: 'Вася', relationalField_: { position_withinSphere: sphere } };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        name: { $eq: 'Вася' },
+        'relationalField_.position.coordinates': {
+          $geoWithin: { $centerSphere: [[50.435766, 30.515742], 1] },
+        },
+      },
+      lookups: [
+        {
+          $lookup: {
+            from: 'example_things',
+            localField: 'relationalField',
+            foreignField: '_id',
+            as: 'relationalField_',
+          },
+        },
+      ],
+    };
+
+    expect(result).toEqual(expectedResult);
+
+    expect(composePreMatch(result.where, result.lookups)).toEqual({ name: { $eq: 'Вася' } });
   });
 
   test('should return result for hierarchical data', () => {

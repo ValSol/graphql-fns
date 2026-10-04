@@ -1,5 +1,7 @@
 import type { EntityConfig, NearInput, NearMongodb } from '@/tsTypes';
 
+import composeGeospatialKey from '@/resolvers/utils/composeGeospatialKey';
+
 type NearSphere = {
   $geometry: {
     type: 'Point';
@@ -37,7 +39,7 @@ const composeNearInput = (near: NearInput, entityConfig: EntityConfig): NearMong
   }
 
   return {
-    [geospatialType === 'Point' ? `${geospatialField}.coordinates` : geospatialField]: {
+    [composeGeospatialKey(geospatialField, geospatialType)]: {
       $nearSphere,
     },
   };

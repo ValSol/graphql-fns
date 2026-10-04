@@ -6,6 +6,7 @@ import type {
   EmbeddedField,
   EntityConfig,
   EntityConfigObject,
+  GeospatialField,
   GeospatialLineString,
   GeospatialMultiLineString,
   GeospatialMultiPolygon,
@@ -22,6 +23,7 @@ import multiLineStringFromGqlToMongo from '@/resolvers/mutations/processCreateIn
 import multiPolygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/multiPolygonFromGqlToMongo';
 import pointFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/pointFromGqlToMongo';
 import polygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/polygonFromGqlToMongo';
+import composeGeospatialKey from '@/resolvers/utils/composeGeospatialKey';
 import composeRelationalKey from './composeRelationalKey';
 import composeWithinSphereInput from './composeWithinSphereInput';
 
@@ -40,6 +42,18 @@ const checkField = (
       `Field "${keyWithoutSuffix}" not found in "${entityName}" entity in filter: "${entireWhere}!`,
     );
   }
+};
+
+const composeGeoWithinKey = (
+  key: string,
+  keyWithoutSuffix: string,
+  fieldsObj: EntityConfigObject,
+): string => {
+  const field = fieldsObj[keyWithoutSuffix];
+
+  return field?.type === 'geospatialFields'
+    ? composeGeospatialKey(key, (field as GeospatialField).geospatialType)
+    : key;
 };
 
 const processIdKey = (
@@ -271,59 +285,82 @@ const composeWhereInputRecursively = (
 
       checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      const geoKey = composeGeoWithinKey(
+        `${prefix}${embeddedPrefix}${keyWithoutSuffix}`,
+        keyWithoutSuffix,
+        fieldsObj,
+      );
+
+      if (!result[geoKey]) {
+        result[geoKey] = {};
       }
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      if (!result[geoKey].$geoWithin) {
+        result[geoKey].$geoWithin = {};
       }
 
-      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
-        polygonFromGqlToMongo(where[key] as GeospatialPolygon);
+      result[geoKey].$geoWithin.$geometry = polygonFromGqlToMongo(where[key] as GeospatialPolygon);
     } else if (key.endsWith('_withinMultiPolygon')) {
       const keyWithoutSuffix = key.slice(0, -'_withinMultiPolygon'.length);
 
       checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      const geoKey = composeGeoWithinKey(
+        `${prefix}${embeddedPrefix}${keyWithoutSuffix}`,
+        keyWithoutSuffix,
+        fieldsObj,
+      );
+
+      if (!result[geoKey]) {
+        result[geoKey] = {};
       }
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      if (!result[geoKey].$geoWithin) {
+        result[geoKey].$geoWithin = {};
       }
 
-      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
-        multiPolygonFromGqlToMongo(where[key] as GeospatialMultiPolygon);
+      result[geoKey].$geoWithin.$geometry = multiPolygonFromGqlToMongo(
+        where[key] as GeospatialMultiPolygon,
+      );
     } else if (key.endsWith('_withinSphere')) {
       const keyWithoutSuffix = key.slice(0, -'_withinSphere'.length);
 
       checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      const geoKey = composeGeoWithinKey(
+        `${prefix}${embeddedPrefix}${keyWithoutSuffix}`,
+        keyWithoutSuffix,
+        fieldsObj,
+      );
+
+      if (!result[geoKey]) {
+        result[geoKey] = {};
       }
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      if (!result[geoKey].$geoWithin) {
+        result[geoKey].$geoWithin = {};
       }
 
-      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$centerSphere =
-        composeWithinSphereInput(
-          where[key] as { center: { lat: number; lng: number }; radius: number },
-        );
+      result[geoKey].$geoWithin.$centerSphere = composeWithinSphereInput(
+        where[key] as { center: { lat: number; lng: number }; radius: number },
+      );
     } else if (key.endsWith('_aroundLineString')) {
       const keyWithoutSuffix = key.slice(0, -'_aroundLineString'.length);
 
       checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      const geoKey = composeGeoWithinKey(
+        `${prefix}${embeddedPrefix}${keyWithoutSuffix}`,
+        keyWithoutSuffix,
+        fieldsObj,
+      );
+
+      if (!result[geoKey]) {
+        result[geoKey] = {};
       }
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      if (!result[geoKey].$geoWithin) {
+        result[geoKey].$geoWithin = {};
       }
 
       const { coordinates, distance } = where[key] as {
@@ -337,19 +374,24 @@ const composeWhereInputRecursively = (
 
       const corridor = buffer(line, distance, { units: 'meters' });
 
-      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
-        corridor.geometry;
+      result[geoKey].$geoWithin.$geometry = corridor.geometry;
     } else if (key.endsWith('_aroundMultiLineString')) {
       const keyWithoutSuffix = key.slice(0, -'_aroundMultiLineString'.length);
 
       checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      const geoKey = composeGeoWithinKey(
+        `${prefix}${embeddedPrefix}${keyWithoutSuffix}`,
+        keyWithoutSuffix,
+        fieldsObj,
+      );
+
+      if (!result[geoKey]) {
+        result[geoKey] = {};
       }
 
-      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
-        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      if (!result[geoKey].$geoWithin) {
+        result[geoKey].$geoWithin = {};
       }
 
       const { lineStrings, distance } = where[key] as {
@@ -363,8 +405,7 @@ const composeWhereInputRecursively = (
 
       const corridor = buffer(multiLine, distance, { units: 'meters' });
 
-      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
-        corridor.geometry;
+      result[geoKey].$geoWithin.$geometry = corridor.geometry;
     } else if (key.endsWith('_intersectsPoint')) {
       const keyWithoutSuffix = key.slice(0, -'_intersectsPoint'.length);
 

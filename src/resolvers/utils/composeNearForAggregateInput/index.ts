@@ -1,5 +1,7 @@
 import type { NearInput, NearForAggregateMongodb, EntityConfig } from '@/tsTypes';
 
+import composeGeospatialKey from '@/resolvers/utils/composeGeospatialKey';
+
 const composeNearForAggregateInput = (
   near: NearInput,
   entityConfig: EntityConfig,
@@ -18,7 +20,7 @@ const composeNearForAggregateInput = (
   const result: NearForAggregateMongodb = {
     near: { type: 'Point', coordinates: [lng, lat] },
     distanceField: `${geospatialField}_distance`,
-    key: geospatialType === 'Point' ? `${geospatialField}.coordinates` : geospatialField,
+    key: composeGeospatialKey(geospatialField, geospatialType),
     spherical: true,
   };
 
