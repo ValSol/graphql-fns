@@ -47,7 +47,8 @@ const checkFilter = (
 
 const composeServersideConfig = (
   generalConfig: GeneralConfig,
-  serversideConfig: ServersideConfig & {
+  // the filters are functions here, they become "[isOutput, function]" tuples of "ServersideConfig"
+  serversideConfig: Omit<ServersideConfig, 'filters' | 'subscribePayloadFilters'> & {
     filters?: SimplifiedEntityFilters;
     subscribePayloadFilters?: SimplifiedEntityFilters;
   },

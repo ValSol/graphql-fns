@@ -298,8 +298,9 @@ const addEntityNames = (
 
 const getAllEntityNames = (
   generalConfig: GeneralConfig,
-  serversideConfig: ServersideConfig & {
+  serversideConfig: Omit<ServersideConfig, 'filters' | 'subscribePayloadFilters'> & {
     filters?: SimplifiedEntityFilters;
+    subscribePayloadFilters?: SimplifiedEntityFilters;
   },
 ): { allEntityNames: AllEntityNames; subscribePayloadEntityNames: AllEntityNames } => {
   const { inventory } = generalConfig;
