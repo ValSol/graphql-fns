@@ -1104,7 +1104,8 @@ export type SetWindowFields = {
   };
   output: {
     calculated_number: {
-      $documentNumber: { [key: string]: never };
+      $sum: 1;
+      window: { documents: readonly ['unbounded', 'current'] };
     };
   };
 };

@@ -18,27 +18,14 @@ const composeProjectionFromArgs = (
 ): {
   [fieldName: string]: 1;
 } => {
-  const { sort, near } = args;
+  const { near } = args;
 
-  const result: Record<string, any> = {};
-
-  if (sort?.sortBy) {
-    sort.sortBy.reduce((prev, sortField) => {
-      const [fieldName] = sortField.split('_');
-      prev[fieldName] = 1;
-      return prev;
-    }, result);
-  }
-
+  // only "near" uses a value of the cursor entity (composeLimitingArgs)
   if (near?.geospatialField) {
-    result[near.geospatialField] = 1;
+    return { [near.geospatialField]: 1 };
   }
 
-  if (!Object.keys(result).length) {
-    return { _id: 1 };
-  }
-
-  return result;
+  return { _id: 1 };
 };
 
 export default composeProjectionFromArgs;

@@ -13,12 +13,17 @@ type Args = {
   last?: number;
 };
 
+// the number of the documents up to the current one; unlike "$documentNumber", works with several sort keys
+const COUNT_UP_TO_CURRENT = { $sum: 1, window: { documents: ['unbounded', 'current'] } } as const;
+
 const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
   const { near, sort } = arg;
 
   if (sort && sort?.sortBy.length) {
     const sortBy = sort.sortBy.reduce<Record<string, any>>((prev, sortKey) => {
-      const [fieldName, distance] = sortKey.split('_');
+      const [preFieldName, distance] = sortKey.split('_');
+
+      const fieldName = preFieldName === 'id' ? '_id' : preFieldName;
 
       if (distance === 'ASC') {
         prev[fieldName] = 1;
@@ -34,9 +39,7 @@ const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
     return {
       sortBy,
       output: {
-        calculated_number: {
-          $documentNumber: {},
-        },
+        calculated_number: COUNT_UP_TO_CURRENT,
       },
     };
   }
@@ -45,9 +48,7 @@ const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
     return {
       sortBy: { [`${near.geospatialField}_distance`]: 1 },
       output: {
-        calculated_number: {
-          $documentNumber: {},
-        },
+        calculated_number: COUNT_UP_TO_CURRENT,
       },
     };
   }
@@ -55,9 +56,7 @@ const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
   return {
     sortBy: { not_existed_field: 1 },
     output: {
-      calculated_number: {
-        $documentNumber: {},
-      },
+      calculated_number: COUNT_UP_TO_CURRENT,
     },
   };
 };

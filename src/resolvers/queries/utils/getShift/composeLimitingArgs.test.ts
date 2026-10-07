@@ -19,64 +19,12 @@ describe('composeLimitingArgs', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('args with sort on unique field', () => {
-    const args = { sort: { sortBy: ['textField1_ASC', 'uniqueField_DESC'] } };
-
-    const result = composeLimitingArgs(args, thing);
-
-    const expectedResult = {
-      ...args,
-      sort: { sortBy: ['textField1_ASC', 'uniqueField_DESC'] },
-      where: { textField1_lte: 'field1 text', uniqueField_gte: 'unique text' },
-    };
-
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('args with sort on unique field that null', () => {
-    const sort = { sortBy: ['textField1_ASC', 'uniqueField_DESC'] };
-
-    const args = { sort };
-
-    const thing2 = { ...thing, uniqueField: null };
-
-    const result = composeLimitingArgs(args, thing2);
-
-    const expectedResult = {
-      sort,
-      where: { textField1_lte: 'field1 text' },
-    };
-
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('args with sort on unique field that nul & other null field', () => {
-    const sort = { sortBy: ['textField1_ASC', 'uniqueField_DESC'] };
-
-    const args = { sort };
-
-    const thing2 = { ...thing, textField1: null, uniqueField: null };
-
-    const result = composeLimitingArgs(args, thing2);
-
-    const expectedResult = args;
-
-    expect(result).toBe(expectedResult);
-  });
-
   test('args with sort', () => {
-    const sort = { sortBy: ['textField1_ASC', 'textField2_ASC'] };
-
-    const args = { sort };
+    const args = { sort: { sortBy: ['textField1_ASC', 'uniqueField_DESC', 'id_ASC'] } };
 
     const result = composeLimitingArgs(args, thing);
 
-    const expectedResult = {
-      sort,
-      where: { textField1_lte: 'field1 text', textField2_lte: 'field2 text' },
-    };
-
-    expect(result).toEqual(expectedResult);
+    expect(result).toBe(args);
   });
 
   test('args with near', () => {

@@ -17,66 +17,36 @@ type Args = {
   objectIds_from_parent?: Array<any>;
 };
 
+// narrows the set in which the position of the cursor entity is computed to the documents that can precede it;
+// only for "near": a sort may have several keys and null values, so the documents preceding the cursor entity
+// are not described by a range of every sort key
 const composeLimitingArgs = (args: Args, thing: any): Args => {
-  const { near, sort, where } = args;
+  const { near } = args;
 
-  const result: Args = { ...args }; // to define type and prevent type error
-
-  if (!near && !sort) {
+  if (!near) {
     return args;
   }
 
-  let noNearOrWhereChanged = true;
+  const {
+    geospatialField,
+    coordinates: { lng, lat },
+    maxDistance = Infinity,
+  } = near;
 
-  if (sort?.sortBy) {
-    const surroundingsWhere = sort.sortBy.reduce<Record<string, any>>((prev, sortField) => {
-      const [fieldName, direction] = sortField.split('_');
+  const {
+    coordinates: [cursorLng, cursorLat],
+  } = thing[geospatialField];
 
-      if (thing[fieldName] !== null) {
-        if (direction === 'ASC') {
-          prev[`${fieldName}_lte`] = thing[fieldName];
-        } else if (direction === 'DESC') {
-          prev[`${fieldName}_gte`] = thing[fieldName];
-        } else {
-          throw new TypeError(`Incorrect sort direction: "${direction}"`);
-        }
+  const distance = getDistanceFromLatLng(lat, lng, cursorLat, cursorLng);
 
-        noNearOrWhereChanged = false;
-      }
-
-      return prev;
-    }, {});
-
-    result.where = where ? { AND: [where, surroundingsWhere] } : surroundingsWhere;
-  }
-
-  if (near) {
-    const {
-      geospatialField,
-      coordinates: { lng, lat },
-      maxDistance = Infinity,
-    } = near;
-
-    const {
-      coordinates: [cursorLng, cursorLat],
-    } = thing[geospatialField];
-
-    const distance = getDistanceFromLatLng(lat, lng, cursorLat, cursorLng);
-
-    result.near = {
+  return {
+    ...args,
+    near: {
       geospatialField,
       coordinates: { lng, lat },
       maxDistance: Math.min(distance * (1 + 0.002), maxDistance),
-    };
-
-    noNearOrWhereChanged = false;
-  }
-
-  if (noNearOrWhereChanged) {
-    return args;
-  }
-
-  return result;
+    },
+  };
 };
 
 export default composeLimitingArgs;

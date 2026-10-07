@@ -9,7 +9,7 @@ describe('composeSetWindowFieldsInput', () => {
     maxDistance: 1000,
   };
 
-  const sort = { sortBy: ['field1_ASC', 'field2_DESC'] };
+  const sort = { sortBy: ['field1_ASC', 'field2_DESC', 'id_ASC'] };
 
   test('should create object for near input', () => {
     const arg = { near };
@@ -17,9 +17,7 @@ describe('composeSetWindowFieldsInput', () => {
     const expectedResult = {
       sortBy: { position_distance: 1 },
       output: {
-        calculated_number: {
-          $documentNumber: {},
-        },
+        calculated_number: { $sum: 1, window: { documents: ['unbounded', 'current'] } },
       },
     };
 
@@ -32,11 +30,9 @@ describe('composeSetWindowFieldsInput', () => {
     const arg = { sort };
 
     const expectedResult = {
-      sortBy: { field1: 1, field2: -1 },
+      sortBy: { field1: 1, field2: -1, _id: 1 },
       output: {
-        calculated_number: {
-          $documentNumber: {},
-        },
+        calculated_number: { $sum: 1, window: { documents: ['unbounded', 'current'] } },
       },
     };
 
@@ -45,15 +41,13 @@ describe('composeSetWindowFieldsInput', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create object for sort input', () => {
+  test('should create object for empty input', () => {
     const arg: Record<string, any> = {};
 
     const expectedResult = {
       sortBy: { not_existed_field: 1 },
       output: {
-        calculated_number: {
-          $documentNumber: {},
-        },
+        calculated_number: { $sum: 1, window: { documents: ['unbounded', 'current'] } },
       },
     };
 

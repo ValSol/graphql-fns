@@ -51,9 +51,6 @@ const getShift = async (
     objectIds_from_parent: objectIdsFromParent, // "objectIds_from_parent" used only to process the call from createChildEntitiesThroughConnectionQueryResolver
   } = limitingArgs;
 
-  // very same code as ...
-  // ...at: src/resolvers/queries/createEntitiesThroughConnectionQueryResolver/getShift/index.js
-
   const { mongooseConn } = context;
 
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
@@ -83,9 +80,12 @@ const getShift = async (
 
   pipeline.push({ $match });
 
-  const [{ calculated_number: calculatedNumber }] = await Entity.aggregate(pipeline).exec();
+  const [result] = await Entity.aggregate(pipeline).exec();
 
-  return calculatedNumber - 1;
+  // the cursor entity no longer matches "where": as if it were deleted
+  if (!result) return null;
+
+  return result.calculated_number - 1;
 };
 
 export default getShift;

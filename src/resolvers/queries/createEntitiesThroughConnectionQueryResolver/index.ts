@@ -21,6 +21,7 @@ import fromCursor from '@/resolvers/utils/fromCursor';
 import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import addIdTieBreaker from '../utils/addIdTieBreaker';
 import getFirst from '../utils/getFirst';
 import getShift from '../utils/getShift';
 import getVeryFirst from '../utils/getFirst/getVeryFirst';
@@ -134,6 +135,8 @@ const createEntitiesThroughConnectionQueryResolver = (
 
       args = { ...restArgs, where: { id_in: ids.map(({ id }) => id) } };
     }
+
+    args = addIdTieBreaker(args);
 
     const resolverArg = {
       parent,

@@ -32,13 +32,13 @@ describe('composeProjectionFromArgs', () => {
   test('return for args with sort', () => {
     const args = { sort };
 
-    const expectedResult = { field1: 1, field2: 1, field3: 1 };
+    const expectedResult = { _id: 1 };
     const result = composeProjectionFromArgs(args);
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('return for args with sort', () => {
+  test('return for args with near', () => {
     const args = { near };
 
     const expectedResult = { position: 1 };
