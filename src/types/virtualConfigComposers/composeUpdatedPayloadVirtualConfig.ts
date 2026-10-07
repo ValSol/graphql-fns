@@ -18,9 +18,10 @@ const composeUpdatedPayloadVirtualConfig: VirtualConfigComposer = (config, gener
     );
   }
 
+  // a state that does not pass the filters of a subscriber is "null": the entity entered or left the filtered set
   const childFields = [
-    { name: 'node', config, required: true, type: 'childFields' },
-    { name: 'previousNode', config, required: true, type: 'childFields' },
+    { name: 'node', config, required: false, type: 'childFields' },
+    { name: 'previousNode', config, required: false, type: 'childFields' },
   ];
 
   if (subscriptionActorConfig) {

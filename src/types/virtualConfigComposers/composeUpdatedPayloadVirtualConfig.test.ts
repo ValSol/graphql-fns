@@ -43,8 +43,8 @@ describe('composeUpdatedPayloadVirtualConfig', () => {
       representationNameSlicePosition: -'UpdatedPayload'.length,
 
       childFields: [
-        { name: 'node', config: exampleConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: exampleConfig, required: true, type: 'childFields' },
+        { name: 'node', config: exampleConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: exampleConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],

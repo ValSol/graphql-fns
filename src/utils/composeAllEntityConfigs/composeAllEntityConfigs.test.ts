@@ -119,8 +119,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: exampleConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: exampleConfig, required: true, type: 'childFields' },
+        { name: 'node', config: exampleConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: exampleConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -221,8 +221,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: entityConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: entityConfig, required: true, type: 'childFields' },
+        { name: 'node', config: entityConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: entityConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -335,8 +335,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: entityConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: entityConfig, required: true, type: 'childFields' },
+        { name: 'node', config: entityConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: entityConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -395,8 +395,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: entityConfig2, required: true, type: 'childFields' },
-        { name: 'previousNode', config: entityConfig2, required: true, type: 'childFields' },
+        { name: 'node', config: entityConfig2, required: false, type: 'childFields' },
+        { name: 'previousNode', config: entityConfig2, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -709,8 +709,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: userConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: userConfig, required: true, type: 'childFields' },
+        { name: 'node', config: userConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: userConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -753,8 +753,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: textbookConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: textbookConfig, required: true, type: 'childFields' },
+        { name: 'node', config: textbookConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: textbookConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -797,8 +797,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: lessonConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: lessonConfig, required: true, type: 'childFields' },
+        { name: 'node', config: lessonConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: lessonConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -937,8 +937,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: userConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: userConfig, required: true, type: 'childFields' },
+        { name: 'node', config: userConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: userConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
@@ -981,8 +981,8 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'node', config: textbookConfig, required: true, type: 'childFields' },
-        { name: 'previousNode', config: textbookConfig, required: true, type: 'childFields' },
+        { name: 'node', config: textbookConfig, required: false, type: 'childFields' },
+        { name: 'previousNode', config: textbookConfig, required: false, type: 'childFields' },
       ],
 
       textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],

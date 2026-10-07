@@ -62,8 +62,11 @@ const createUpdatedEntitySubscriptionResolver = (
       context,
       info,
       { involvedFilters, subscribePayloadMongoFilter, subscriptionUpdatedFields },
-    ) =>
-      withFilterAndTransformer(
+    ) => {
+      // which states of a delivered event passed the filters: the transformer replaces the others by "null"
+      const passedStates = new WeakMap<object, { previousNode: boolean; node: boolean }>();
+
+      return withFilterAndTransformer(
         context.pubsub.subscribe(`updated-${name}`),
 
         (payload) => {
@@ -90,18 +93,34 @@ const createUpdatedEntitySubscriptionResolver = (
             return false;
           }
 
-          return testSubscriptionNode(
-            [payload[`updated${name}`].previousNode, payload[`updated${name}`].node],
-            wherePayload,
-            subscribePayloadMongoFilter,
-            allEntityConfigs[name],
-          );
+          const { previousNode, node } = payload[`updated${name}`];
+
+          const passes = (state: Record<string, any>) =>
+            testSubscriptionNode(
+              [state],
+              wherePayload,
+              subscribePayloadMongoFilter,
+              allEntityConfigs[name],
+            );
+
+          // an entity that enters or leaves the filtered set is delivered too, with the other state as "null"
+          const passed = { previousNode: passes(previousNode), node: passes(node) };
+
+          if (!passed.previousNode && !passed.node) {
+            return false;
+          }
+
+          passedStates.set(payload as object, passed);
+
+          return true;
         },
 
         (payload) => {
           const {
             [`updated${name}`]: { actor, node, previousNode, updatedFields: preUpdatedFields },
           } = payload as Record<string, any>;
+
+          const passed = passedStates.get(payload as object)!;
 
           const updatedFields = filterUpdatedFields(
             preUpdatedFields,
@@ -112,13 +131,16 @@ const createUpdatedEntitySubscriptionResolver = (
           return {
             [`updated${name}${representationKey}`]: {
               actor: actor && transformAfter({}, actor, subscriptionActorConfig, generalConfig),
-              node: transformAfter({}, node, entityConfig, generalConfig),
-              previousNode: transformAfter({}, previousNode, entityConfig, generalConfig),
+              node: passed.node ? transformAfter({}, node, entityConfig, generalConfig) : null,
+              previousNode: passed.previousNode
+                ? transformAfter({}, previousNode, entityConfig, generalConfig)
+                : null,
               updatedFields,
             },
           };
         },
-      ),
+      );
+    },
   };
 
   return store[storeKey];

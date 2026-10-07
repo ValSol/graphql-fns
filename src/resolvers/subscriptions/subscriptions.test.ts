@@ -255,8 +255,9 @@ describe('subscriptions', () => {
   });
 
   describe('"updated" subscription', () => {
-    test('should check both "previousNode" & "node" by "wherePayload"', async () => {
+    test('should send entering & leaving entities with "null" instead of the state not passing "wherePayload"', async () => {
       const payloads = [
+        // enters: only the new state has the title "B"
         {
           updatedRestaurant: {
             node: { ...nodeA, title: 'B' },
@@ -264,6 +265,7 @@ describe('subscriptions', () => {
             updatedFields: ['title'],
           },
         },
+        // stays
         {
           updatedRestaurant: {
             node: { ...nodeB, address: 'b2' },
@@ -271,12 +273,81 @@ describe('subscriptions', () => {
             updatedFields: ['address'],
           },
         },
+        // leaves
+        {
+          updatedRestaurant: {
+            node: { ...nodeB, title: 'C' },
+            previousNode: nodeB,
+            updatedFields: ['title'],
+          },
+        },
+        // never in the set
+        {
+          updatedRestaurant: {
+            node: { ...nodeA, title: 'D' },
+            previousNode: nodeA,
+            updatedFields: ['title'],
+          },
+        },
       ];
 
       const items = await subscribe('updated', {}, { wherePayload: { title: 'B' } }, payloads);
 
-      expect(items.map(({ node }) => node.title)).toEqual(['B']);
-      expect(items.map(({ node }) => node.address)).toEqual(['b2']);
+      expect(
+        items.map(({ previousNode, node, updatedFields }) => [
+          previousNode && previousNode.title,
+          node && node.title,
+          updatedFields,
+        ]),
+      ).toEqual([
+        [null, 'B', ['title']],
+        ['B', 'B', ['address']],
+        ['B', null, ['title']],
+      ]);
+    });
+
+    test('should send entering & leaving entities with "null" instead of the state not passing "subscribePayloadFilters"', async () => {
+      const payloads = [
+        // passed to "user1"
+        {
+          updatedRestaurant: {
+            node: { ...nodeB, owner: 'user1' },
+            previousNode: nodeB,
+            updatedFields: ['owner'],
+          },
+        },
+        // taken from "user1"
+        {
+          updatedRestaurant: {
+            node: { ...nodeA, owner: 'user2' },
+            previousNode: nodeA,
+            updatedFields: ['owner'],
+          },
+        },
+      ];
+
+      const items = await subscribe(
+        'updated',
+        {
+          containedRoles,
+          getUserAttributes: async () => ({ id: 'user1', roles: ['user'] }),
+          inventoryByRoles,
+          subscribePayloadFilters,
+        },
+        {},
+        payloads,
+      );
+
+      expect(
+        items.map(({ previousNode, node, updatedFields }) => [
+          previousNode && previousNode.owner,
+          node && node.owner,
+          updatedFields,
+        ]),
+      ).toEqual([
+        [null, 'user1', ['owner']],
+        ['user1', null, ['owner']],
+      ]);
     });
 
     test('should filter events by "whichUpdated" arg', async () => {

@@ -236,23 +236,23 @@ type MenuCloneSectionCreatedOrDeletedPayload {
 }
 type MenuUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Menu!
-  previousNode: Menu!
+  node: Menu
+  previousNode: Menu
 }
 type MenuCloneUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: MenuClone!
-  previousNode: MenuClone!
+  node: MenuClone
+  previousNode: MenuClone
 }
 type MenuSectionUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: MenuSection!
-  previousNode: MenuSection!
+  node: MenuSection
+  previousNode: MenuSection
 }
 type MenuCloneSectionUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: MenuCloneSection!
-  previousNode: MenuCloneSection!
+  node: MenuCloneSection
+  previousNode: MenuCloneSection
 }
 input MenuWhereInput {
   id_in: [ID!]
@@ -1181,13 +1181,13 @@ type Example2CreatedOrDeletedPayload {
 }
 type Example1UpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Example1!
-  previousNode: Example1!
+  node: Example1
+  previousNode: Example1
 }
 type Example2UpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Example2!
-  previousNode: Example2!
+  node: Example2
+  previousNode: Example2
 }
 input Example1WhereInput {
   id_in: [ID!]
@@ -1702,13 +1702,13 @@ type PlaceCreatedOrDeletedPayload {
 }
 type PersonUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Person!
-  previousNode: Person!
+  node: Person
+  previousNode: Person
 }
 type PlaceUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Place!
-  previousNode: Place!
+  node: Place
+  previousNode: Place
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2173,8 +2173,8 @@ type PersonCreatedOrDeletedPayload {
 }
 type PersonUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Person!
-  previousNode: Person!
+  node: Person
+  previousNode: Person
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2564,13 +2564,13 @@ type PlaceCreatedOrDeletedPayload {
 }
 type PersonUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Person!
-  previousNode: Person!
+  node: Person
+  previousNode: Person
 }
 type PlaceUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: Place!
-  previousNode: Place!
+  node: Place
+  previousNode: Place
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -4482,8 +4482,8 @@ type ExampleForView implements Node {
 }
 type ExampleForViewUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
-  node: ExampleForView!
-  previousNode: ExampleForView!
+  node: ExampleForView
+  previousNode: ExampleForView
   actor: TokenForView
 }
 type TokenForView {
