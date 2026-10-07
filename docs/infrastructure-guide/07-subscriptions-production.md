@@ -29,7 +29,7 @@ nginx.conf                                    new: the reverse proxy (outside th
 
 Verified with Redis 7.4, ioredis 5.11, @graphql-yoga/redis-event-target 3.0, nginx 1.27, Chrome 154, the rest as in [part 6](06-subscriptions-local.md) and the [contents](README.md).
 
-**The version of the library.** This part needs graphql-fns **0.1.2-beta.1169 or later**. Earlier versions send no `updatedX` event about an entity that enters or leaves the scope of a subscriber (step 7), and versions before 0.1.2-beta.1167 also throw on a subscription of a role whose `subscribePayloadFilters` return `null` (step 7), never match `wherePayload` / `subscribePayloadFilters` by a relational field when the ids of the event are `ObjectId`s, never match them by a date when the payload went through JSON (step 2), keep a closed subscription subscribed to the PubSub until the next event of its channel (step 8), and reject filter functions in the type of `composeServersideConfig`.
+**The version of the library.** This part needs graphql-fns **0.1.2-beta.1169 or later**. Earlier versions send no `updatedX` event about an entity that enters or leaves the scope of a subscriber (step 7), and 0.1.2-beta.1166 and earlier also throw on a subscription of a role whose `subscribePayloadFilters` return `null` (step 7), never match `wherePayload` / `subscribePayloadFilters` by a relational field when the ids of the event are `ObjectId`s, never match them by a date when the payload went through JSON (step 2), keep a closed subscription subscribed to the PubSub until the next event of its channel (step 8), and reject filter functions in the type of `composeServersideConfig`.
 
 ### Step 1. Packages
 
@@ -101,7 +101,7 @@ REDIS_URL=redis://127.0.0.1:6379
 | `createdConversation(wherePayload: { client: $id })` | delivered | delivered |
 | `createdMessage(wherePayload: { waiting: true })` (an async calculated field) | delivered | delivered |
 
-EJSON (MongoDB Extended JSON, exported by `mongoose` as `mongo.BSON.EJSON`) writes `{"$date": …}` and `{"$oid": …}` and reads them back as a `Date` and an `ObjectId` ✅, so the payload on B is the same as on A. It matters for your code that reads the node on the subscriber's side, e.g. the `asyncFunc` of a calculated field computed for every subscriber ([calculated-fields.md](../calculated-fields.md) CF27): with `JSON` it would get strings where one process gives `Date`s and `ObjectId`s 📖.
+EJSON (MongoDB Extended JSON, exported by `mongoose` as `mongo.BSON.EJSON`) writes `{"$date": …}` and `{"$oid": …}` and reads them back as a `Date` and an `ObjectId` ✅, so the payload on B is the same as on A. It matters for your code that reads the node on the subscriber's side, e.g. the `asyncFunc` of a calculated field computed for every subscriber ([calculated-fields.md](../calculated-fields.md) CF27): with `JSON` such an `asyncFunc` gets `createdAt` and the other dates as strings, with EJSON as `Date`s, the same as in one process ✅. Ids are global id strings there in every case.
 
 **Check: an event from A reaches B.** Start two processes of the production build (`yarn build`, then `next start -p 3001` and `next start -p 3002`). Subscribe on B:
 
@@ -124,7 +124,7 @@ The calculated fields of the payload survive the round trip ✅: the async `part
 
 - `enableReadyCheck: false` on the subscribing client is required ✅. ioredis writes `SUBSCRIBE` to the socket as soon as the TCP connection is open, before its own handshake: the command is allowed while Redis loads its data. When the first subscription of a fresh process arrives in that moment, the reply puts the connection into the subscriber mode, then the handshake (`CLIENT SETINFO`) and the ready check (`INFO`) are rejected: the process logs `[ioredis] Unhandled error event: Error: Connection in subscriber mode, only subscriber commands may be used`, the client recovers by reconnecting and the subscription is gone (`PUBSUB NUMSUB` → `0`), so its subscriber never receives anything. With `ioredis` alone: a `subscribe` on the `connect` event gives `NUMSUB 0` and that error by default, `NUMSUB 1` with `enableReadyCheck: false`. With the application it happened to the first subscription after `next start` now and then; with the option, 5 of 5 fresh starts delivered the events and logged no error. The ready check only waits for a Redis that is still loading its dataset, which a Pub/Sub connection does not need. `lazyConnect: true` is no remedy: the same error appeared with it.
 - `yarn build` passes without a running Redis, but prints `[ioredis] Unhandled error event: Error: connect ECONNREFUSED` while it collects the page data ✅: the build imports the routes, and the clients try to connect. The messages are harmless.
-- Several applications on one Redis share the channels (`updated-Country` and so on, step 8); give each application its own Redis. A database number does not separate them: Redis Pub/Sub ignores it 📖.
+- Several applications on one Redis share the channels (`updated-Country` and so on, step 8); give each application its own Redis. A database number does not separate them: a subscriber of database 1 received a message published from database 5 ✅.
 
 ### Step 3. The transport behind a load balancer
 
@@ -156,7 +156,7 @@ Two ways out:
 | Streams per tab | one | one per subscription |
 | State on the server | the reserved streams | none: a subscription is one `POST` whose response is the stream |
 | Proxy | must send all requests of a client to one process (`ip_hash`, a cookie, …) | any balancing |
-| Limit | — | the concurrent streams of one HTTP/2 connection (nginx: `http2_max_concurrent_streams`, 128 by default 📖), shared by all tabs of the origin |
+| Limit | — | the concurrent streams of one HTTP/2 connection, shared by all tabs of the origin: nginx announces 128 (`http2_max_concurrent_streams`); of 130 subscriptions on one connection 128 were opened, the other two and a query sent after them waited until some streams were closed ✅ (an HTTP/2 client of Node; that a browser waits the same way is 📖) |
 | Verified | ✅ with `ip_hash`: both tabs updated | ✅ 4 tabs × 3 subscriptions, 12 streams spread over both processes: the mutation answered in 202 ms, all 4 tabs updated |
 
 **Recommendation: distinct connections over HTTP/2.** The limit of 6 connections that made part 6 choose the single connection mode is a limit of HTTP/1.1; over HTTP/2 a stream per subscription is cheap, and with no state on the server any process can serve any request. Keep the single connection mode for HTTP/1.1, i.e. `next dev`. The client picks the mode by the protocol of the page:
@@ -238,7 +238,7 @@ What each setting does, measured with a subscription through the proxy and a mut
 | without `proxy_buffering off`, the application sends `X-Accel-Buffering: no` (below) | the same as the first row |
 | `proxy_read_timeout 5s` | the event at `1.1 s`, then `TypeError: terminated` at `6.1 s`; nginx logs `upstream timed out` |
 | without `proxy_read_timeout` (60 s by default) | the stream stays open, the pings of every 12 s keep it alive |
-| with `proxy_http_version 1.1` and `proxy_set_header Connection ""` | the same as the first row: the event streams do not need them (they enable keep-alive connections to the upstream 📖) |
+| with `proxy_http_version 1.1` and `proxy_set_header Connection ""` | the same as the first row: the event streams do not need them. They matter only for reusing connections to the upstream, and only with `keepalive` in `upstream`: 30 queries used 30 upstream connections without it, 8 with `keepalive 8` ✅ |
 
 `proxy_buffering off` is the simplest switch if you write the nginx config. If you do not (a hosting with a proxy built on nginx), let the application turn the buffering off for its event streams:
 
@@ -279,12 +279,12 @@ With `ip_hash` all requests of a tab reached one process and both tabs were upda
 
 ### Step 5. Where it can run
 
-A subscription is an HTTP response that stays open as long as the page, and the events reach it from Redis. The server therefore has to be a **long-lived Node.js process** that may keep a response open for hours: `next start` (or any Node server that runs the route handlers), several of them behind a proxy, in containers or on virtual machines. That is the setup verified in this part ✅.
+A subscription is an HTTP response that stays open as long as the page, and the events reach it from Redis. The server therefore has to be a **long-lived Node.js process** that may keep a response open for hours: `next start` (or any Node server that runs the route handlers), several of them behind a proxy, in containers or on virtual machines. That is the setup verified in this part ✅, also with the build of `output: 'standalone'` of Next.js run by `node server.js` in a `node:24-alpine` container next to a `next start` process: the events crossed between them through Redis ✅.
 
-**Stopping a process.** On `SIGTERM` `next start` stops accepting connections and waits for the open requests to finish (`server.close()` in `start-server.js` of Next.js 📖). An event stream never finishes: with one tab open the process was still alive 44 s after `SIGTERM` and exited only when the browser was closed ✅. Meanwhile it kept delivering events to its streams. In a deployment the orchestrator kills the process after its grace period (`docker stop`: 10 s, Kubernetes: 30 s by default 📖); the streams then break and the clients reconnect to another process (step 6). So:
+**Stopping a process.** On `SIGTERM` `next start` stops accepting connections and waits for the open requests to finish (`server.close()` in `start-server.js` of Next.js 📖). An event stream never finishes: with one tab open the process was still alive 44 s after `SIGTERM` and exited only when the browser was closed ✅. Meanwhile it kept delivering events to its streams. In a deployment the orchestrator kills the process after its grace period (Kubernetes: 30 s by default 📖); the streams then break and the clients reconnect to another process (step 6). `docker stop` of the standalone container that served two of the three streams of a tab returned after 10.4 s with the exit code 137 (killed after the 10 s of grace); the two streams were opened again on the other process 1.7 and 3.4 s later, the query of the page was read again, and the next change reached the tab ✅. So:
 
 - a rolling update of several processes keeps the subscriptions (the clients reconnect, the events of the break are read again as in step 6), but every stopped process holds the update for the whole grace period;
-- do not end the streams "gracefully" from a `SIGTERM` handler: a stream that the server completes is a completed subscription for `graphql-sse`, which does not reconnect it 📖 (only network errors are retried).
+- do not complete the subscriptions from a `SIGTERM` handler: a subscription the server completes (the `complete` event of the protocol) is over for `graphql-sse`, it is not reconnected ✅. A response that just ends, without `complete`, is treated as a break and reconnected ✅ (checked against a minimal server).
 
 **Serverless platforms** limit the duration of a function, and a stream is a function call that does not end. On Vercel a function runs 300 s by default and at most 300 s on the Hobby plan, 800 s on Pro and Enterprise (30 minutes in a beta) ([Vercel: configuring maximum duration](https://vercel.com/docs/functions/configuring-functions/duration)) 📖: every stream would be cut at least every few minutes, each open tab would hold a function instance, and the PubSub must be external (step 2) because the instances share no memory. Not verified here.
 
@@ -292,7 +292,7 @@ A subscription is an HTTP response that stays open as long as the page, and the 
 
 The PubSub is "fire and forget": an event is delivered to the subscribers connected at the moment of the publication, nothing is stored. While a stream is broken (its process stopped, the network of the client dropped, the proxy closed it) the events are lost, and nothing tells the client which ones it missed.
 
-`graphql-sse` reconnects by itself after a network error: up to 5 attempts (`retryAttempts`), with delays of 1, 2, 4, 8, 16 s plus 0.3–3 s at random (`retry`) 📖. In the scenario below the tab is served by process 3001, which is killed; a change is made on 3002 during the break; 3001 is started again ✅:
+`graphql-sse` reconnects by itself after a network error: up to 5 attempts (`retryAttempts`), with delays of 1, 2, 4, 8, 16 s plus 0.3–3 s at random (`retry`): against a stopped server the attempts started at 0, 2.8, 7.1, 12.9, 21.8 and 40.2 s, then the subscription failed with `fetch failed` ✅. In the scenario below the tab is served by process 3001, which is killed; a change is made on 3002 during the break; 3001 is started again ✅:
 
 ```
   4.9 s  tab: UA Ukraine: 41000000 (Kyiv)
@@ -382,10 +382,10 @@ The same scenario, with a country created during the break as well ✅:
  19.4 s  tab: UA Ukraine: 42000000 (Kyiv); XX in the list: true
 ```
 
-- `fetchQuery` goes to the network (it passes `force: true`, so the response cache of part 4 is not consulted 📖) and writes the response into the store. The connection is read without `after`, so Relay replaces its edges: a country created during the break appears ✅, a deleted one disappears the same way 📖, and `Stats`, which no event updates, is fresh too.
+- `fetchQuery` goes to the network (it passes `force: true`, so the response cache of part 4 is not consulted: a reconnect 3.7 s after the page was loaded, within the 5 s of the cache, still read the query from the server ✅) and writes the response into the store. The connection is read without `after`, so Relay replaces its edges: a country created during the break appears ✅, a country deleted during the break disappears ✅ (all three streams of the tab were on the stopped process, so no event removed it), and `Stats`, which no event updates, is fresh too.
 - Every subscription reconnects on its own, so the query is read once per subscription: three times here, in both modes (HTTP/2 through nginx and HTTP/1.1 directly) ✅. Debounce the listener if the query is expensive.
-- After 5 failed attempts the subscription ends with an error and is not restarted 📖: a break longer than about 33–46 s (e.g. the only process is down) needs a reload of the page, or a larger `retryAttempts` with a `retry` that caps the delay.
-- A break between a process and Redis is not seen by the client at all: its stream stays open, ioredis reconnects and subscribes again (`autoResubscribe`), the events in between are lost 📖.
+- After 5 failed attempts the subscription ends with an error and is not restarted ✅ (see the attempts above): a break longer than about 33–46 s (e.g. the only process is down) needs a reload of the page, or a larger `retryAttempts` with a `retry` that caps the delay.
+- A break between a process and Redis is not seen by the client at all ✅: with Redis stopped for 2.6 s, the mutation on A succeeded (41 ms), its event never reached the open stream on B, and after Redis was started again ioredis subscribed again by itself (`autoResubscribe`) and the next event arrived. The processes log `[ioredis] Unhandled error event: … ECONNREFUSED` meanwhile.
 
 **Reading from the last known point instead of everything.** A list that only grows (the messages of a chat) does not have to be read whole: remember the `createdAt` of the newest item and read what came after it ✅:
 
@@ -395,7 +395,7 @@ query ($since: DateTime!) {
 }
 ```
 
-With `$since` = the `createdAt` of the second of five messages it returns the last three. The cursors of `…ThroughConnection` can serve the same purpose for a connection sorted by creation 📖. Changed and deleted items are not caught this way.
+With `$since` = the `createdAt` of the second of five messages it returns the last three. The cursors of `…ThroughConnection` serve the same purpose for a connection sorted by creation ✅: `MessagesThroughConnection(first: 10, after: <endCursor of m1…m3>, sort: { sortBy: [createdAt_ASC, id_ASC] })` returned `m4`, `m5` written after the cursor was read. Changed and deleted items are not caught this way.
 
 ### Step 7. Who receives an event: a support chat
 
@@ -589,7 +589,7 @@ cli2 receives nothing. After the reassignment con1 is cut off at once: the next 
 
 `updatedFields` is `["consultant"]` for everybody. A consultant never receives a state of the conversation it may not see (con2 does not learn from this event who had the conversation before, con1 does not learn to whom it went, only that `consultant` changed).
 
-The list of conversations of a consultant follows from `updatedConversation` alone. Relay directives cannot be conditional (`@deleteEdge` on `previousNode` would also fire when both states come), so the subscription gets an `updater` 📖:
+The list of conversations of a consultant follows from `updatedConversation` alone. Relay directives cannot be conditional: `@deleteEdge` on `previousNode { id }` also fires when both states come, so with it the conversation disappeared from the lists of con1 **and** sup as soon as con1 took it, and never came back ✅. The subscription gets an `updater` instead:
 
 ```ts
 useSubscription<ConversationsUpdatedSubscription>(
@@ -619,16 +619,25 @@ useSubscription<ConversationsUpdatedSubscription>(
 );
 ```
 
+With this `updater` on a page with `ConversationsThroughConnection` and the subscription above, each user in its own browser, through nginx and two processes ✅:
+
+| Change | con1 | con2 | sup |
+|---|---|---|---|
+| cli1 opens a conversation | `cli1 → queue` | `cli1 → queue` | `cli1 → queue` |
+| con1 takes it | `cli1 → con1` | removed | `cli1 → con1` |
+| sup reassigns it to con2 | removed | added: `cli1 → con2` | `cli1 → con2` |
+| sup gives it back to con1 | added: `cli1 → con1` | removed | `cli1 → con1` |
+
 ### Step 8. Scale
 
 The library publishes to one channel per entity and kind of event: `created-Message`, `updated-Conversation`, … ✅ (`redis-cli PUBSUB CHANNELS` shows them). There is no channel per conversation or per room. The consequences:
 
 - Redis delivers every event of an entity to every process that has at least one subscriber of that entity ✅: each process holds one Redis subscription per channel (five subscribers of `createdMessage` on one process: `PUBSUB NUMSUB created-Message` → `1`) and fans the event out in memory.
-- In the process, the event goes through the filter of **every** subscriber of the channel (`wherePayload`, `whichUpdated`, `subscribePayloadFilters`), and the payload is resolved for every subscriber that passes (its selection, the calculated fields not computed on publication) 📖. A busy chat with thousands of open conversations costs thousands of in-memory filter runs per message on every process.
+- In the process, the event goes through the filter of **every** subscriber of the channel (`wherePayload`, `whichUpdated`, `subscribePayloadFilters`), and the payload is resolved for every subscriber that passes (its selection, the calculated fields not computed on publication) ✅: one `updateCity` with 5 subscribers of `updatedCity { node { name country { name } } }`, 3 of them passing their `wherePayload`, ran the filter 10 times (5 subscribers × 2 states) and read the country 3 times. A busy chat with thousands of open conversations costs thousands of in-memory filter runs per message on every process.
 - What is cheap: the async calculated fields of step 7 are computed once per event, not per subscriber ([calculated-fields.md](../calculated-fields.md) CF26).
 - A closed subscription costs nothing: when a client disconnects, its iterator leaves the PubSub at once, and a channel without subscribers is unsubscribed in Redis ✅ (`PUBSUB CHANNELS` shows `updated-Country` while a `curl` subscription is open and nothing a second after it is closed; nothing either after the browser of step 9 is closed).
 
-For a moderate number of subscribers this is fine. At a large scale the way out is narrower channels of your own (a manually created mutation that calls `pubsub.publish` with, say, a channel per conversation, and a manually created subscription field that subscribes to it); not verified here 📖.
+For a moderate number of subscribers this is fine. At a large scale the way out is narrower channels of your own (a manually created mutation that calls `pubsub.publish` with, say, a channel per conversation, and a manually created subscription field that subscribes to it): with `conversationMessage(conversation: ID!)` subscribed to `message-<id>`, the subscriber of each conversation got only its messages ✅.
 
 ### Step 9. Check
 
