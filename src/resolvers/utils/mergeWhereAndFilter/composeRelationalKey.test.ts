@@ -1,297 +1,82 @@
-import type { GraphqlObject, TangibleEntityConfig } from '../../../tsTypes';
+import type { TangibleEntityConfig } from '@/tsTypes';
 
+import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeRelationalKey from './composeRelationalKey';
 
-const transformForJest = (obj: {
-  entityConfig: TangibleEntityConfig;
-  relationalKey: string;
-  value: GraphqlObject;
-}) => {
-  const { entityConfig, ...rest } = obj;
-  return { ...rest, entityConfig: entityConfig.name };
-};
-
 describe('composeRelationalKey', () => {
-  test('return one chain result', () => {
-    const entityConfig = {} as TangibleEntityConfig;
-    Object.assign(entityConfig, {
-      name: 'Example',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'name',
-          index: true,
-          type: 'textFields',
-        },
-      ],
+  const allEntityConfigs = composeAllEntityConfigs([
+    { name: 'Currency', textFields: [{ name: 'code', index: true }] },
+    {
+      name: 'Country',
+      textFields: [{ name: 'name', index: true }],
       relationalFields: [
-        {
-          name: 'relationalField',
-          oppositeName: 'parentRelationalField',
-          index: true,
-          config: entityConfig,
-          type: 'relationalFields',
-        },
-        {
-          name: 'parentRelationalField',
-          oppositeName: 'relationalField',
-          array: true,
-          parent: true,
-          config: entityConfig,
-          type: 'relationalFields',
-        },
+        { name: 'currency', configName: 'Currency', oppositeName: 'countries', index: true },
       ],
-    });
+    },
+    {
+      name: 'City',
+      textFields: [{ name: 'name', index: true }],
+      relationalFields: [
+        { name: 'country', configName: 'Country', oppositeName: 'cities', index: true },
+      ],
+    },
+  ]);
 
-    const value = { relationalField_: { name: 'test' } };
-    const lookupArray: Array<any> = [];
+  const City = allEntityConfigs.City as TangibleEntityConfig;
+  const Country = allEntityConfigs.Country as TangibleEntityConfig;
 
-    const result = composeRelationalKey(value, lookupArray, entityConfig);
+  test('should register the lookup of one level', () => {
+    const lookupArray: string[] = [];
 
-    const expectedResult = {
-      relationalKey: 'relationalField_',
-      entityConfig,
-      value: { name: 'test' },
-    };
+    const { relationalKey, entityConfig } = composeRelationalKey('country_', '', lookupArray, City);
 
-    const expectedLookupArray = [':relationalField_:Example'];
-
-    expect(transformForJest(result)).toEqual(transformForJest(expectedResult));
-    expect(lookupArray).toEqual(expectedLookupArray);
+    expect(relationalKey).toBe('country_');
+    expect(entityConfig.name).toBe('Country');
+    expect(lookupArray).toEqual([':country_:Country']);
   });
 
-  test('return one chain result', () => {
-    const menusectionConfig = {} as TangibleEntityConfig;
-    const menuConfig = {} as TangibleEntityConfig;
-    const restaurantConfig = {} as TangibleEntityConfig;
+  test('should continue the key of the parent level', () => {
+    const lookupArray = [':country_:Country'];
 
-    const accessConfig: TangibleEntityConfig = {
-      name: 'Access',
-      type: 'tangible',
+    const { relationalKey, entityConfig } = composeRelationalKey(
+      'currency_',
+      'country_',
+      lookupArray,
+      Country,
+    );
 
-      textFields: [
-        {
-          name: 'restaurantEditors',
-          index: true,
-          array: true,
-          type: 'textFields',
-        },
-      ],
-
-      relationalFields: [
-        {
-          name: 'restaurants',
-          oppositeName: 'access',
-          config: restaurantConfig,
-          array: true,
-          parent: true,
-          type: 'relationalFields',
-        },
-      ],
-    };
-
-    Object.assign(menusectionConfig, {
-      name: 'Menusection',
-      type: 'tangible',
-      duplexFields: [
-        {
-          name: 'menu',
-          oppositeName: 'sections',
-          config: menuConfig,
-          required: true,
-          index: true,
-          type: 'duplexFields',
-        },
-      ],
-    });
-
-    Object.assign(menuConfig, {
-      name: 'Menu',
-      type: 'tangible',
-      duplexFields: [
-        {
-          name: 'sections',
-          oppositeName: 'menu',
-          array: true,
-          config: menusectionConfig,
-          required: true,
-          index: true,
-          type: 'duplexFields',
-        },
-        {
-          name: 'restaurant',
-          oppositeName: 'menu',
-          config: restaurantConfig,
-          required: true,
-          index: true,
-          type: 'duplexFields',
-        },
-      ],
-    });
-
-    Object.assign(restaurantConfig, {
-      name: 'Restaurant',
-      type: 'tangible',
-      duplexFields: [
-        {
-          name: 'menu',
-          oppositeName: 'restaurant',
-          config: menuConfig,
-          index: true,
-          type: 'duplexFields',
-        },
-      ],
-
-      relationalFields: [
-        {
-          name: 'access',
-          oppositeName: 'restaurants',
-          config: accessConfig,
-          index: true,
-          type: 'relationalFields',
-        },
-      ],
-    });
-
-    const value = {
-      menu_: {
-        restaurant_: {
-          access_: {
-            restaurantEditors: '5f85ad539905d61fb73346a2',
-          },
-        },
-      },
-    };
-
-    const lookupArray: Array<any> = [];
-
-    const result = composeRelationalKey(value, lookupArray, menusectionConfig);
-
-    const expectedResult = {
-      relationalKey: 'menu_restaurant_access_',
-      entityConfig: accessConfig,
-      value: {
-        restaurantEditors: '5f85ad539905d61fb73346a2',
-      },
-    };
-
-    const expectedLookupArray = [
-      ':menu_:Menu',
-      'menu_:restaurant_:Restaurant',
-      'menu_restaurant_:access_:Access',
-    ];
-
-    expect(transformForJest(result)).toEqual(transformForJest(expectedResult));
-    expect(lookupArray).toEqual(expectedLookupArray);
+    expect(relationalKey).toBe('country_currency_');
+    expect(entityConfig.name).toBe('Currency');
+    expect(lookupArray).toEqual([':country_:Country', 'country_:currency_:Currency']);
   });
 
-  test('return Textbook Lessons error', () => {
-    const lessonConfig = {} as TangibleEntityConfig;
-    const userConfig = {} as TangibleEntityConfig;
+  test('should register the opposite side of a relational link with its opposite name', () => {
+    const lookupArray: string[] = [];
 
-    const textbookConfig: TangibleEntityConfig = {
-      name: 'Textbook',
-      type: 'tangible',
+    const { relationalKey, entityConfig } = composeRelationalKey(
+      'cities_',
+      '',
+      lookupArray,
+      Country,
+    );
 
-      textFields: [
-        {
-          name: 'title',
-          required: true,
-          type: 'textFields',
-        },
-      ],
+    expect(relationalKey).toBe('cities_');
+    expect(entityConfig.name).toBe('City');
+    expect(lookupArray).toEqual([':cities_:City:country']);
+  });
 
-      duplexFields: [
-        {
-          name: 'lessons',
-          oppositeName: 'textbook',
-          config: lessonConfig,
-          array: true,
-          index: true,
-          type: 'duplexFields',
-        },
+  test('should register a lookup once', () => {
+    const lookupArray: string[] = [];
 
-        {
-          name: 'user',
-          oppositeName: 'textbooks',
-          config: userConfig,
-          required: true,
-          index: true,
-          type: 'duplexFields',
-        },
-      ],
-    };
+    composeRelationalKey('country_', '', lookupArray, City);
+    composeRelationalKey('country_', '', lookupArray, City);
 
-    Object.assign(lessonConfig, {
-      name: 'Lesson',
-      type: 'tangible',
+    expect(lookupArray).toEqual([':country_:Country']);
+  });
 
-      textFields: [
-        {
-          name: 'title',
-          required: true,
-          type: 'textFields',
-        },
-      ],
-
-      duplexFields: [
-        {
-          name: 'textbook',
-          oppositeName: 'lessons',
-          config: lessonConfig,
-          required: true,
-          index: true,
-          type: 'duplexFields',
-        },
-      ],
-    });
-
-    Object.assign(userConfig, {
-      name: 'User',
-      type: 'tangible',
-
-      textFields: [
-        {
-          name: 'email',
-          required: true,
-          type: 'textFields',
-          index: true,
-        },
-      ],
-
-      duplexFields: [
-        {
-          name: 'textbooks',
-          oppositeName: 'user',
-          array: true,
-          config: textbookConfig,
-          index: true,
-          type: 'duplexFields',
-        },
-      ],
-    });
-
-    const value = {
-      textbook_: {
-        user: '5f85ad539905d61fb73346a2',
-      },
-    };
-
-    const lookupArray: Array<any> = [];
-
-    const result = composeRelationalKey(value, lookupArray, lessonConfig);
-
-    const expectedResult = {
-      relationalKey: 'textbook_',
-      entityConfig: lessonConfig,
-      value: {
-        user: '5f85ad539905d61fb73346a2',
-      },
-    };
-
-    const expectedLookupArray = [':textbook_:Lesson'];
-
-    // expect(transformForJest(result)).toEqual(transformForJest(expectedResult));
-    expect(lookupArray).toEqual(expectedLookupArray);
+  test('should throw for a field that is not a link', () => {
+    expect(() => composeRelationalKey('name_', '', [], City)).toThrow(
+      'Field "name" must has attr "config"!',
+    );
   });
 });

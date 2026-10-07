@@ -1,5 +1,6 @@
 import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
+import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composePreMatch from './composePreMatch';
 import composeWhereInput from './composeWhereInput';
 
@@ -1023,5 +1024,79 @@ describe('composeWhereInput', () => {
     };
 
     expect(result).toEqual(expectedResult);
+  });
+
+  describe('a level of a relational filter with own fields and nested filters', () => {
+    const allEntityConfigs = composeAllEntityConfigs([
+      { name: 'Currency', textFields: [{ name: 'code', index: true }] },
+      { name: 'Person', textFields: [{ name: 'name', index: true }] },
+      {
+        name: 'Country',
+        textFields: [{ name: 'name', index: true }],
+        relationalFields: [
+          { name: 'currency', configName: 'Currency', oppositeName: 'countries', index: true },
+          { name: 'president', configName: 'Person', oppositeName: 'countries', index: true },
+        ],
+      },
+      {
+        name: 'City',
+        textFields: [{ name: 'name', index: true }],
+        relationalFields: [
+          { name: 'country', configName: 'Country', oppositeName: 'cities', index: true },
+        ],
+      },
+    ]);
+
+    const countryLookup = {
+      $lookup: {
+        from: 'country_things',
+        localField: 'country',
+        foreignField: '_id',
+        as: 'country_',
+      },
+    };
+    const currencyLookup = {
+      $lookup: {
+        from: 'currency_things',
+        localField: 'country_.currency',
+        foreignField: '_id',
+        as: 'country_currency_',
+      },
+    };
+
+    test('should keep the own fields of the level', () => {
+      const where = { country_: { name: 'A', currency_: { code: 'X' } } };
+
+      expect(composeWhereInput(where, allEntityConfigs.City)).toEqual({
+        where: { 'country_.name': { $eq: 'A' }, 'country_currency_.code': { $eq: 'X' } },
+        lookups: [countryLookup, currencyLookup],
+      });
+    });
+
+    test('should keep several nested filters of the level', () => {
+      const where = { country_: { currency_: { code: 'X' }, president_: { name: 'P' } } };
+
+      expect(composeWhereInput(where, allEntityConfigs.City)).toEqual({
+        where: { 'country_currency_.code': { $eq: 'X' }, 'country_president_.name': { $eq: 'P' } },
+        lookups: [
+          countryLookup,
+          currencyLookup,
+          {
+            $lookup: {
+              from: 'person_things',
+              localField: 'country_.president',
+              foreignField: '_id',
+              as: 'country_president_',
+            },
+          },
+        ],
+      });
+    });
+
+    test('should throw for an unknown field of a nested level', () => {
+      expect(() => composeWhereInput({ country_: { area: 1 } }, allEntityConfigs.City)).toThrow(
+        'Field "area" not found in "Country" entity',
+      );
+    });
   });
 });

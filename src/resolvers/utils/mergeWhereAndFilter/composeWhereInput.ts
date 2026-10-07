@@ -479,24 +479,23 @@ const composeWhereInputRecursively = (
 
       checkField(key.slice(0, -1), entityName, embeddedPrefix, fieldsObj, entireWhere);
 
-      if (parentFieldName) {
+      // a nested "y_" of a relational filter is allowed, but not one inside an embedded field of it
+      if (parentFieldName && embeddedPrefix) {
         throw new TypeError(
           `Restricted relational field: "${key}" becouse not empty "${parentFieldName}" parentField in filter: "${entireWhere}!`,
         );
       }
 
-      const {
-        relationalKey,
-        entityConfig: entityConfig2,
-        value,
-      } = composeRelationalKey(
-        { [key]: where[key] },
+      // one level: the fields of the linked entity and its nested "y_" filters are composed below
+      const { relationalKey, entityConfig: entityConfig2 } = composeRelationalKey(
+        key,
+        parentFieldName,
         lookupArray,
         entityConfig as TangibleEntityConfig,
       );
 
       const result2 = composeWhereInputRecursively(
-        value,
+        where[key] as InvolvedFilter,
         relationalKey,
         '', // embeddedPrefix begin from ""
         lookupArray,
