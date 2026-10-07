@@ -1,5 +1,6 @@
 import type {
   SimplifiedEmbeddedEntityConfig,
+  SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
   TangibleEntityConfig,
 } from '@/tsTypes';
@@ -1120,4 +1121,26 @@ describe('composeAllEntityConfigs', () => {
       );
     });
   });
+
+  test.each(['relationalFields', 'duplexFields', 'filterFields', 'calculatedFields'])(
+    'should throw for "%s" of an embedded entity',
+    (key) => {
+      const fields: Record<string, any> = {
+        relationalFields: [{ name: 'owner', configName: 'Person', oppositeName: 'addresses' }],
+        duplexFields: [{ name: 'owner', configName: 'Person', oppositeName: 'addresses' }],
+        filterFields: [{ name: 'owners', configName: 'Person' }],
+        calculatedFields: [{ name: 'label', calculatedType: 'textFields' }],
+      };
+
+      const simplifiedEntityConfigs = [
+        { name: 'Person', textFields: [{ name: 'name' }] },
+        { name: 'Address', type: 'embedded', textFields: [{ name: 'street' }], [key]: fields[key] },
+        { name: 'House', embeddedFields: [{ name: 'address', configName: 'Address' }] },
+      ] as SimplifiedEntityConfig[];
+
+      expect(() => composeAllEntityConfigs(simplifiedEntityConfigs)).toThrow(
+        `Embedded entity "Address" must not have "${key}"!`,
+      );
+    },
+  );
 });

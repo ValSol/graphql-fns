@@ -44,6 +44,16 @@ const composeAllEntityConfigsAndEnums = (
         throw new TypeError(`Unique entity name: "${name}" is used twice!`);
       }
 
+      // a subdocument stores no links and computes no calculated fields: such fields would be in the schema,
+      // but never stored or computed (the type "SimplifiedEmbeddedEntityConfig" forbids them too)
+      if (config.type === 'embedded') {
+        ['relationalFields', 'duplexFields', 'filterFields', 'calculatedFields'].forEach((key) => {
+          if ((config as Record<string, any>)[key]?.length) {
+            throw new TypeError(`Embedded entity "${name}" must not have "${key}"!`);
+          }
+        });
+      }
+
       (config.enumFields || []).forEach(({ name: fieldName, enumName }) => {
         if (!enums[enumName]) {
           throw new TypeError(
