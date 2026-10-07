@@ -14,10 +14,10 @@ type Subscription {
 }
 
 type CountryCreatedOrDeletedPayload { node: Country!  actor: CountryActor }
-type CountryUpdatedPayload { updatedFields(slice: SliceInput): [String!]!  node: Country!  previousNode: Country!  actor: CountryActor }
+type CountryUpdatedPayload { updatedFields(slice: SliceInput): [String!]!  node: Country  previousNode: Country  actor: CountryActor }
 ```
 
-`node` is a full `Country`: the subscriber selects any fields, including link fields and calculated fields, which are resolved for the subscriber (`deletedCountry { node { code cities { name } } }`) ✅. `actor` exists only with `subscriptionActorConfigName` (step 5).
+`node` is a full `Country`: the subscriber selects any fields, including link fields and calculated fields, which are resolved for the subscriber (`deletedCountry { node { code cities { name } } }`) ✅. In `CountryUpdatedPayload` `node` and `previousNode` are nullable: a state that does not pass the filters of the subscriber is `null` (step 4). `actor` exists only with `subscriptionActorConfigName` (step 5).
 
 ### Step 2. Which mutations publish
 
@@ -48,7 +48,18 @@ subscription { createdCountry(wherePayload: { euMember: true }) { node { code } 
 ```
 
 - It has operators for **all** fields of the entity, not only indexed ones (the events are filtered in memory, not in MongoDB): `euMember` has no `index` and works ✅. Calculated fields are included if they are not `async`, or are listed in `allowedCalculatedWithAsyncFuncFieldNames` (step 5) ([calculated-fields.md](../calculated-fields.md) CF9).
-- For `updatedX` **both** `previousNode` and `node` must match ✅: a country that becomes an EU member (`euMember: false → true`) is **not** delivered to `updatedCountry(wherePayload: { euMember: true })`, because its previous state does not match. To catch such transitions, subscribe with `whichUpdated` and check the values on the client.
+- For `updatedX` it is enough that **one** of the two states matches; the state that does not is sent as `null` (see below).
+
+**Entering and leaving.** Every state of an `updatedX` event is checked separately, by `wherePayload` together with the restrictions of the user (step 6). The event is delivered if at least one state passes, the other one comes as `null`, and `updatedFields` always lists all changed fields. With `updatedCountry(wherePayload: { population_gte: 40000000 }) { previousNode { code population } node { code population } updatedFields }` ✅:
+
+| Change | Delivered |
+|---|---|
+| UA 41 000 000 → 39 000 000 (leaves) | `previousNode: { code: "UA", population: 41000000 }, node: null, updatedFields: ["population"]` |
+| PL 37 600 000 → 38 000 000 (never in the set) | nothing |
+| UA 39 000 000 → 42 000 000 (enters) | `previousNode: null, node: { code: "UA", population: 42000000 }, updatedFields: ["population"]` |
+| UA 42 000 000 → 43 000 000 (stays) | both states |
+
+So a client keeps a filtered list in sync with `updatedX` alone: `node: null` removes the entity, `previousNode: null` adds it, both states update it in place. The same rule makes the restrictions of the user precise: a subscriber never gets a state it may not see, but learns that an entity entered or left its scope ([part 7 of the infrastructure guide, step 7](../infrastructure-guide/07-subscriptions-production.md#step-7-who-receives-an-event-a-support-chat)).
 
 **`whichUpdated`** (only `updatedX`) selects events by the changed fields; the payload lists them in `updatedFields` ✅:
 
@@ -106,7 +117,7 @@ Authorization of subscriptions runs once, when a client subscribes: the user mus
 
 - [ ] subscriptions needed → `pubsub` in the context of every call; a shared PubSub (e.g. Redis) for several server processes; not needed → `exclude: { Subscription: true }`;
 - [ ] only `createX`, `updateX`, `deleteX` publish; bulk mutations do not;
-- [ ] `wherePayload` works on all fields; for `updatedX` both states must match; transitions → `whichUpdated`;
+- [ ] `wherePayload` works on all fields; an `updatedX` event comes if one state matches, the other one is `null` (an entity entered or left the set);
 - [ ] "who changed it" → a virtual actor config + `subscriptionActorConfigName` + same-named (calculated) fields of the entity; async ones listed in `allowedCalculatedWithAsyncFuncFieldNames`.
 
 ---

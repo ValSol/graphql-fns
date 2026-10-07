@@ -63,7 +63,7 @@ Transformers are chosen by the GraphQL type of the argument without the entity n
 | ID | Fact |
 |---|---|
 | RD7 | 📖 `resolverDecorator` calls it with `generalConfig = null` (global ids without representation key, entity name from the config), `customResolverDecorator` with `generalConfig` (global ids of representation configs carry the root name and the representation key, from `parseEntityName`). |
-| RD8 | 📖 Subscription resolvers call `transformAfter({}, node, entityConfig, generalConfig)` for `node`, `previousNode` and `actor`, so `_token` is `undefined` there. |
+| RD8 | 📖 Subscription resolvers call `transformAfter({}, node, entityConfig, generalConfig)` for `node`, `previousNode` and `actor` (a state of `updatedX` that does not pass the filters of the subscriber is `null` and is not transformed), so `_token` is `undefined` there. |
 | RD9 | ✅ Code that rebuilds an entity after the root resolver passes on the hidden context of calculated fields with `copyCalculatedContext` ([calculated-fields.md](./calculated-fields.md) CF17): `transformAfter` and `createNodeQueryResolver` (it adds `__typename` with a spread). Connections keep node references. |
 | RD10 | ✅ Entities returned by resolvers are compared with Jest `toEqual` in tests (ours and projects'), and `toEqual` also compares own enumerable `Symbol` properties, so nothing that holds `context`/`info` may be put into an entity as an enumerable property. |
 

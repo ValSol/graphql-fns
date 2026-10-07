@@ -29,7 +29,7 @@ nginx.conf                                    new: the reverse proxy (outside th
 
 Verified with Redis 7.4, ioredis 5.11, @graphql-yoga/redis-event-target 3.0, nginx 1.27, Chrome 154, the rest as in [part 6](06-subscriptions-local.md) and the [contents](README.md).
 
-**The version of the library.** This part needs graphql-fns **0.1.2-beta.1167 or later**. Earlier versions throw on a subscription of a role whose `subscribePayloadFilters` return `null` (step 7), never match `wherePayload` / `subscribePayloadFilters` by a relational field when the ids of the event are `ObjectId`s, never match them by a date when the payload went through JSON (step 2), keep a closed subscription subscribed to the PubSub until the next event of its channel (step 8), and reject filter functions in the type of `composeServersideConfig`.
+**The version of the library.** This part needs graphql-fns **0.1.2-beta.1169 or later**. Earlier versions send no `updatedX` event about an entity that enters or leaves the scope of a subscriber (step 7), and versions before 0.1.2-beta.1167 also throw on a subscription of a role whose `subscribePayloadFilters` return `null` (step 7), never match `wherePayload` / `subscribePayloadFilters` by a relational field when the ids of the event are `ObjectId`s, never match them by a date when the payload went through JSON (step 2), keep a closed subscription subscribed to the PubSub until the next event of its channel (step 8), and reject filter functions in the type of `composeServersideConfig`.
 
 ### Step 1. Packages
 
@@ -565,29 +565,59 @@ const serversideConfig: ServersideConfig = composeServersideConfig(generalConfig
 - The `switch` functions need the return type `InvolvedFilter[] | null`: without it TypeScript infers a union of object literals that does not fit `SimplifiedEntityFilters`.
 - `null` (the role `guest` here) denies: a subscription is accepted and sends nothing ([part 10 of the guide to the configs, step 8](../configs-guide/10-authorization.md#step-8-what-a-client-sees-on-denial)).
 
-Five users, every one subscribed on process B to `createdConversation`, `updatedConversation` and `createdMessage`; the mutations are made on process A ✅:
+Five users, every one subscribed on process B to `createdConversation`, `updatedConversation` and `createdMessage`; the mutations are made on process A ✅ (the deliveries with `node: null` / `previousNode: null` were checked on one process, see below):
 
 | Action | `createdConversation` | `updatedConversation` | `createdMessage` |
 |---|---|---|---|
 | cli1 starts a conversation | cli1, con1, con2, sup | | |
 | cli1 writes (no consultant yet) | | | cli1, con1, con2, sup |
-| con1 takes the conversation | | cli1, con1, sup | |
+| con1 takes the conversation | | cli1, con1, sup; con2 with `node: null` | |
 | con1 replies | | | cli1, con1, sup |
-| sup reassigns it to con2 | | cli1, sup | |
+| sup reassigns it to con2 | | cli1, sup; con1 with `node: null`; con2 with `previousNode: null` | |
 | cli1 writes | | | cli1, con2, sup |
 | sup writes | | | cli1, con2, sup |
 | con1 tries to write | | | nobody: the mutation is denied (the server logs `Cannot return null for non-nullable field Mutation.createMessage.`, the client gets the masked `Unexpected error.`) |
 
 cli2 receives nothing. After the reassignment con1 is cut off at once: the next message is computed with `participantIds` = [cli1, con2]. The queries agree with the events: con1 sees no conversation and no message afterwards, con2 and sup see all four messages.
 
-**The limitation: entering and leaving.** For `updatedX` the filter has to pass **both** `previousNode` and `node` ([part 9 of the guide to the configs, step 4](../configs-guide/09-subscriptions.md#step-4-filters-wherepayload-and-whichupdated)), and this holds for `subscribePayloadFilters` as well. A subscriber therefore receives no event about the change that brings an entity into its scope or takes it out:
+**Entering and leaving.** Every state of an `updatedX` event is checked separately: the event is delivered if at least one of them passes the filters of the subscriber, the other one comes as `null`, and `updatedFields` lists all changed fields ([part 9 of the guide to the configs, step 4](../configs-guide/09-subscriptions.md#step-4-filters-wherepayload-and-whichupdated)). For the conversation, with `updatedConversation { previousNode { consultant { name } } node { consultant { name } } updatedFields }` ✅ (one process with the Redis PubSub of step 2):
 
-| Change of the conversation | `previousNode` passes for | `node` passes for | Receives `updatedConversation` |
+| Change of the conversation | con1 | con2 | cli1, sup |
 |---|---|---|---|
-| con1 takes it (no consultant → con1) | con1, con2 (the queue) | con1 | con1 ✅ |
-| reassigned con1 → con2 | con1 | con2 | neither con1 nor con2 ✅ |
+| con1 takes it (no consultant → con1) | both states | `previousNode` (no consultant), `node: null`: gone from the queue | both states |
+| reassigned con1 → con2 | `previousNode` (con1), `node: null`: taken away | `previousNode: null`, `node` (con2): a new conversation | both states |
 
-con2 learns about its new conversation with the next message (`createdMessage` reaches it, the payload has the new `participantIds`), con1 is never told that it lost it. If the client of a consultant must react at once, refresh its list by other means, e.g. a refetch when the window gets the focus or at an interval. This is the current behavior of the library.
+`updatedFields` is `["consultant"]` for everybody. A consultant never receives a state of the conversation it may not see (con2 does not learn from this event who had the conversation before, con1 does not learn to whom it went, only that `consultant` changed).
+
+The list of conversations of a consultant follows from `updatedConversation` alone. Relay directives cannot be conditional (`@deleteEdge` on `previousNode` would also fire when both states come), so the subscription gets an `updater` 📖:
+
+```ts
+useSubscription<ConversationsUpdatedSubscription>(
+  useMemo(
+    () => ({
+      subscription: updatedSubscription, // updatedConversation { previousNode { id } node { id … } }
+      variables: {},
+      updater: (store, data) => {
+        const { node, previousNode } = data!.updatedConversation;
+        const connection = store.get(connectionId);
+
+        if (!connection) return;
+
+        if (!node && previousNode) {
+          ConnectionHandler.deleteNode(connection, previousNode.id); // left the scope
+        } else if (node && !previousNode) {
+          const record = store.getRootField('updatedConversation').getLinkedRecord('node')!;
+          const edge = ConnectionHandler.createEdge(store, connection, record, 'ConversationEdge');
+
+          ConnectionHandler.insertEdgeAfter(connection, edge); // entered the scope
+        }
+        // both states: Relay updates the record by its "id"
+      },
+    }),
+    [connectionId],
+  ),
+);
+```
 
 ### Step 8. Scale
 
@@ -632,13 +662,13 @@ Three subscriptions per tab, then the mutation; the streams of the tabs land on 
 
 ### Checklist
 
-- [ ] graphql-fns 0.1.2-beta.1167 or later;
+- [ ] graphql-fns 0.1.2-beta.1169 or later;
 - [ ] the PubSub on `globalThis` uses `createRedisEventTarget` with two ioredis clients, the subscribing one with `enableReadyCheck: false`, and the `mongo.BSON.EJSON` serializer; `REDIS_URL` in the environment;
 - [ ] HTTP/2 between the browser and the proxy, the client uses distinct connections (`url: '/graphql'`) under HTTP/2 and the single connection mode only under HTTP/1.1; the single connection mode behind a balancer only with sticky sessions;
 - [ ] the proxy does not buffer the event streams (`proxy_buffering off` or `X-Accel-Buffering: no`) and does not time them out in less than the 12 s between the pings;
 - [ ] long-lived Node processes; the grace period of a deployment is the time a stopped process holds its streams;
 - [ ] every component that shows data kept up to date by subscriptions reads it again after a reconnect;
-- [ ] who may see an event that depends on another entity: an async calculated field in `allowedCalculatedWithAsyncFuncFieldNames` + `subscribePayloadFilters` by it; entering and leaving the scope sends no `updatedX` event;
+- [ ] who may see an event that depends on another entity: an async calculated field in `allowedCalculatedWithAsyncFuncFieldNames` + `subscribePayloadFilters` by it; entering and leaving the scope comes as an `updatedX` event with `previousNode: null` / `node: null`;
 - [ ] every event of an entity passes the filters of all its subscribers in every process: fine for moderate numbers.
 
 ---
