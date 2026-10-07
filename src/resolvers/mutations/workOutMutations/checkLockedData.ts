@@ -8,6 +8,7 @@ import type {
   EntityConfig,
   InvolvedFilter,
   SintheticResolverInfo,
+  SubscriptionInvolvedEntityNames,
 } from '@/tsTypes';
 
 import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
@@ -27,6 +28,7 @@ export type StandardMutationsArg = {
       inputOutputFilterAndLimit: [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
     materializeCalculatedFields?: boolean; // calculate calculated fields of the result at once
+    subscriptionEntityNames?: Partial<Record<SubscriptionInvolvedEntityNames, string>>; // see "returnReport"
   };
   returnReport?: boolean;
   returnResult: boolean;

@@ -82,6 +82,7 @@ import composeFieldsObject, {
 import composePersonalFilter from '@/resolvers/utils/executeAuthorisation/composePersonalFilter';
 import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 import composeUserFilter from '@/resolvers/utils/executeAuthorisation/composeUserFilter';
+import composeSubscriptionReportArgs from '@/resolvers/utils/composeSubscriptionReportArgs';
 import createInfoEssence from './resolvers/utils/createInfoEssence';
 import getInfoEssence from './resolvers/utils/getInfoEssence';
 import injectStaticOrPersonalFilter from '@/resolvers/utils/executeAuthorisation/injectStaticOrPersonalFilter';
@@ -90,6 +91,7 @@ import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 import getSimpleProjectionFromInfo from '@/resolvers/utils/getSimpleProjectionFromInfo';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import toGlobalId from '@/resolvers/utils/toGlobalId';
+import withSubscriptionReport from '@/resolvers/utils/withSubscriptionReport';
 
 // types
 
@@ -158,6 +160,7 @@ export {
   composeAllFieldsProjection,
   composeFieldsObject,
   composePersonalFilter,
+  composeSubscriptionReportArgs,
   composeUserFilter,
   createInfoEssence,
   injectStaticOrPersonalFilter,
@@ -167,6 +170,7 @@ export {
   getSimpleProjectionFromInfo,
   transformAfter,
   toGlobalId,
+  withSubscriptionReport,
   FOR_MONGO_QUERY,
   WITHOUT_CALCULATED_WITH_ASYNC,
 };

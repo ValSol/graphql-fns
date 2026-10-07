@@ -1219,7 +1219,7 @@ export type ResolverArg = {
     involvedFilters: {
       [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
-    subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
+    subscriptionEntityNames?: Partial<Record<SubscriptionInvolvedEntityNames, string>>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
     subscriptionUpdatedFields?: string[]; // used in Subscription
     materializeCalculatedFields?: boolean; // calculate requested calculated fields at once
