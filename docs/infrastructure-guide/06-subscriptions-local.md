@@ -343,19 +343,17 @@ export default function Countries({ preloadedQuery }: Props) {
 
 ### Step 8. A manually created mutation publishes only if told to
 
-With steps 1–7 the button `+1000` updated tab A (from the mutation response) but **not** tab B ✅: `growCountry` of [part 5](05-manually-created.md) calls the update resolver of the library directly, and a direct call does not publish. The decorators of the generated `updateCountry` do two things a manually created resolver has to repeat ([resolver-decorators.md](../resolver-decorators.md)):
+With steps 1–7 the button `+1000` updated tab A (from the mutation response) but **not** tab B ✅: `growCountry` of [part 5](05-manually-created.md) calls the update resolver of the library directly, and a direct call does not publish. `withSubscriptionReport` makes it publish as the generated `updateCountry` does:
 
 ```ts
 // src/data/manuallyCreatedResolverComposers/Mutation/growCountry.ts (the parts that change)
 import {
-  WITHOUT_CALCULATED_WITH_ASYNC,
-  composeAllFieldsProjection,
   composeQueryResolver,
   createInfoEssence,
   createUpdateEntityMutationResolver,
   fromGlobalId,
-  getInfoEssence,
   transformAfter,
+  withSubscriptionReport,
 } from 'graphql-fns';
 import type {
   ActionResolver,
@@ -372,38 +370,44 @@ const growCountry = (
 ): ActionResolver => {
   const Country = generalConfig.allEntityConfigs.Country as TangibleEntityConfig;
 
-  // … getCountry, updateCountry as in part 5
+  // … getCountry as in part 5
 
-  return async (parent, args, context, info) => {
-    // … as in part 5 up to the update
+  // publishes "updatedCountry" as the generated "updateCountry" does
+  const updateCountry = withSubscriptionReport(
+    createUpdateEntityMutationResolver(Country, generalConfig, serversideConfig, true)!,
+    'updated',
+    Country,
+    generalConfig,
+  );
 
-    const updatedCountry = await updateCountry(
-      null,
-      { whereOne: { id }, data: { population: (country.population ?? 0) + by } },
-      context,
-      // all fields of the country, so that "previousNode" and "updatedFields" are complete;
-      // the selection of the client is kept in "infoEssence"
-      createInfoEssence({
-        projection: composeAllFieldsProjection(Country, WITHOUT_CALCULATED_WITH_ASYNC),
-        entityConfig: Country,
-        infoEssence: getInfoEssence(Country, info),
-      }),
-      {
-        ...resolverOptions,
-        // publish "updatedCountry" as the generated "updateCountry" does
-        subscriptionEntityNames: { subscriptionUpdatedEntityName: 'Country' },
-      },
-    );
-
-    return transformAfter({}, updatedCountry, Country, null);
-  };
+  // … the resolver as in part 5: "updateCountry(null, { whereOne, data }, context, info, resolverOptions)"
 };
 ```
 
-1. **`subscriptionEntityNames`** in the 5th argument switches the publishing on. The key depends on the resolver: `subscriptionCreatedEntityName` for `createCreateEntityMutationResolver`, `subscriptionUpdatedEntityName` for `createUpdateEntityMutationResolver`, `subscriptionDeletedEntityName` for `createDeleteEntityMutationResolver`; the value is the entity name 📖. The generated mutations get it only when the subscription is allowed by `inventory` ([inventory.md](../inventory.md), IN14); here the resolver decides itself.
-2. **All fields in the 4th argument** (update and delete). The entity is read with the projection of `info`; with the client's `info` only the selected fields are read, and the event is wrong ✅: `updatedFields: ["code", "name", "population"]` instead of `["population"]`. `createInfoEssence({ projection, entityConfig, infoEssence })` reads all fields and keeps the client's selection for the result: the mutation still returns `{ id population cities { name country { code } } }` as asked ✅. `entityConfig` must be a `TangibleEntityConfig`, hence the cast of `Country`.
+`withSubscriptionReport(resolver, kind, entityConfig, generalConfig)` wraps a raw `create…` / `update…` / `delete…` mutation resolver; `kind` is `'created'`, `'updated'` or `'deleted'`. The wrapped resolver is called as before, with the `info` of the client. It repeats what the decorators of a generated mutation do ([resolver-decorators.md](../resolver-decorators.md)):
 
-After this `+1000` in tab A reaches tab B, with `updatedFields: ["population"]` ✅.
+1. **`subscriptionEntityNames`** in the 5th argument switches the publishing on (`{ subscriptionUpdatedEntityName: 'Country' }` here). It is added only if the subscription is allowed by `inventory`, as for the generated mutations ([inventory.md](../inventory.md), IN14); otherwise nothing is published and no `pubsub` is required 📖.
+2. **All fields in the 4th argument** for `'updated'` and `'deleted'`. The entity is read with the projection of `info`; with the `info` of the client only the selected fields would be read, and the event would be wrong ✅: `updatedFields: ["code", "name", "population"]` instead of `["population"]`. The helper reads all fields and keeps the selection of the client for the result: the mutation still returns what the client asked for ✅.
+
+After this `+1000` in tab A reaches tab B, with complete `previousNode` / `node` and `updatedFields: ["population"]` ✅.
+
+For a chain of mutations in `workOutMutations` ([part 11 of the guide to the configs](../configs-guide/11-transactions.md#step-3-several-standard-mutations-in-one-transaction-workoutmutations)) the same two arguments come from `composeSubscriptionReportArgs`, together with `returnReport: true` ✅:
+
+```ts
+await workOutMutations(
+  [
+    {
+      actionGeneralName: 'updateEntity',
+      entityConfig: Country,
+      args: { whereOne: { id }, data: { population } },
+      ...composeSubscriptionReportArgs('updated', Country, generalConfig, info, resolverOptions), // info & resolverOptions
+      returnResult: true,
+      returnReport: true,
+    },
+  ],
+  { generalConfig, serversideConfig, context },
+);
+```
 
 ### Step 9. Check
 
@@ -437,7 +441,7 @@ All three are the subject of [part 7](07-subscriptions-production.md).
 - [ ] `useGraphQLSSE()` in the plugins of Yoga, `src/app/graphql/stream/route.ts` exports `GET`, `POST`, `PUT`, `DELETE`;
 - [ ] the network layer of Relay gets a `subscribe` function backed by one `graphql-sse` client with `singleConnection: true`;
 - [ ] lists that must react to created and deleted entities are `@connection`s, updated by `@appendNode` / `@deleteEdge` with the `__id` of the connection;
-- [ ] manually created mutations that should notify subscribers pass `subscriptionEntityNames` and, for update and delete, an info with all fields.
+- [ ] manually created mutations that should notify subscribers wrap the resolvers of the library in `withSubscriptionReport` (`composeSubscriptionReportArgs` + `returnReport: true` in `workOutMutations`).
 
 ---
 

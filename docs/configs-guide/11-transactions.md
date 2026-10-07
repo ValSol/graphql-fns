@@ -176,7 +176,7 @@ An item of the chain 📖:
 | `info` | which fields to return: the `info` of your resolver or `createInfoEssence({ projection })`; without it all stored fields are returned ✅ |
 | `resolverOptions` | `{ involvedFilters: { inputOutputFilterAndLimit } }` for the mutation; by default no restriction (`[[]]`) |
 | `inAnyCase` | `true` allows a mutation that `inventory` excludes from the API; otherwise the chain fails with `Not authorized "deleteEntity" mutation for "Currency" entity!` |
-| `returnReport` | with `returnResult: true`, publishes the subscription payload of the mutation (part 9) after the writes |
+| `returnReport` | with `returnResult: true`, publishes the subscription payload of the mutation (part 9) after the writes, if `resolverOptions` also carry `subscriptionEntityNames`: spread `composeSubscriptionReportArgs(kind, entityConfig, generalConfig, info, resolverOptions)` into the item, it sets `info` and `resolverOptions` ([part 6 of the infrastructure guide, step 8](../infrastructure-guide/06-subscriptions-local.md#step-8-a-manually-created-mutation-publishes-only-if-told-to)) ✅ |
 | `lockedData` | optimistic locking (step 6) |
 
 Rules:
