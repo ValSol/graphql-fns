@@ -35,7 +35,7 @@ MongoDB moves top-level `$match` conjuncts that don't depend on a lookup's `as` 
 | PM2 | ✅ With `search` the pre-match goes into the same `$match` as `$text`, which has to be the first stage; it is not a separate stage after `$sort`. |
 | PM3 | ✅ With `near` the pre-match goes into `$geoNear.query`. `$geoNear` has to be the first stage, and a `$match` after it can't use another index. |
 | PM4 | ✅ Without lookups there is no pre-match: `where` itself is checked in the first `$match`. Without local conditions (a purely relational `where`) there is no pre-match either: `[...lookups, { $match: where }]`. |
-| PM5 | 📖 With both `search` and `near` the order is `$text`, `$sort`, `$geoNear`; MongoDB rejects such a pipeline anyway (`$geoNear` must be first and can't be combined with `$text`). The pre-match is then in the `$text` match. |
+| PM5 | ✅ `search` and `near` never get into one pipeline: MongoDB rejects `$text` with `$geoNear` (`$geoNear` must be the first stage). With both, `search` is resolved into ids first, and `near` is applied to them. Queries: `createEntitiesQueryResolver` and `createEntitiesThroughConnectionQueryResolver` select by `search` and `where` (plus `<geospatialField>_withinSphere` for `maxDistance`, [geospatial-index-paths.md](geospatial-index-paths.md) GI8) and then query with `near` and `id_in`. Filtered mutations: `aggregateFilteredIds` composes the head with `search` (the pre-match is then in the `$text` match), then runs `$geoNear` with `query: { _id: { $in: ids } }` (`aggregateFilteredIds.mtest.ts`). |
 | PM6 | ✅ The access filter (`involvedFilters`) is merged into `where` by `addFilter` before composing, so its local part gets into the pre-match too. |
 
 ## 2. Derivation
@@ -66,7 +66,7 @@ On the example above the pre-match is:
 | ID | Fact |
 |---|---|
 | PM15 | ✅ Queries: `createEntityQueryResolver`, `createEntitiesQueryResolver` (`near`, `search`), `createEntityCountQueryResolver` (`search`), `createEntityCountsQueryResolver` (`search`; only the common `where`, the items of `restrictedWhere` can't be relational and run in `$facet`), `createEntityExistencesQueryResolver` (`search`, a pre-match per item), `createEntityDistinctValuesQueryResolver` (`search`) and `queries/utils/getShift` (`near`, `search`). `createEntitiesThroughConnectionQueryResolver` and `createChildEntitiesThroughConnectionQueryResolver` build no aggregation themselves: they use `getShift` and the entities resolver. |
-| PM16 | ✅ Mutations: `resolverAttributes/getPrevious` of `UpdateEntity`, `UpdateManyEntities`, `UpdateFilteredEntities` (`near`, `search`), `DeleteEntity`, `DeleteManyEntities` and `DeleteFilteredEntities` (`near`, `search`). |
+| PM16 | ✅ Mutations: `resolverAttributes/getPrevious` of `UpdateEntity`, `UpdateManyEntities`, `UpdateFilteredEntities` (`near`, `search`), `DeleteEntity`, `DeleteManyEntities` and `DeleteFilteredEntities` (`near`, `search`); the filtered ones through `utils/aggregateFilteredIds`. |
 | PM17 | 📖 Not used where only the composed `where` is needed and the lookups are dropped: `getCommonData` of `CopyEntity` / `CopyManyEntities`, `checkData` (tests the incoming data with `mingo`, without a query to MongoDB) and `composeSubscribePayloadMongoFilter`. In `checkData` a relational condition of the filter is tested against the incoming data, which has no `x_` field, as if the related document were missing (e.g. `$eq` doesn't match, `$ne` matches). |
 
 ## 4. Effect

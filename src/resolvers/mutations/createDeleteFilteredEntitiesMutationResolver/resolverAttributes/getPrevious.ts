@@ -4,7 +4,7 @@ import type { GetPrevious } from '@/resolvers/tsTypes';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
-import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
+import aggregateFilteredIds from '@/resolvers/utils/aggregateFilteredIds';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
@@ -39,24 +39,22 @@ const getPrevious: GetPrevious = async (
   let conditions = preConditions;
 
   if (lookups.length > 0 || near || search) {
-    const pipeline = composeAggregateHead({
-      where: conditions,
-      lookups,
-      geoNear: near ? composeNearForAggregateInput(near as NearInput, entityConfig) : undefined,
-      search: search as string | undefined,
-    });
+    const ids = await aggregateFilteredIds(
+      Entity,
+      {
+        where: conditions,
+        lookups,
+        geoNear: near ? composeNearForAggregateInput(near as NearInput, entityConfig) : undefined,
+        search: search as string | undefined,
+      },
+      session,
+    );
 
-    pipeline.push({ $project: { _id: 1 } });
+    if (!ids) return null;
 
-    const entities = await (session
-      ? Entity.aggregate(pipeline).session(session).exec()
-      : Entity.aggregate(pipeline).exec());
+    if (!ids.length) return [];
 
-    if (!entities) return null;
-
-    if (!entities.length) return [];
-
-    conditions = { _id: { $in: entities.map(({ _id }) => _id) } };
+    conditions = { _id: { $in: ids } };
   }
 
   const projection = adaptProjectionForCalculatedFields(
