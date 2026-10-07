@@ -22,7 +22,6 @@ const scalarTypes = [
   'Int',
   'Float',
   'String',
-  'Upload',
 ];
 
 const forClientActions = ['childEntity', 'childEntities'];

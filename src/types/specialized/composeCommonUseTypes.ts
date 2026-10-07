@@ -1,6 +1,5 @@
 const composeCommonUseTypes = (): Array<string> => [
   'scalar DateTime',
-  'scalar Upload',
   `interface Node {
   id: ID!
 }`,

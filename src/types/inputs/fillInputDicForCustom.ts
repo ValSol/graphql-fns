@@ -12,7 +12,6 @@ const commonInputTypes = [
   'Int',
   'String',
   'DateTime',
-  'Upload',
   'RegExp',
   'SliceInput',
   // geospatial types

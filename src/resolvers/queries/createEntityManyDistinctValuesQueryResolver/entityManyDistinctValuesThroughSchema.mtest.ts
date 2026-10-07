@@ -90,7 +90,6 @@ describe('entityManyDistinctValues through schema', () => {
     // ... relational filters "x_"), the items, the enums of targets and the restricted "where" ...
     // ... (without "x_"); no inputs of other actions, no entity types (the query returns scalars)
     const expectedTypeDefs = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }

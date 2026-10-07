@@ -22,7 +22,7 @@ Order of steps in `composeGqlTypes` (`src/types/composeGqlTypes.ts`):
 2. Custom and representation actions: `mergeRepresentationIntoCustom` → `composeCustomActionSignature`, **for tangible entities only**.
 3. `processManualyUsedEntities` adds types of entities not reachable from any action.
 4. `interface`s are built (`composeInterfaceTypeDic`).
-5. The result is assembled as: `scalar DateTime`, `scalar Upload`, `interface Node`, `input RegExp`, `input SliceInput`, enums (`XEnumeration`), geospatial types, interfaces, entity types, inputs, `type Query { node(id: ID!): Node … }`, `type Mutation`, `type Subscription`.
+5. The result is assembled as: `scalar DateTime`, `interface Node`, `input RegExp`, `input SliceInput`, enums (`XEnumeration`), geospatial types, interfaces, entity types, inputs, `type Query { node(id: ID!): Node … }`, `type Mutation`, `type Subscription`.
 
 Key point: **an entity type gets into the SDL only if it is reachable** from some action, child field or `manualyUsedEntities`.
 

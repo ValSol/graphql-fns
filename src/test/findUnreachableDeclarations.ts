@@ -13,7 +13,6 @@ import type { GraphQLNamedType } from 'graphql';
 // declared by every schema on purpose (see "composeCommonUseTypes" & "commonInputTypes" of "fillInputDicForCustom")
 const commonNames = [
   'DateTime',
-  'Upload',
   'Node',
   'RegExp',
   'SliceInput',

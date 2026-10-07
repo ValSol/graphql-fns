@@ -133,7 +133,6 @@ describe('composeGqlTypes', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -1077,7 +1076,6 @@ type Subscription {
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -1627,7 +1625,6 @@ type Subscription {
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -2114,7 +2111,6 @@ type Subscription {
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -2495,7 +2491,6 @@ type Subscription {
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3008,7 +3003,6 @@ type Subscription {
 
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3140,7 +3134,6 @@ type Query {
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3241,7 +3234,6 @@ type Mutation {
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3321,7 +3313,6 @@ type Query {
 
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3417,7 +3408,6 @@ type Query {
 
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3560,7 +3550,6 @@ type Query {
 
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3636,7 +3625,6 @@ type Mutation {
     const interfaces = { ExampleInterface: ['textField', 'updatedAt'] };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory, interfaces };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3715,7 +3703,6 @@ type Mutation {
     const custom = { Mutation: { loadEntity: signatureMethods } };
     const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3773,7 +3760,6 @@ type Mutation {
     const custom = { Query: { getEntity } };
     const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -3856,7 +3842,6 @@ type Query {
     const representations = { ForCatalog: ForCatalogRepresentation };
     const generalConfig: GeneralConfig = { allEntityConfigs, custom, representations, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -4073,7 +4058,6 @@ type Mutation {
       inventory,
     };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -4164,7 +4148,6 @@ type Mutation {
     const representations = { ForCatalog };
     const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -4356,7 +4339,6 @@ type Query {
     const representations = { ForCatalog, ForView };
     const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }
@@ -4446,7 +4428,6 @@ type Mutation {
 
     const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
     const expectedResult = `scalar DateTime
-scalar Upload
 interface Node {
   id: ID!
 }

@@ -4,7 +4,6 @@ describe('composeCommonUseTypes', () => {
   test('should return correct string', () => {
     const expectedResult = [
       'scalar DateTime',
-      'scalar Upload',
       `interface Node {
   id: ID!
 }`,
