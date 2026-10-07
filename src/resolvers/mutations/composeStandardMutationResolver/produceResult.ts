@@ -71,17 +71,26 @@ const produceResult = async (
     : getInfoEssence(entityConfig, info);
 
   if (array) {
-    return await composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
-      null,
-      { where: { id_in: mains.map(({ _id }) => _id) }, token },
-      context,
-      infoEssence,
-      {
-        involvedFilters: { inputOutputFilterAndLimit: [[]] },
-        materializeCalculatedFields,
-        calculatedFieldsConfig,
+    const entities = await composeQueryResolver(
+      pluralize(entityName),
+      generalConfig,
+      serversideConfig,
+    )(null, { where: { id_in: mains.map(({ _id }) => _id) }, token }, context, infoEssence, {
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
+      materializeCalculatedFields,
+      calculatedFieldsConfig,
+    });
+
+    // the query doesn't keep the order of "id_in", but results have to be in the order of the mutation input
+    const entitiesById = (entities as GraphqlObject[]).reduce<Record<string, GraphqlObject>>(
+      (prev, entity) => {
+        prev[String(entity.id)] = entity;
+        return prev;
       },
+      {},
     );
+
+    return mains.map(({ _id }) => entitiesById[String(_id)]).filter(Boolean);
   }
 
   const instance = await composeQueryResolver(entityName, generalConfig, serversideConfig)(

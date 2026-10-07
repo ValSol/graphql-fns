@@ -188,23 +188,23 @@ describe('createCreateManyEntitiesMutationResolver', () => {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
-    expect(createdExamples[0].id.toString()).toBe(data[1].id);
-    expect(createdExamples[0].textField1).toBe(data[1].textField1);
-    expect(createdExamples[0].textField2).toBe(data[1].textField2);
-    expect(createdExamples[0].textField3).toBe(data[1].textField3);
-    expect(createdExamples[0].textField4).toEqual(data[1].textField4);
-    expect(createdExamples[0].textField5).toEqual(data[1].textField5);
-    expect(createdExamples[0].createdAt instanceof Date).toBeTruthy();
-    expect(createdExamples[0].updatedAt instanceof Date).toBeTruthy();
+    expect(createdExamples[0].id.toString()).toBe(data[0].id);
+    expect(createdExamples[0].textField1).toBe(data[0].textField1);
+    expect(createdExamples[0].textField2).toBe(data[0].textField2);
+    expect(createdExamples[0].textField3).toBe(data[0].textField3);
+    expect(createdExamples[0].textField4).toEqual(data[0].textField4);
+    expect(createdExamples[0].textField5).toEqual(data[0].textField5);
+    expect(createdExamples[0].createdAt.toISOString()).toEqual(data[0].createdAt);
+    expect(createdExamples[0].updatedAt.toISOString()).toEqual(data[0].updatedAt);
 
-    expect(createdExamples[1].id.toString()).toBe(data[0].id);
-    expect(createdExamples[1].textField1).toBe(data[0].textField1);
-    expect(createdExamples[1].textField2).toBe(data[0].textField2);
-    expect(createdExamples[1].textField3).toBe(data[0].textField3);
-    expect(createdExamples[1].textField4).toEqual(data[0].textField4);
-    expect(createdExamples[1].textField5).toEqual(data[0].textField5);
-    expect(createdExamples[1].createdAt.toISOString()).toEqual(data[0].createdAt);
-    expect(createdExamples[1].updatedAt.toISOString()).toEqual(data[0].updatedAt);
+    expect(createdExamples[1].id.toString()).toBe(data[1].id);
+    expect(createdExamples[1].textField1).toBe(data[1].textField1);
+    expect(createdExamples[1].textField2).toBe(data[1].textField2);
+    expect(createdExamples[1].textField3).toBe(data[1].textField3);
+    expect(createdExamples[1].textField4).toEqual(data[1].textField4);
+    expect(createdExamples[1].textField5).toEqual(data[1].textField5);
+    expect(createdExamples[1].createdAt instanceof Date).toBeTruthy();
+    expect(createdExamples[1].updatedAt instanceof Date).toBeTruthy();
 
     const createdExamples2 = await createManyExamples(null, { data: [] }, { mongooseConn }, null, {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },

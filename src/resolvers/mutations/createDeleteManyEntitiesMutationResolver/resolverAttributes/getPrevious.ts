@@ -42,27 +42,27 @@ const getPrevious: GetPrevious = async (
 
   if (whereOne.length === 0) return [];
 
-  const { lookups, where: preConditions } = mergeWhereAndFilter(
-    filter,
-    { OR: whereOne },
-    entityConfig,
-  );
+  const { lookups, where } = mergeWhereAndFilter(filter, { OR: whereOne }, entityConfig);
 
-  let conditions = preConditions;
+  // every "whereOne" item is matched separately to return entities in the order of "whereOne"
+  const $facet = whereOne.reduce<Record<string, Record<string, any>[]>>((prev, item, i) => {
+    prev[`item${i}`] = [
+      { $match: mergeWhereAndFilter([], item, entityConfig).where },
+      { $project: { _id: 1 } },
+    ];
 
-  if (lookups.length > 0) {
-    const pipeline = composeAggregateHead({ where: preConditions, lookups });
+    return prev;
+  }, {});
 
-    pipeline.push({ $project: { _id: 1 } });
+  const pipeline = [...composeAggregateHead({ where, lookups }), { $facet }];
 
-    const entities = await (session
-      ? Entity.aggregate(pipeline).session(session).exec()
-      : Entity.aggregate(pipeline).exec());
+  const [facets] = await (session
+    ? Entity.aggregate(pipeline).session(session).exec()
+    : Entity.aggregate(pipeline).exec());
 
-    if (entities.length !== whereOne.length) return null;
+  if (whereOne.some((item, i) => facets[`item${i}`].length !== 1)) return null;
 
-    conditions = { _id: { $in: entities.map(({ _id }) => _id) } };
-  }
+  const ids = whereOne.map((item, i) => facets[`item${i}`][0]._id);
 
   const projection = adaptProjectionForCalculatedFields(
     getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg),
@@ -76,10 +76,15 @@ const getPrevious: GetPrevious = async (
     return prev;
   }, projection);
 
-  const entities = await Entity.find(conditions, projection, { lean: true, session });
+  const entities = await Entity.find({ _id: { $in: ids } }, projection, { lean: true, session });
   if (entities.length !== whereOne.length) return null;
 
-  return entities;
+  const entitiesById = entities.reduce((prev, entity) => {
+    prev[entity._id.toString()] = entity;
+    return prev;
+  }, {});
+
+  return ids.map((id) => entitiesById[id.toString()]);
 };
 
 export default getPrevious;
