@@ -47,7 +47,7 @@ Do not declare `id`, `createdAt`, `updatedAt`: every entity gets them automatica
 
 - no `_` (underscore);
 - not `id`, `createdAt`, `updatedAt`, `counter`, `connect`, `create`, `pageInfo`, `in`, `nin`, `ne`, `gt`, `gte`, `lt`, `lte`, `re` (allowed only in virtual entities);
-- no endings `ThroughConnection`, `GetOrCreate`, `DistinctValues`; an array field must not end with `Count`, a filter field with `Stringified` (these suffixes are used by the generated fields);
+- no endings `ThroughConnection`, `DistinctValues`; an array field must not end with `Count`, a filter field with `Stringified` (these suffixes are used by the generated fields);
 - unique within the entity, including the fields added to it as opposites of relational links.
 
 Field options that matter already for plain data:

@@ -44,7 +44,7 @@ Caching: outside jest intermediate results are cached, but separately for every 
 | E8 | `XCreatedOrDeletedPayload` (virtual) | auto for tangible | `node: X!`, `[actor: Actor]` | return type of `createdX` / `deletedX` |
 | E9 | **representation** config `X{Key}` (or with `representationNameSlicePosition`, e.g. `XKeyConnection`) | `generalConfig.representations[Key]` | a copy of X with include/exclude/add/freeze/unfreeze fields and relational/duplex/filter/child references replaced by `Y{Key}` | `…{Key}` actions from `allow[X]` |
 
-Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no plural (`pluralize(name) === name`), not `DateTime/Node/node/PageInfo`. Fields cannot contain `_`, cannot end with `ThroughConnection` / `GetOrCreate` / `DistinctValues` / (for arrays) `Count`, and filter fields cannot end with `Stringified`. Reserved names `id, createdAt, updatedAt, counter, in, nin, …, connect, create, pageInfo` are forbidden (except in virtual entities). `freeze` is forbidden in embedded/virtual entities.
+Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no plural (`pluralize(name) === name`), not `DateTime/Node/node/PageInfo`. Fields cannot contain `_`, cannot end with `ThroughConnection` / `DistinctValues` / (for arrays) `Count`, and filter fields cannot end with `Stringified`. Reserved names `id, createdAt, updatedAt, counter, in, nin, …, connect, create, pageInfo` are forbidden (except in virtual entities). `freeze` is forbidden in embedded/virtual entities.
 
 ---
 
@@ -58,7 +58,7 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | F4 | embedded | `name: E` / `name(slice): [E!]!` + `connection` (`nameThroughConnection`) and `count` (`nameCount`) variants | `ECreateInput` | `EUpdateInput` | `name: EWhereInput` |
 | F5 | relational (tangible→tangible) | child fields C1/C2 | `YCreateChildInput` / `YCreateOrPushChildrenInput` (`connect`/`create`) | same | `name, _in, _nin, _ne, name_: YWhereWithoutBooleanOperationsInput` |
 | F6 | **parent relational** (added automatically to Y as the opposite of every relational X→Y) | array: C1 | — | — | `name_: …WhereWithoutBooleanOperationsInput` if the opposite field has `index` |
-| F7 | duplex (two-way link) | C1/C2 (+C3 GetOrCreate) | like F5, but if the opposite field is `required`: `YCreateThru_{opp}_FieldChildInput` / `YCreateOrPushThru_{opp}_FieldChildrenInput` (in Create and Update; in such an input the opposite field is optional and filled with the parent id) | as Create | as F5 |
+| F7 | duplex (two-way link) | C1/C2 | like F5, but if the opposite field is `required`: `YCreateThru_{opp}_FieldChildInput` / `YCreateOrPushThru_{opp}_FieldChildrenInput` (in Create and Update; in such an input the opposite field is optional and filled with the parent id) | as Create | as F5 |
 | F8 | filter (stores a filter on Y as a string) | `variants: plain` → C1/C2; `stringified` → `nameStringified: String` | array: `YWhereInput`, scalar: `YWhereOneInput` (frozen ones too, DD7) | yes (without frozen) | — |
 | F9 | calculated | per `calculatedType`, with `inputTypes` arguments (+`slice` for arrays); `filterFields` as C1/C2 | — | — | — (but yes in WherePayloadInput) |
 | F10 | child (virtual only) | `name: Y` / `[Y!]!` | — | — | — |
@@ -158,7 +158,6 @@ For relational (including parent), duplex, filter (`plain`) and calculated (`fil
 | C1b | array | `childEntityCount` | `fCount(where, search?): Int!` | `…CountResolver` |
 | C1c | array | `childEntityDistinctValues` and Y has indexed text/enum fields | `fDistinctValues(where, search?, options!): [String!]!` | `…DistinctValuesResolver` |
 | C2 | scalar | `childEntity` allowed (`checkRepresentationAction`, the same check as for the resolver) | `f: Y[!]` | `createEntityScalarResolver` / `createEntityFilterScalarResolver` |
-| C3 | duplex scalar, not `required`, scalar opposite field | `childEntityGetOrCreate` | `fGetOrCreate(data: YCreateInput!): Y` (`whereOne` hidden) | `createEntityGetOrCreateResolver` |
 | C4 | embedded array | `variants` | `plain`: `f(slice): [E!]!`; `connection`: `fThroughConnection(after,before,first,last): EConnection!`; `count`: `fCount: Int!` | `fieldArrayResolver` / `fieldArrayThroughConnectionResolver` / `fieldArrayCountResolver` |
 | C5 | any other array field | — | `f(slice: SliceInput)` | `fieldArrayResolver` |
 | C6 | geospatial | — | `Geospatial…` | regular fields: `…FromMongoToGql` converters; calculated: the field resolver of the calculated field without conversion (`func` returns the GraphQL format, [calculated-fields.md](./calculated-fields.md) CF11), arrays: `fieldArrayResolver` |
@@ -201,12 +200,12 @@ Runtime decorator chain ([resolver-decorators.md](./resolver-decorators.md)): `r
 | DD9 | `composeAllEntityConfigs` throws a `TypeError` if `configName` of a relational/duplex field does not point to a tangible entity or `oppositeName` of the opposite field does not point back to the field. |
 | DD10 | `copyXWithChildren` / `copyManyXsWithChildren` have no `data`: they copy the tree of children (§10). |
 | DD11 | `whereKeyToSource` of `copy…` selects the source only by its `WhereOneInput`; there is no compound variant. |
+| DD12 | Child fields only read data. There is no child field that writes (the former `fGetOrCreate` of scalar duplex fields, action `childEntityGetOrCreate`, was removed: a field of a Query must not change data); use the mutation `getOrCreateX` (M20, §4.1). C3 is not used. |
 
 ## 9. Open questions
 
 | ID | Question |
 |---|---|
-| ?1 | `childEntityGetOrCreate` has `actionType: 'Query'` but may create a record: writing data in a Query field. The root mutation `getOrCreateX` (M20, §4.1) may be a base for it. |
 | ?2 | `data` of `copy…` has type `XUpdateInput` also when a copy is created: frozen fields of a new copy cannot be set via `data`, and required X fields that are not among the common fields are not checked by the schema (the error appears only on write). |
 
 ---

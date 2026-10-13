@@ -224,7 +224,7 @@ const composeRepresentationConfig = (
       key === 'calculatedFields'
     ) {
       entityConfig[key] = entityConfig[key].map((item) => {
-        const { name, oppositeName, array, config: currentConfig, required } = item;
+        const { name, array, config: currentConfig } = item;
 
         if (name === 'pageInfo') {
           // field "pageInfo" refers to standard child config "PageInfo" so skip it
@@ -242,11 +242,6 @@ const composeRepresentationConfig = (
           );
         }
 
-        const { array: oppositeArray } =
-          key === 'duplexFields'
-            ? composeFieldsObject(currentConfig).fieldsObject[oppositeName]
-            : { array: false };
-
         const childQueries = array
           ? [
               'childEntities',
@@ -254,9 +249,7 @@ const composeRepresentationConfig = (
               'childEntityCount',
               'childEntityDistinctValues',
             ]
-          : key !== 'duplexFields' || required || oppositeArray
-            ? ['childEntity']
-            : ['childEntity', 'childEntityGetOrCreate'];
+          : ['childEntity'];
         if (
           !childQueries.some((childQuery: RepresentationAttributesActionName) =>
             representations[representationKey].allow[currentConfig.name].includes(childQuery),

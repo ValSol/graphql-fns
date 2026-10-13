@@ -5,7 +5,6 @@ import arrayEntityCount from './arrayEntityCountQueryAttributes';
 import childEntity from './childEntityQueryAttributes';
 import childEntityCount from './childEntityCountQueryAttributes';
 import childEntityDistinctValues from './childEntityDistinctValuesQueryAttributes';
-import childEntityGetOrCreate from './childEntityGetOrCreateQueryAttributes';
 import childEntities from './childEntitiesQueryAttributes';
 import childEntitiesThroughConnection from './childEntitiesThroughConnectionQueryAttributes';
 import copyManyEntities from './copyManyEntitiesMutationAttributes';
@@ -46,7 +45,6 @@ const actionAttributes = {
   childEntity,
   childEntityCount,
   childEntityDistinctValues,
-  childEntityGetOrCreate,
   childEntities,
   childEntitiesThroughConnection,
   copyManyEntities,

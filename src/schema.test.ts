@@ -497,7 +497,7 @@ describe('graphql schema', () => {
 
       const inventory: Inventory = {
         name: 'test',
-        exclude: { Query: { childEntity: ['Menu'], childEntityGetOrCreate: ['Menu'] } },
+        exclude: { Query: { childEntity: ['Menu'] } },
       };
 
       const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs, inventory });
@@ -505,9 +505,7 @@ describe('graphql schema', () => {
       const sectionType = typeDefs.match(/type Section implements[^}]*\}/)?.[0];
 
       expect(sectionType).not.toMatch(/\n  menu: /);
-      expect(sectionType).not.toMatch(/\n  menuGetOrCreate\(/);
       expect(resolvers.Section?.menu).toBeUndefined();
-      expect(resolvers.Section?.menuGetOrCreate).toBeUndefined();
 
       expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
     });

@@ -46,9 +46,6 @@ const getSimpleProjectionFromInfo = (
   return fields.reduce<Record<string, 1>>((prev, field) => {
     if (field.endsWith('ThroughConnection')) {
       prev[`${field.slice(0, -'ThroughConnection'.length)}`] = 1;
-    } else if (field.endsWith('GetOrCreate')) {
-      prev[`${field.slice(0, -'GetOrCreate'.length)}`] = 1;
-      prev._id = 1; // to connect with created Entity
     } else if (field.endsWith('Count')) {
       prev[field] = 1; // we can have NOT generated field that ends by "Count"
       prev[`${field.slice(0, -'Count'.length)}`] = 1;

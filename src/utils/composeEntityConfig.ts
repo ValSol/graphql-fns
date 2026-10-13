@@ -108,12 +108,6 @@ const composeEntityConfig = (
           );
         }
 
-        if (fieldName.endsWith('GetOrCreate')) {
-          throw new TypeError(
-            `Forbidden the field name: "${fieldName}" that ends with "GetOrCreate" in entity: "${name}"!`,
-          );
-        }
-
         if (fieldName.endsWith('DistinctValues')) {
           throw new TypeError(
             `Forbidden the field name: "${fieldName}" that ends with "DistinctValues" in entity: "${name}"!`,

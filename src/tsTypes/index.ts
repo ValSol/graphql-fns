@@ -772,7 +772,6 @@ export type RepresentationAttributesActionName =
   | 'childEntity'
   | 'childEntityCount'
   | 'childEntityDistinctValues'
-  | 'childEntityGetOrCreate'
   | 'entityCount'
   | 'entityCounts'
   | 'entityExistences'
@@ -910,7 +909,7 @@ export type Custom = {
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | [
-      'Query', // "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues' or custom query
+      'Query', // "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues' or custom query
       string,
     ]
   | [
@@ -926,7 +925,7 @@ export type TwoSegmentInventoryChain =
 
 export type ThreeSegmentInventoryChain =
   | [
-      'Query', // first "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues' or custom query, second for entity name
+      'Query', // first "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues' or custom query, second for entity name
       string,
       string,
     ]

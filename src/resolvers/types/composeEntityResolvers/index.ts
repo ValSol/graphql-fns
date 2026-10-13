@@ -13,7 +13,6 @@ import composeCalculatedFieldResolver from '../composeCalculatedFieldResolver';
 import createEntityArrayResolver from '../createEntityArrayResolver';
 import createEntityCountResolver from '../createEntityCountResolver';
 import createEntityDistinctValuesResolver from '../createEntityDistinctValuesResolver';
-import createEntityGetOrCreateResolver from '../createEntityGetOrCreateResolver';
 import createEntityOppositeRelationArrayResolver from '../createEntityOppositeRelationArrayResolver';
 import createEntityOppositeRelationCountResolver from '../createEntityOppositeRelationCountResolver';
 import createEntityOppositeRelationDistinctValuesResolver from '../createEntityOppositeRelationDistinctValuesResolver';
@@ -196,26 +195,6 @@ const composeEntityResolvers = (
           prev[name] = resolver;
         }
       }
-      return prev;
-    }, resolvers);
-
-    duplexFields.reduce((prev, { array, name, oppositeName, config, required }) => {
-      if (array || required) {
-        return prev;
-      }
-
-      const { array: oppositeArray } = composeFieldsObject(config).fieldsObject[oppositeName];
-
-      if (oppositeArray) {
-        return prev;
-      }
-
-      const resolver = createEntityGetOrCreateResolver(config, generalConfig, serversideConfig);
-
-      if (resolver) {
-        prev[`${name}GetOrCreate`] = resolver;
-      }
-
       return prev;
     }, resolvers);
 

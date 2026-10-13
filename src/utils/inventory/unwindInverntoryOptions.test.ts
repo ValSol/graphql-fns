@@ -106,7 +106,6 @@ describe('unwindInverntoryOptions', () => {
       childEntityCountForCatalog: ['Example'],
       childEntityDistinctValues: ['Example'],
       childEntityForCatalog: ['ChildExample'],
-      childEntityGetOrCreate: ['ChildExample'],
       entities: ['Example', 'ChildExample'],
       entitiesByUnique: ['Example', 'ChildExample'],
       entitiesForCatalog: ['Example'],

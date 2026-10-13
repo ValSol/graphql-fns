@@ -34,7 +34,7 @@
 3. A **shallow copy** of the root config with the representation name.
 4. `interfaces`, `includeFields`, `excludeFields` (field arrays are reassigned with `filter`).
 5. `addFields` are composed as an entity config (`composeEntityConfig`) and put into the copy, replacing root fields with the same name.
-6. Relational, duplex, filter, child and calculated `filterFields` fields get the representation config of the related entity (composed recursively); the related entity must be in `allow` with a child action that fits the field (`childEntities…` for arrays, `childEntity` or `childEntityGetOrCreate` for scalars), and relational/duplex fields must have their opposite fields in it.
+6. Relational, duplex, filter, child and calculated `filterFields` fields get the representation config of the related entity (composed recursively); the related entity must be in `allow` with a child action that fits the field (`childEntities…` for arrays, `childEntity` for scalars), and relational/duplex fields must have their opposite fields in it.
 7. `freezedFields` / `unfreezedFields`.
 
 | ID | Fact |

@@ -68,7 +68,6 @@ describe('getAllEntityNames', () => {
       Place: {
         descriptions: [
           'inventory "test", option item: "childEntity": "Place", involvedEntityKey: "inputOutputEntity"',
-          'inventory "test", option item: "childEntityGetOrCreate": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entityCount": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entityCounts": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entityExistences": "Place", involvedEntityKey: "inputOutputEntity"',

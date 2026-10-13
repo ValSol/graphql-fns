@@ -156,7 +156,6 @@ type Menu implements Node {
   selectedSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   selectedSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
   selectedSectionsCount(where: MenuSectionWhereInput): Int!
-  cloneGetOrCreate(data: MenuCloneCreateInput!): MenuClone
 }
 type MenuSection implements Node {
   id: ID!
@@ -188,7 +187,6 @@ type MenuClone implements Node {
   sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
   sectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection!
   sectionsCount(where: MenuCloneSectionWhereInput): Int!
-  originalGetOrCreate(data: MenuCreateInput!): Menu
 }
 type MenuCloneSection implements Node {
   id: ID!
@@ -455,50 +453,6 @@ input PaginationInput {
   skip: Int
   first: Int
 }
-input MenuCloneWhereOneInput {
-  id: ID!
-}
-input MenuCloneCreateInput {
-  id: ID
-  original: MenuCreateChildInput
-  sections: MenuCloneSectionCreateOrPushChildrenInput
-  name: String!
-}
-input MenuCreateChildInput {
-  connect: ID
-  create: MenuCreateInput
-}
-input MenuCreateInput {
-  id: ID
-  clone: MenuCloneCreateChildInput
-  sections: MenuSectionCreateOrPushChildrenInput
-  selectedSections: MenuSectionWhereInput!
-  name: String!
-}
-input MenuCloneCreateChildInput {
-  connect: ID
-  create: MenuCloneCreateInput
-}
-input MenuSectionCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [MenuSectionCreateInput!]
-  createPositions: [Int!]
-}
-input MenuSectionCreateInput {
-  id: ID
-  menu: MenuCreateChildInput
-  name: String!
-}
-input MenuCloneSectionCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [MenuCloneSectionCreateInput!]
-  createPositions: [Int!]
-}
-input MenuCloneSectionCreateInput {
-  id: ID
-  menu: MenuCloneCreateChildInput
-  name: String!
-}
 enum MenuCloneSectionSortEnum {
   id_ASC
   id_DESC
@@ -509,6 +463,9 @@ enum MenuCloneSectionSortEnum {
 }
 input MenuCloneSectionSortInput {
   sortBy: [MenuCloneSectionSortEnum]
+}
+input MenuCloneWhereOneInput {
+  id: ID!
 }
 input MenuSectionWhereOneInput {
   id: ID!
@@ -563,6 +520,47 @@ input MenuUpdateInput {
   clone: MenuCloneCreateChildInput
   sections: MenuSectionCreateOrPushChildrenInput
   selectedSections: MenuSectionWhereInput
+}
+input MenuCloneCreateChildInput {
+  connect: ID
+  create: MenuCloneCreateInput
+}
+input MenuCloneCreateInput {
+  id: ID
+  original: MenuCreateChildInput
+  sections: MenuCloneSectionCreateOrPushChildrenInput
+  name: String!
+}
+input MenuCreateChildInput {
+  connect: ID
+  create: MenuCreateInput
+}
+input MenuCreateInput {
+  id: ID
+  clone: MenuCloneCreateChildInput
+  sections: MenuSectionCreateOrPushChildrenInput
+  selectedSections: MenuSectionWhereInput!
+  name: String!
+}
+input MenuSectionCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuSectionCreateInput!]
+  createPositions: [Int!]
+}
+input MenuSectionCreateInput {
+  id: ID
+  menu: MenuCreateChildInput
+  name: String!
+}
+input MenuCloneSectionCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuCloneSectionCreateInput!]
+  createPositions: [Int!]
+}
+input MenuCloneSectionCreateInput {
+  id: ID
+  menu: MenuCloneCreateChildInput
+  name: String!
 }
 enum copyMenuThroughcloneOptionsEnum {
   name

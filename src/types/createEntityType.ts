@@ -1,5 +1,4 @@
 import type { ActionAttributes, EntityConfig, GeneralConfig } from '@/tsTypes';
-import composeFieldsObject from '@/utils/composeFieldsObject';
 
 import checkRepresentationAction from '@/utils/checkRepresentationAction';
 import parseEntityName from '@/utils/parseEntityName';
@@ -12,7 +11,6 @@ const {
   childEntities,
   childEntitiesThroughConnection,
   childEntity,
-  childEntityGetOrCreate,
   childEntityCount,
   childEntityDistinctValues,
 } = allActionAttributes;
@@ -258,40 +256,6 @@ const createEntityType = (
           required ? '!' : ''
         }`,
       );
-    }
-
-    return prev;
-  }, entityTypeArray);
-
-  duplexFields.reduce((prev, { array, name: name2, oppositeName, required, config }) => {
-    if (array || required) {
-      return prev;
-    }
-
-    const { array: oppositeArray } = composeFieldsObject(config).fieldsObject[oppositeName];
-
-    if (oppositeArray) {
-      return prev;
-    }
-
-    if (checkRepresentationAction('childEntityGetOrCreate', config, generalConfig)) {
-      const childEntityGetOrCreateArgs = composeChildActionSignature(
-        config,
-        generalConfig,
-        'childEntityGetOrCreate',
-        entityTypeDic,
-        inputDic,
-      );
-
-      if (childEntityGetOrCreateArgs !== null) {
-        prev.push(
-          `  ${composeChildFieldName(`${name2}GetOrCreate`, childEntityGetOrCreateArgs)}: ${composeReturnString(
-            config,
-            generalConfig,
-            childEntityGetOrCreate,
-          )}`,
-        );
-      }
     }
 
     return prev;
