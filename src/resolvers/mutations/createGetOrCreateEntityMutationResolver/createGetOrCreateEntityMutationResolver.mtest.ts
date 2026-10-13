@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import mongoose from 'mongoose';
 
 import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
@@ -50,7 +51,7 @@ describe('createGetOrCreateEntityMutationResolver', () => {
     allEntityConfigs: { Person: personConfig, Menu: menuConfig },
   };
 
-  const pubsub = { publish: jest.fn() };
+  const pubsub = { publish: jest.fn<(channel: string, payload: any) => void>() };
 
   const fullAccess = { involvedFilters: { inputOutputFilterAndLimit: [[]] } };
 
