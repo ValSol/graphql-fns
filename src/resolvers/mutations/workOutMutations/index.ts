@@ -28,6 +28,7 @@ import mutationsResolverAttributes from './mutationsResolverAttributes';
 import checkLockedData, { StandardMutationsArg, CommonResolverCreatorArg } from './checkLockedData';
 import commitTransactionWithRetry from './commitTransactionWithRetry';
 import copyPreparedData from './copyPreparedData';
+import isDuplicateKeyError from './isDuplicateKeyError';
 import isTransientTransactionError from './isTransientTransactionError';
 
 const workOutMutations = async (
@@ -93,9 +94,18 @@ const workOutMutations = async (
     subscriptions.push(subscription);
   }
 
+  // "previouses" are also used as "mains" of prepared data, so "prepareBulkData" adds to them...
+  // ... created entities, "previousSnapshots" keep entities as they were got by "getPrevious"
   let previouses: GraphqlObject[][] = [];
+  let previousSnapshots: GraphqlObject[][] = [];
 
   const tryCount = 7;
+
+  const retryOnDuplicateKey = standardMutationsArgs.some(
+    ({ actionGeneralName }) => mutationsResolverAttributes[actionGeneralName]?.retryOnDuplicateKey,
+  );
+
+  let duplicateKeyRetried = false;
 
   const initialPreparedData = copyPreparedData(preparedBulkData);
 
@@ -117,6 +127,7 @@ const workOutMutations = async (
       }
 
       previouses = [];
+      previousSnapshots = [];
       for (let j = 0; j < standardMutationsArgs.length; j += 1) {
         const mutationArgs = standardMutationsArgs[j];
 
@@ -199,6 +210,8 @@ const workOutMutations = async (
           );
         }
 
+        previousSnapshots.push([...previous]);
+
         const { core, periphery } = preparedData;
         const preparedData2 = { core, periphery, mains: previous } as const;
 
@@ -248,6 +261,12 @@ const workOutMutations = async (
         await session.endSession();
       }
 
+      // e.g. entity of "getOrCreateEntity" created concurrently by other request: repeat once to get it
+      if (retryOnDuplicateKey && !duplicateKeyRetried && isDuplicateKeyError(err)) {
+        duplicateKeyRetried = true;
+        continue;
+      }
+
       // retry only transaction errors that mongodb marks as transient, all other errors are
       // thrown as is; without transaction nothing is retried to not repeat partially done writes
       if (!session || i === tryCount - 1 || !isTransientTransactionError(err)) {
@@ -269,7 +288,7 @@ const workOutMutations = async (
     const { resolverCreatorArg, resolverArg } = composeResolverArgs(mutationArgs);
     const { info } = resolverArg;
 
-    const previous = previouses[i];
+    const previous = previousSnapshots[i];
     const result: null | { previous: GraphqlObject[]; current?: GraphqlObject[] } = returnResult
       ? ({} as { previous: GraphqlObject[]; current?: GraphqlObject[] })
       : null;
@@ -336,7 +355,7 @@ const workOutMutations = async (
       const fakePreparedData: PreparedData = {
         core: new Map(),
         periphery: new Map(),
-        mains: previous,
+        mains: previouses[i], // with created entities
       };
 
       result.current = await produceResult(

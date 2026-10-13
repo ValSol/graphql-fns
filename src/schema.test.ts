@@ -936,4 +936,73 @@ describe('graphql schema', () => {
       composeTypeDefsAndResolvers({ allEntityConfigs, representation: {} } as GeneralConfig),
     ).toThrow('The "representation" attribute of generalConfig is renamed to "representations"!');
   });
+
+  describe('"getOrCreateEntity" mutation', () => {
+    const allEntityConfigs = composeAllEntityConfigs([
+      {
+        name: 'Person',
+        textFields: [{ name: 'email', unique: true }, { name: 'name' }],
+      },
+      {
+        name: 'Menu',
+        textFields: [{ name: 'title' }, { name: 'lang' }],
+        uniqueCompoundIndexes: [['title', 'lang']],
+      },
+    ]);
+
+    test('should compose "getOrCreate…" mutations with args of "entity" query & "createEntity"', () => {
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+      expect(typeDefs).toMatch(
+        /\n  getOrCreatePerson\(whereOne: PersonWhereOneInput!, data: PersonCreateInput!, token: String\): Person!\n/,
+      );
+      expect(typeDefs).toMatch(
+        /\n  getOrCreateMenu\(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, data: MenuCreateInput!, token: String\): Menu!\n/,
+      );
+
+      const { Mutation } = resolvers as any;
+
+      expect(typeof Mutation.getOrCreatePerson).toBe('function');
+      expect(typeof Mutation.getOrCreateMenu).toBe('function');
+
+      expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+    });
+
+    test('should compose "getOrCreate…" mutation allowed by inventory only', () => {
+      const inventory: Inventory = {
+        name: 'test',
+        include: { Mutation: { getOrCreateEntity: ['Person'] } },
+      };
+
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs, inventory });
+
+      const { Mutation } = resolvers as any;
+
+      expect(Object.keys(Mutation)).toEqual(['getOrCreatePerson']);
+      expect(typeDefs).not.toMatch(/getOrCreateMenu|createPerson\(/);
+
+      expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+    });
+
+    test('should compose representation "getOrCreate…" mutation', () => {
+      const ForView: RepresentationAttributes = {
+        representationKey: 'ForView',
+        allow: { Person: ['getOrCreateEntity'] },
+      };
+
+      const generalConfig: GeneralConfig = {
+        allEntityConfigs,
+        representations: { ForView },
+      };
+
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig);
+
+      expect(typeDefs).toMatch(
+        /\n  getOrCreatePersonForView\(whereOne: PersonForViewWhereOneInput!, data: PersonForViewCreateInput!, token: String\): PersonForView!\n/,
+      );
+      expect(typeof (resolvers as any).Mutation.getOrCreatePersonForView).toBe('function');
+
+      expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+    });
+  });
 });

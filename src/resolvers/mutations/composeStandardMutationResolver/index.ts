@@ -30,6 +30,7 @@ import executeBulkItems from '../executeBulkItems';
 import optimizeBulkItems from '../optimizeBulkItems';
 import unwindCore from '../unwindCore';
 import commitTransactionWithRetry from '../workOutMutations/commitTransactionWithRetry';
+import isDuplicateKeyError from '../workOutMutations/isDuplicateKeyError';
 import isTransientTransactionError from '../workOutMutations/isTransientTransactionError';
 import produceResult from './produceResult';
 
@@ -55,6 +56,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
     report,
     finalResult,
     loophole,
+    retryOnDuplicateKey,
   } = resolverAttributes;
 
   const createMutationResolver = (
@@ -130,6 +132,8 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       if (transactions) {
         await syncAllMongooseModels(mongooseConn, generalConfig);
       }
+
+      let duplicateKeyRetried = false;
 
       for (let i = 0; i < tryCount; i += 1) {
         const session = transactions ? await mongooseConn.startSession() : null;
@@ -284,6 +288,15 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
               await session.abortTransaction();
             }
             await session.endSession();
+          }
+
+          // e.g. entity created concurrently by other request after it was not found: repeat once...
+          // ... to get it, if repeated attempt fails too - entity exists but is not available
+          if (retryOnDuplicateKey && isDuplicateKeyError(err)) {
+            if (duplicateKeyRetried) return null;
+
+            duplicateKeyRetried = true;
+            continue;
           }
 
           // retry only transaction errors that mongodb marks as transient, all other errors are

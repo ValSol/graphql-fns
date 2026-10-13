@@ -23,7 +23,7 @@ import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeA
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
-import checkWhereCompoundOne from '@/resolvers/utils/checkWhereCompoundOne';
+import checkWhereOneArgs from '@/resolvers/utils/checkWhereOneArgs';
 
 type Args = {
   whereOne?: {
@@ -68,23 +68,7 @@ const createEntityQueryResolver = (
 
     const { mongooseConn } = context;
 
-    if (whereCompoundOne && whereOne) {
-      throw new TypeError('Expected exactly one input from "whereCompoundOne" && "whereOne"!');
-    }
-
-    if (whereOne) {
-      const whereOneKeys = Object.keys(whereOne);
-
-      if (whereOneKeys.length !== 1) {
-        throw new TypeError('Expected exactly one key in whereOne arg!');
-      }
-    } else {
-      if (!whereCompoundOne) {
-        throw new TypeError('Expected "whereCompoundOne" or "whereOne" input!');
-      }
-
-      checkWhereCompoundOne(whereCompoundOne, entityConfig);
-    }
+    checkWhereOneArgs(whereOne, whereCompoundOne, entityConfig);
 
     const resolverArg = { parent, args, context, info, resolverOptions };
 

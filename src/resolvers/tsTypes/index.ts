@@ -55,4 +55,6 @@ export type ResolverAttributes = {
     current: GraphqlObject[];
   }) => GraphqlObject | GraphqlObject[] | number;
   loophole?: Loophole;
+  // repeat mutation once on duplicate key error (e.g. entity created concurrently by other request)
+  retryOnDuplicateKey?: boolean;
 };

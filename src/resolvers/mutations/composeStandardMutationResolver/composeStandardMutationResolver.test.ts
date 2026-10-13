@@ -165,4 +165,108 @@ describe('composeStandardMutationResolver', () => {
     expect(executeBulkItemsMock).toHaveBeenCalledTimes(1);
     expect(session.commitTransaction).toHaveBeenCalledTimes(2);
   });
+
+  describe('retry on duplicate key error', () => {
+    const duplicateKeyError = () =>
+      new MongoServerError({ message: 'E11000 duplicate key error', code: 11000 });
+
+    const createRetryingResolver = (transactions: boolean, retryOnDuplicateKey = true) =>
+      composeStandardMutationResolver({ ...resolverAttributes, retryOnDuplicateKey })(
+        exampleConfig,
+        generalConfig,
+        { transactions },
+        true,
+      );
+
+    test('should repeat mutation once after duplicate key error', async () => {
+      executeBulkItemsMock
+        .mockRejectedValueOnce(duplicateKeyError())
+        .mockResolvedValueOnce(undefined);
+
+      const sessions = [createSession(), createSession()];
+      let sessionIndex = 0;
+      const mongooseConn = {
+        startSession: jest.fn(async () => {
+          sessionIndex += 1;
+          return sessions[sessionIndex - 1];
+        }),
+      };
+
+      const result = await createRetryingResolver(true)(
+        null,
+        { data: {} },
+        { mongooseConn },
+        info,
+        resolverOptions,
+      );
+
+      expect(result).toBe('final result');
+      expect(getPrevious).toHaveBeenCalledTimes(2);
+      expect(executeBulkItemsMock).toHaveBeenCalledTimes(2);
+      expect(sleepMock).not.toHaveBeenCalled();
+      expect(sessions[0].abortTransaction).toHaveBeenCalledTimes(1);
+      expect(sessions[0].endSession).toHaveBeenCalledTimes(1);
+      expect(sessions[1].commitTransaction).toHaveBeenCalledTimes(1);
+    });
+
+    test('should repeat mutation after duplicate key error also without transactions', async () => {
+      executeBulkItemsMock
+        .mockRejectedValueOnce(duplicateKeyError())
+        .mockResolvedValueOnce(undefined);
+
+      const result = await createRetryingResolver(false)(
+        null,
+        { data: {} },
+        { mongooseConn: {} },
+        info,
+        resolverOptions,
+      );
+
+      expect(result).toBe('final result');
+      expect(executeBulkItemsMock).toHaveBeenCalledTimes(2);
+    });
+
+    test('should return "null" after repeated duplicate key error', async () => {
+      executeBulkItemsMock.mockRejectedValue(duplicateKeyError());
+
+      const sessions = [createSession(), createSession()];
+      let sessionIndex = 0;
+      const mongooseConn = {
+        startSession: jest.fn(async () => {
+          sessionIndex += 1;
+          return sessions[sessionIndex - 1];
+        }),
+      };
+
+      const result = await createRetryingResolver(true)(
+        null,
+        { data: {} },
+        { mongooseConn },
+        info,
+        resolverOptions,
+      );
+
+      expect(result).toBeNull();
+      expect(executeBulkItemsMock).toHaveBeenCalledTimes(2);
+      expect(sessions[1].abortTransaction).toHaveBeenCalledTimes(1);
+      expect(sessions[1].endSession).toHaveBeenCalledTimes(1);
+    });
+
+    test('should throw duplicate key error without "retryOnDuplicateKey"', async () => {
+      const error = duplicateKeyError();
+      executeBulkItemsMock.mockRejectedValue(error);
+
+      await expect(
+        createRetryingResolver(true, false)(
+          null,
+          { data: {} },
+          { mongooseConn: { startSession: jest.fn(async () => createSession()) } },
+          info,
+          resolverOptions,
+        ),
+      ).rejects.toBe(error);
+
+      expect(executeBulkItemsMock).toHaveBeenCalledTimes(1);
+    });
+  });
 });
