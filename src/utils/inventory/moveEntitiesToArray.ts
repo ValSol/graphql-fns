@@ -1,6 +1,6 @@
-import type {InventoryByRoles} from '../../tsTypes';
+import type { InventoryByRoles } from '../../tsTypes';
 
-const moveThingsToArray = (
+const moveEntitiesToArray = (
   // InventoryByRoles,
   inventoryByRoles: any,
 ): InventoryByRoles => {
@@ -45,4 +45,4 @@ const moveThingsToArray = (
   return result;
 };
 
-export default moveThingsToArray;
+export default moveEntitiesToArray;

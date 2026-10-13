@@ -4,7 +4,7 @@ import type { GeneralConfig, EntityConfig, TangibleEntityConfig } from '@/tsType
 
 import mongoOptions from '@/test/mongo-options';
 import sleep from '@/utils/sleep';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '@/resolvers/mutations/createCreateEntityMutationResolver';
@@ -76,7 +76,7 @@ describe('createEntityQueryResolver with "whereCompoundOne"', () => {
   const resolverOptions = { involvedFilters: { inputOutputFilterAndLimit: [[]] } };
 
   test('should find entity by compound key with relational field and "null" value', async () => {
-    const citySchema = createThingSchema(cityConfig as EntityConfig);
+    const citySchema = createEntitySchema(cityConfig as EntityConfig);
     const City = mongooseConn.model('City_Thing', citySchema);
     await City.createCollection();
     await City.syncIndexes();

@@ -1,7 +1,7 @@
 import lodashMerge from 'lodash.merge';
 
-import moveThingsToArray from './moveThingsToArray';
-import moveThingsToObject from './moveThingsToObject';
+import moveEntitiesToArray from './moveEntitiesToArray';
+import moveEntitiesToObject from './moveEntitiesToObject';
 
 import type { InventoryByRoles } from '../../tsTypes';
 
@@ -11,10 +11,10 @@ const mergeInventories = (
   // InventoryByRoles,
   additionalInventoryByRoles: any,
 ): InventoryByRoles =>
-  moveThingsToArray(
+  moveEntitiesToArray(
     lodashMerge(
-      moveThingsToObject(inventoryByRoles),
-      moveThingsToObject(additionalInventoryByRoles),
+      moveEntitiesToObject(inventoryByRoles),
+      moveEntitiesToObject(additionalInventoryByRoles),
     ),
   );
 

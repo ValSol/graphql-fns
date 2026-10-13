@@ -26,28 +26,28 @@ afterAll(async () => {
 describe('order of the results of "...Many" mutations', () => {
   const serversideConfig = { transactions: true };
 
-  const thingConfig: TangibleEntityConfig = {
-    name: 'Thing',
+  const itemConfig: TangibleEntityConfig = {
+    name: 'Item',
     type: 'tangible',
     textFields: [{ name: 'name', unique: true, type: 'textFields' }],
   };
 
-  const generalConfig: GeneralConfig = { allEntityConfigs: { Thing: thingConfig } };
+  const generalConfig: GeneralConfig = { allEntityConfigs: { Item: itemConfig } };
 
   const resolverOptions = { involvedFilters: { inputOutputFilterAndLimit: [[]] } };
 
   const createMany = createCreateManyEntitiesMutationResolver(
-    thingConfig,
+    itemConfig,
     generalConfig,
     serversideConfig,
   );
   const updateMany = createUpdateManyEntitiesMutationResolver(
-    thingConfig,
+    itemConfig,
     generalConfig,
     serversideConfig,
   );
   const deleteMany = createDeleteManyEntitiesMutationResolver(
-    thingConfig,
+    itemConfig,
     generalConfig,
     serversideConfig,
   );
@@ -70,7 +70,7 @@ describe('order of the results of "...Many" mutations', () => {
     ids = created.map(({ id }) => id.toString());
   });
 
-  test('"updateManyThings" returns entities in the order of "whereOneAndData"', async () => {
+  test('"updateManyItems" returns entities in the order of "whereOneAndData"', async () => {
     const reversedIds = [...ids].reverse();
 
     const updated = await updateMany(
@@ -90,7 +90,7 @@ describe('order of the results of "...Many" mutations', () => {
     expect(updated.map(({ name }) => name)).toEqual(['updated-0', 'updated-1', 'updated-2']);
   });
 
-  test('"deleteManyThings" returns entities in the order of "whereOne"', async () => {
+  test('"deleteManyItems" returns entities in the order of "whereOne"', async () => {
     const reversedIds = [...ids].reverse();
 
     const deleted = await deleteMany(

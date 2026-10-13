@@ -14,7 +14,7 @@ import isCommonlyAllowedTypeName from '../isCommonlyAllowedTypeName';
 import PageInfo from './pageInfoConfig';
 
 // alsow used in "composeAllEntityConfigs" util
-const forbiddenThingNames = ['DateTime', 'Node', 'node', 'PageInfo'];
+const forbiddenEntityNames = ['DateTime', 'Node', 'node', 'PageInfo'];
 
 const composeAllEntityConfigsAndEnums = (
   simplifiedEntityConfigs: SimplifiedEntityConfig[],
@@ -32,7 +32,7 @@ const composeAllEntityConfigsAndEnums = (
         throw new TypeError(`Forbidden entity name: "${name}" in plural form!`);
       }
 
-      if (forbiddenThingNames.includes(name)) {
+      if (forbiddenEntityNames.includes(name)) {
         throw new TypeError(`Forbidden entity name: "${name}"!`);
       }
 

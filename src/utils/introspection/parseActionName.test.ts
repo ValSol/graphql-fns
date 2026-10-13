@@ -120,8 +120,8 @@ describe('parseActionName', () => {
     config: (entityConfig: any) => entityConfig,
   };
 
-  const putThing: ActionSignatureMethods = {
-    name: 'putThing',
+  const putEntity: ActionSignatureMethods = {
+    name: 'putEntity',
     specificName: ({ name }: any) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
@@ -145,7 +145,7 @@ describe('parseActionName', () => {
     Place: placeConfig,
     Country: countryConfig,
   };
-  const custom = { Query: { getEntity, putThing } };
+  const custom = { Query: { getEntity, putEntity } };
   const representations = { ForCatalog };
 
   const generalConfig = { allEntityConfigs, custom, representations };
@@ -207,9 +207,9 @@ describe('parseActionName', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return result for putThing action', () => {
+  test('should return result for putEntity action', () => {
     const actionType = 'Query';
-    const actionName = 'putThing';
+    const actionName = 'putEntity';
     const entityName = 'Person';
     const expectedResult = {
       creationType: 'custom',
@@ -245,7 +245,7 @@ describe('parseActionName', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return result for thingCountForCatalog action', () => {
+  test('should return result for entityCountForCatalog action', () => {
     const actionType = 'Query';
     const actionName = 'entityCountForCatalog';
     const entityName = 'Person';

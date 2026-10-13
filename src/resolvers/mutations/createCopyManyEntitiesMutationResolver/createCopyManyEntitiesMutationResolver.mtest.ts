@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import pubsub from '../../utils/pubsub';
 import createCreateManyEntitiesMutationResolver from '../createCreateManyEntitiesMutationResolver';
 import createUpdateManyEntitiesMutationResolver from '../createUpdateManyEntitiesMutationResolver';
@@ -146,11 +146,11 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       },
     };
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
 
-    const personCloneSchema = createThingSchema(personCloneConfig);
+    const personCloneSchema = createEntitySchema(personCloneConfig);
     const PersonClone = mongooseConn.model('PersonClone_Thing', personCloneSchema);
     await PersonClone.createCollection();
 

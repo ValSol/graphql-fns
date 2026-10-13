@@ -17,7 +17,7 @@ describe('childQueriesToInventory', () => {
         entityName: 'Person',
       },
       {
-        actionName: 'childThingForCatalog',
+        actionName: 'childEntityForCatalog',
         baseAction: 'childEntity',
         representationKey: 'ForCatalog',
         entityName: 'Place',
@@ -39,7 +39,7 @@ describe('childQueriesToInventory', () => {
         include: {
           Query: {
             childentitiesForCatalog: ['Person'],
-            childThingForCatalog: ['Place'],
+            childEntityForCatalog: ['Place'],
           },
         },
       },

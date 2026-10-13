@@ -4,7 +4,7 @@ import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '
 import mongoose from 'mongoose';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
@@ -126,11 +126,11 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
     };
 
     test('should create mutation update entity resolver that create childrent entities', async () => {
-      const personSchema = createThingSchema(personConfig);
+      const personSchema = createEntitySchema(personConfig);
       const Person = mongooseConn.model('Person_Thing', personSchema);
       await Person.createCollection();
 
-      const placeSchema = createThingSchema(placeConfig);
+      const placeSchema = createEntitySchema(placeConfig);
       const Place = mongooseConn.model('Place_Thing', placeSchema);
       await Place.createCollection();
 
@@ -389,11 +389,11 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
     });
 
     test('should create mutation update entity resolver with wipe out duplex fields values', async () => {
-      const personSchema = createThingSchema(personConfig);
+      const personSchema = createEntitySchema(personConfig);
       const Person = mongooseConn.model('Person_Thing', personSchema);
       await Person.createCollection();
 
-      const placeSchema = createThingSchema(placeConfig);
+      const placeSchema = createEntitySchema(placeConfig);
       const Place = mongooseConn.model('Place_Thing', placeSchema);
       await Place.createCollection();
 
@@ -737,7 +737,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       allEntityConfigs: { Example: exampleConfig },
     };
 
-    const exampleSchema = createThingSchema(exampleConfig);
+    const exampleSchema = createEntitySchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
 
@@ -871,7 +871,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Main: mainConfig } };
 
-    const mainSchema = createThingSchema(mainConfig);
+    const mainSchema = createEntitySchema(mainConfig);
     const Main = mongooseConn.model('Main_Thing', mainSchema);
     await Main.createCollection();
 
@@ -988,11 +988,11 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       allEntityConfigs: { Parent: parentConfig, Child: childConfig },
     };
 
-    const parentSchema = createThingSchema(parentConfig);
+    const parentSchema = createEntitySchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.createCollection();
 
-    const childSchema = createThingSchema(childConfig);
+    const childSchema = createEntitySchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
@@ -1155,15 +1155,15 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       ],
     });
 
-    const accessSchema = createThingSchema(accessConfig);
+    const accessSchema = createEntitySchema(accessConfig);
     const Access = mongooseConn.model('Access_Thing', accessSchema);
     await Access.createCollection();
 
-    const postSchema = createThingSchema(postConfig);
+    const postSchema = createEntitySchema(postConfig);
     const Post = mongooseConn.model('Post_Thing', postSchema);
     await Post.createCollection();
 
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createEntitySchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 

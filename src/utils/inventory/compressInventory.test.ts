@@ -7,16 +7,16 @@ describe('compressInventory', () => {
         name: '',
         include: {
           Mutation: {
-            allowAccessToThing: ['Restaurant'],
-            removeStaticThing: ['Post', 'Restaurant'],
-            renewThingForView: ['User'],
-            signinThingForView: ['User'],
+            allowAccessToEntity: ['Restaurant'],
+            removeStaticEntity: ['Post', 'Restaurant'],
+            renewEntityForView: ['User'],
+            signinEntityForView: ['User'],
           },
           Query: {
             entitiesForView: ['Restaurant', 'Post', 'MenuSection'],
             entityForView: ['Restaurant', 'Post', 'Menu'],
-            childThingForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
-            childThingsForView: ['Post', 'MenuSection'],
+            childEntityForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
+            childEntitiesForView: ['Post', 'MenuSection'],
           },
         },
       },
@@ -24,10 +24,10 @@ describe('compressInventory', () => {
         name: 'publisher',
         include: {
           Query: {
-            thingForApprove: ['Restaurant', 'Post'],
+            entityForApprove: ['Restaurant', 'Post'],
             childEntities: ['MenuSectionClone'],
-            thingsForApprove: ['Post', 'Restaurant'],
-            childThingForApprove: ['User'],
+            entitiesForApprove: ['Post', 'Restaurant'],
+            childEntityForApprove: ['User'],
           },
           Mutation: {
             cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
@@ -50,9 +50,9 @@ describe('compressInventory', () => {
               'RestaurantClone',
             ],
             createEntity: ['Menu'],
-            deleteWithChildrenThing: ['MenuClone'],
-            removeStaticThing: ['Restaurant', 'Post'],
-            cloneLevelOfThing: ['Restaurant'],
+            deleteWithChildrenEntity: ['MenuClone'],
+            removeStaticEntity: ['Restaurant', 'Post'],
+            cloneLevelOfEntity: ['Restaurant'],
           },
         },
       },
@@ -60,7 +60,7 @@ describe('compressInventory', () => {
         name: 'insider',
         include: {
           Query: {
-            childThingForCabinet: [
+            childEntityForCabinet: [
               'BanquetHall',
               'ConferenceHall',
               'Menu',
@@ -68,15 +68,15 @@ describe('compressInventory', () => {
               'Post',
               'Restaurant',
             ],
-            thingForCabinet: ['Restaurant', 'Post'],
-            childThingsForCabinet: ['MenuSection', 'Post', 'Restaurant'],
-            thingsForCabinet: ['Post', 'Restaurant'],
+            entityForCabinet: ['Restaurant', 'Post'],
+            childEntitiesForCabinet: ['MenuSection', 'Post', 'Restaurant'],
+            entitiesForCabinet: ['Post', 'Restaurant'],
             entity: ['LegalEntity', 'RestaurantLevel'],
             childEntities: ['LegalEntity'],
           },
           Mutation: {
-            cloneLevelOfThing: ['Restaurant'],
-            improvedUpdateThing: ['RestaurantLevel'],
+            cloneLevelOfEntity: ['Restaurant'],
+            improvedUpdateEntity: ['RestaurantLevel'],
             updateEntity: ['RestaurantLevel'],
           },
         },
@@ -85,7 +85,7 @@ describe('compressInventory', () => {
         name: 'editor',
         include: {
           Query: {
-            thingForEdit: ['Restaurant'],
+            entityForEdit: ['Restaurant'],
             entity: [
               'BanquetHallClone',
               'ConferenceHallClone',
@@ -100,15 +100,15 @@ describe('compressInventory', () => {
           Mutation: {
             createEntity: ['BanquetHall', 'ConferenceHall', 'Menu'],
             cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
-            improvedUpdateThing: [
+            improvedUpdateEntity: [
               'BanquetHallClone',
               'ConferenceHallClone',
               'MenuClone',
               'PostClone',
               'RestaurantClone',
             ],
-            updateThingWithChildren: ['MenuClone'],
-            toggleCommentsOfThing: ['Restaurant'],
+            updateEntityWithChildren: ['MenuClone'],
+            toggleCommentsOfEntity: ['Restaurant'],
           },
         },
       },
@@ -116,13 +116,13 @@ describe('compressInventory', () => {
         name: 'owner',
         include: {
           Query: {
-            childThingForOwn: ['PostAccess', 'RestaurantAccess'],
-            thingToken: ['Restaurant'],
-            thingForOwn: ['User', 'RestaurantAccess'],
-            thingsByUniqueForOwn: ['User'],
+            childEntityForOwn: ['PostAccess', 'RestaurantAccess'],
+            entityToken: ['Restaurant'],
+            entityForOwn: ['User', 'RestaurantAccess'],
+            entitiesByUniqueForOwn: ['User'],
           },
           Mutation: {
-            updateThingAndUserForOwn: ['Restaurant'],
+            updateEntityAndUserForOwn: ['Restaurant'],
           },
         },
       },
@@ -130,7 +130,7 @@ describe('compressInventory', () => {
         name: 'creator',
         include: {
           Mutation: {
-            createThingForCreate: ['Post', 'Restaurant'],
+            createEntityForCreate: ['Post', 'Restaurant'],
           },
           Query: {
             childEntity: ['BanquetHall', 'ConferenceHall'],
@@ -141,12 +141,12 @@ describe('compressInventory', () => {
         name: 'toggler',
         include: {
           Query: {
-            thingsForToggle: ['Post', 'Restaurant'],
-            thingForToggle: ['Post', 'Restaurant'],
+            entitiesForToggle: ['Post', 'Restaurant'],
+            entityForToggle: ['Post', 'Restaurant'],
           },
           Mutation: {
-            updateThingForToggle: ['Post', 'Restaurant'],
-            removeStaticThing: ['Post', 'Restaurant'],
+            updateEntityForToggle: ['Post', 'Restaurant'],
+            removeStaticEntity: ['Post', 'Restaurant'],
           },
         },
       },
@@ -154,13 +154,13 @@ describe('compressInventory', () => {
         name: 'admin',
         include: {
           Query: {
-            thingForSetting: ['Restaurant', 'User'],
+            entityForSetting: ['Restaurant', 'User'],
             childEntities: ['LegalEntity'],
-            thingsForSetting: ['User'],
+            entitiesForSetting: ['User'],
           },
           Mutation: {
-            cloneLevelOfThing: ['Restaurant'],
-            updateThingForSetting: ['Restaurant', 'User'],
+            cloneLevelOfEntity: ['Restaurant'],
+            updateEntityForSetting: ['Restaurant', 'User'],
           },
         },
       },
@@ -168,13 +168,13 @@ describe('compressInventory', () => {
         name: 'guest',
         include: {
           Query: {
-            childThingForGuest: ['CommentListForRestaurant'],
+            childEntityForGuest: ['CommentListForRestaurant'],
           },
           Mutation: {
-            pushIntoThingForGuest: ['CommentListForRestaurant'],
-            getThingBySMS: ['PhoneConfirmationCode'],
-            addNewTelToThingForGuest: ['User'],
-            signoutThingForGuest: ['User'],
+            pushIntoEntityForGuest: ['CommentListForRestaurant'],
+            getEntityBySMS: ['PhoneConfirmationCode'],
+            addNewTelToEntityForGuest: ['User'],
+            signoutEntityForGuest: ['User'],
           },
         },
       },
@@ -199,16 +199,16 @@ describe('compressInventory', () => {
         name: '',
         include: {
           Mutation: {
-            allowAccessToThing: ['Restaurant'],
-            removeStaticThing: ['Post', 'Restaurant'],
-            renewThingForView: ['User'],
-            signinThingForView: ['User'],
+            allowAccessToEntity: ['Restaurant'],
+            removeStaticEntity: ['Post', 'Restaurant'],
+            renewEntityForView: ['User'],
+            signinEntityForView: ['User'],
           },
           Query: {
             entitiesForView: ['Restaurant', 'Post', 'MenuSection'],
             entityForView: ['Restaurant', 'Post', 'Menu'],
-            childThingForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
-            childThingsForView: ['Post', 'MenuSection'],
+            childEntityForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
+            childEntitiesForView: ['Post', 'MenuSection'],
           },
         },
       },
@@ -216,10 +216,10 @@ describe('compressInventory', () => {
         name: 'publisher',
         include: {
           Query: {
-            thingForApprove: ['Restaurant', 'Post'],
+            entityForApprove: ['Restaurant', 'Post'],
             childEntities: ['MenuSectionClone'],
-            thingsForApprove: ['Post', 'Restaurant'],
-            childThingForApprove: ['User'],
+            entitiesForApprove: ['Post', 'Restaurant'],
+            childEntityForApprove: ['User'],
           },
           Mutation: {
             cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
@@ -242,7 +242,7 @@ describe('compressInventory', () => {
               'RestaurantClone',
             ],
             createEntity: ['Menu'],
-            deleteWithChildrenThing: ['MenuClone'],
+            deleteWithChildrenEntity: ['MenuClone'],
           },
         },
       },
@@ -250,7 +250,7 @@ describe('compressInventory', () => {
         name: 'insider',
         include: {
           Query: {
-            childThingForCabinet: [
+            childEntityForCabinet: [
               'BanquetHall',
               'ConferenceHall',
               'Menu',
@@ -258,15 +258,15 @@ describe('compressInventory', () => {
               'Post',
               'Restaurant',
             ],
-            thingForCabinet: ['Restaurant', 'Post'],
-            childThingsForCabinet: ['MenuSection', 'Post', 'Restaurant'],
-            thingsForCabinet: ['Post', 'Restaurant'],
+            entityForCabinet: ['Restaurant', 'Post'],
+            childEntitiesForCabinet: ['MenuSection', 'Post', 'Restaurant'],
+            entitiesForCabinet: ['Post', 'Restaurant'],
             entity: ['LegalEntity', 'RestaurantLevel'],
             childEntities: ['LegalEntity'],
           },
           Mutation: {
-            cloneLevelOfThing: ['Restaurant'],
-            improvedUpdateThing: ['RestaurantLevel'],
+            cloneLevelOfEntity: ['Restaurant'],
+            improvedUpdateEntity: ['RestaurantLevel'],
             updateEntity: ['RestaurantLevel'],
           },
         },
@@ -275,7 +275,7 @@ describe('compressInventory', () => {
         name: 'editor',
         include: {
           Query: {
-            thingForEdit: ['Restaurant'],
+            entityForEdit: ['Restaurant'],
             entity: [
               'BanquetHallClone',
               'ConferenceHallClone',
@@ -290,15 +290,15 @@ describe('compressInventory', () => {
           Mutation: {
             createEntity: ['BanquetHall', 'ConferenceHall', 'Menu'],
             cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
-            improvedUpdateThing: [
+            improvedUpdateEntity: [
               'BanquetHallClone',
               'ConferenceHallClone',
               'MenuClone',
               'PostClone',
               'RestaurantClone',
             ],
-            updateThingWithChildren: ['MenuClone'],
-            toggleCommentsOfThing: ['Restaurant'],
+            updateEntityWithChildren: ['MenuClone'],
+            toggleCommentsOfEntity: ['Restaurant'],
           },
         },
       },
@@ -306,13 +306,13 @@ describe('compressInventory', () => {
         name: 'owner',
         include: {
           Query: {
-            childThingForOwn: ['PostAccess', 'RestaurantAccess'],
-            thingToken: ['Restaurant'],
-            thingForOwn: ['User', 'RestaurantAccess'],
-            thingsByUniqueForOwn: ['User'],
+            childEntityForOwn: ['PostAccess', 'RestaurantAccess'],
+            entityToken: ['Restaurant'],
+            entityForOwn: ['User', 'RestaurantAccess'],
+            entitiesByUniqueForOwn: ['User'],
           },
           Mutation: {
-            updateThingAndUserForOwn: ['Restaurant'],
+            updateEntityAndUserForOwn: ['Restaurant'],
           },
         },
       },
@@ -320,7 +320,7 @@ describe('compressInventory', () => {
         name: 'creator',
         include: {
           Mutation: {
-            createThingForCreate: ['Post', 'Restaurant'],
+            createEntityForCreate: ['Post', 'Restaurant'],
           },
           Query: {
             childEntity: ['BanquetHall', 'ConferenceHall'],
@@ -331,11 +331,11 @@ describe('compressInventory', () => {
         name: 'toggler',
         include: {
           Query: {
-            thingsForToggle: ['Post', 'Restaurant'],
-            thingForToggle: ['Post', 'Restaurant'],
+            entitiesForToggle: ['Post', 'Restaurant'],
+            entityForToggle: ['Post', 'Restaurant'],
           },
           Mutation: {
-            updateThingForToggle: ['Post', 'Restaurant'],
+            updateEntityForToggle: ['Post', 'Restaurant'],
           },
         },
       },
@@ -343,11 +343,11 @@ describe('compressInventory', () => {
         name: 'admin',
         include: {
           Query: {
-            thingForSetting: ['Restaurant', 'User'],
-            thingsForSetting: ['User'],
+            entityForSetting: ['Restaurant', 'User'],
+            entitiesForSetting: ['User'],
           },
           Mutation: {
-            updateThingForSetting: ['Restaurant', 'User'],
+            updateEntityForSetting: ['Restaurant', 'User'],
           },
         },
       },
@@ -355,13 +355,13 @@ describe('compressInventory', () => {
         name: 'guest',
         include: {
           Query: {
-            childThingForGuest: ['CommentListForRestaurant'],
+            childEntityForGuest: ['CommentListForRestaurant'],
           },
           Mutation: {
-            pushIntoThingForGuest: ['CommentListForRestaurant'],
-            getThingBySMS: ['PhoneConfirmationCode'],
-            addNewTelToThingForGuest: ['User'],
-            signoutThingForGuest: ['User'],
+            pushIntoEntityForGuest: ['CommentListForRestaurant'],
+            getEntityBySMS: ['PhoneConfirmationCode'],
+            addNewTelToEntityForGuest: ['User'],
+            signoutEntityForGuest: ['User'],
           },
         },
       },

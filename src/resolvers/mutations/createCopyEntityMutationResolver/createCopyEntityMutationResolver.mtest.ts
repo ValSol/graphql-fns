@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createUpdateEntityMutationResolver from '../createUpdateEntityMutationResolver';
@@ -146,11 +146,11 @@ describe('createCopyEntityMutationResolver', () => {
       },
     };
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
 
-    const personCloneSchema = createThingSchema(personCloneConfig);
+    const personCloneSchema = createEntitySchema(personCloneConfig);
     const PersonClone = mongooseConn.model('PersonClone_Thing', personCloneSchema);
     await PersonClone.createCollection();
 
@@ -391,11 +391,11 @@ describe('createCopyEntityMutationResolver', () => {
       allEntityConfigs: { Restaurant: restaurantConfig, RestaurantClone: restaurantCloneConfig },
     };
 
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createEntitySchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 
-    const restaurantCloneSchema = createThingSchema(restaurantCloneConfig);
+    const restaurantCloneSchema = createEntitySchema(restaurantCloneConfig);
     const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', restaurantCloneSchema);
     await RestaurantClone.createCollection();
 

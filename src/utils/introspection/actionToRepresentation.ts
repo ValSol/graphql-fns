@@ -24,28 +24,28 @@ const actionToRepresentation = (
     return representationAttributes;
   }
 
-  const returningThingName = entityConfig
+  const returningEntityName = entityConfig
     ? entityConfig.name.slice(0, -representationKey.length)
     : entityName;
 
-  if (!allEntityConfigs[returningThingName]) return representationAttributes;
+  if (!allEntityConfigs[returningEntityName]) return representationAttributes;
 
   if (!representationAttributes[representationKey]) {
     representationAttributes[representationKey] = { representationKey, allow: {} };
   }
 
-  if (!representationAttributes[representationKey].allow[returningThingName]) {
-    representationAttributes[representationKey].allow[returningThingName] = [];
+  if (!representationAttributes[representationKey].allow[returningEntityName]) {
+    representationAttributes[representationKey].allow[returningEntityName] = [];
   }
 
   if (
     baseAction &&
     baseAction !== actionName &&
-    !representationAttributes[representationKey].allow[returningThingName].includes(
+    !representationAttributes[representationKey].allow[returningEntityName].includes(
       baseAction as RepresentationAttributesActionName,
     )
   ) {
-    representationAttributes[representationKey].allow[returningThingName].push(
+    representationAttributes[representationKey].allow[returningEntityName].push(
       baseAction as RepresentationAttributesActionName,
     );
   }

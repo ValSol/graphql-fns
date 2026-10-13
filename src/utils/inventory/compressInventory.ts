@@ -26,7 +26,7 @@ const compressInventory = (
             inventoryByRoles?.[umbrellaPermission]?.include?.Query?.[action] ?? [], // replace for "lodash.get"
         );
         Query[action].forEach((entityName) => {
-          const skip = correspondingValues.some((thingNames) => thingNames.includes(entityName));
+          const skip = correspondingValues.some((entityNames) => entityNames.includes(entityName));
           if (skip) return;
 
           if (!result[permission]) {
@@ -53,7 +53,7 @@ const compressInventory = (
             inventoryByRoles?.[umbrellaPermission]?.include?.Mutation?.[action] ?? [], // replace for "lodash.get"
         );
         Mutation[action].forEach((entityName) => {
-          const skip = correspondingValues.some((thingNames) => thingNames.includes(entityName));
+          const skip = correspondingValues.some((entityNames) => entityNames.includes(entityName));
           if (skip) return;
 
           if (!result[permission]) {

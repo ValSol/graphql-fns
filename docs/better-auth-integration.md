@@ -161,12 +161,12 @@ const serversideConfig = composeServersideConfig(generalConfig, {
 The recommended way is the better-auth `databaseHooks.user.create.after` hook:
 
 ```ts
-import { createThingSchema } from 'graphql-fns';
+import { createEntitySchema } from 'graphql-fns';
 
 const syncGraphqlFnsUser = async (user) => {
   const UserThing =
     mongooseConn.models.User_Thing ||
-    mongooseConn.model('User_Thing', createThingSchema(allEntityConfigs.User, enums));
+    mongooseConn.model('User_Thing', createEntitySchema(allEntityConfigs.User, enums));
 
   await UserThing.updateOne(
     { _id: user.id },

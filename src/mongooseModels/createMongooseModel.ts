@@ -1,6 +1,6 @@
 import type { Enums, EntityConfig } from '../tsTypes';
 
-import createThingSchema from './createThingSchema';
+import createEntitySchema from './createEntitySchema';
 import syncModelIndexes from './syncModelIndexes';
 
 // the only way to get a model of an entity: the model is registered on the passed connection and
@@ -14,14 +14,14 @@ const createMongooseModel = async (
   const { name, type: configType } = entityConfig;
 
   if (configType === 'tangible') {
-    const thingSchema = createThingSchema(entityConfig, enums);
+    const entitySchema = createEntitySchema(entityConfig, enums);
 
-    const ThingModel =
-      mongooseConn.models[`${name}_Thing`] || mongooseConn.model(`${name}_Thing`, thingSchema);
+    const EntityModel =
+      mongooseConn.models[`${name}_Thing`] || mongooseConn.model(`${name}_Thing`, entitySchema);
 
-    await syncModelIndexes(mongooseConn, ThingModel, `"${name}" entity`, force);
+    await syncModelIndexes(mongooseConn, EntityModel, `"${name}" entity`, force);
 
-    return ThingModel;
+    return EntityModel;
   }
 
   throw new TypeError(`Incorrect type: "${configType}" in config with name: "${name}"!`);

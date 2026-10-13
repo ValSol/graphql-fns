@@ -122,8 +122,8 @@ describe('parseActions', () => {
     config: (entityConfig: any) => entityConfig,
   };
 
-  const putThing: ActionSignatureMethods = {
-    name: 'putThing',
+  const putEntity: ActionSignatureMethods = {
+    name: 'putEntity',
     specificName: ({ name }: any) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
@@ -147,7 +147,7 @@ describe('parseActions', () => {
     Place: placeConfig,
     Country: countryConfig,
   };
-  const custom = { Query: { getEntity, putThing } };
+  const custom = { Query: { getEntity, putEntity } };
   const representations = { ForCatalog };
 
   const generalConfig = { allEntityConfigs, custom, representations };

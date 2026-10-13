@@ -38,7 +38,7 @@ These are limits of the **generated** actions. Calculated fields, representation
 | LM16 | 📖 A field of an embedded entity is indexed (and filterable) only if every embedded field on the path to it has `index: true` ([configs-guide/03](configs-guide/03-nested-objects-and-geodata.md)). | — |
 | LM17 | 📖 At most one text index: it is built from every text field with a `weight`, nested embedded paths included, named `TextIndex`, without `default_language`, so MongoDB applies the English stemming and stop words. | Another language or several text indexes are not possible through the config. |
 | LM18 | ✅ The `2dsphere` index of a `Point` field is on `<x>.coordinates`, of other geometries on `<x>` ([geospatial-index-paths.md](geospatial-index-paths.md) GI5). | — |
-| LM19 | 📖 `createThingSchema` throws when an entity needs more than 64 indexes (the MongoDB limit). | — |
+| LM19 | 📖 `createEntitySchema` throws when an entity needs more than 64 indexes (the MongoDB limit). | — |
 
 ## 3. Filters (`where`)
 

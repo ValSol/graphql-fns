@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, EntityConfig, NearInput } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import toCursor from '@/resolvers/utils/toCursor';
 import createCreateManyEntitiesMutationResolver from '@/resolvers/mutations/createCreateManyEntitiesMutationResolver';
@@ -51,7 +51,7 @@ beforeAll(async () => {
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
-  const exampleSchema = createThingSchema(entityConfig);
+  const exampleSchema = createEntitySchema(entityConfig);
   Example = mongooseConn.model('Example_Thing', exampleSchema);
   await Example.createCollection();
 

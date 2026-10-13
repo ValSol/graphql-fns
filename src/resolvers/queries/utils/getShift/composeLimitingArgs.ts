@@ -20,7 +20,7 @@ type Args = {
 // narrows the set in which the position of the cursor entity is computed to the documents that can precede it;
 // only for "near": a sort may have several keys and null values, so the documents preceding the cursor entity
 // are not described by a range of every sort key
-const composeLimitingArgs = (args: Args, thing: any): Args => {
+const composeLimitingArgs = (args: Args, entity: any): Args => {
   const { near } = args;
 
   if (!near) {
@@ -35,7 +35,7 @@ const composeLimitingArgs = (args: Args, thing: any): Args => {
 
   const {
     coordinates: [cursorLng, cursorLat],
-  } = thing[geospatialField];
+  } = entity[geospatialField];
 
   const distance = getDistanceFromLatLng(lat, lng, cursorLat, cursorLng);
 

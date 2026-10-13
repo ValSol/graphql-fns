@@ -9,7 +9,7 @@ import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeTypeDefsAndResolvers from '@/composeTypeDefsAndResolvers';
 import createCounter from './createCounter';
 import createMongooseModel from './createMongooseModel';
-import createThingSchema from './createThingSchema';
+import createEntitySchema from './createEntitySchema';
 import initMongooseModels from './initMongooseModels';
 
 const declarations: SimplifiedEntityConfig[] = [
@@ -200,7 +200,7 @@ describe('initMongooseModels', () => {
     const conn2 = await connect('jest-init-models-concurrent-2');
 
     const syncIndexesSpies = [conn, conn2].map((c) =>
-      jest.spyOn(c.model('City_Thing', createThingSchema(allEntityConfigs.City)), 'syncIndexes'),
+      jest.spyOn(c.model('City_Thing', createEntitySchema(allEntityConfigs.City)), 'syncIndexes'),
     );
 
     const models = await Promise.all(

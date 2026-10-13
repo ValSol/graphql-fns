@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import sleep from '../../../utils/sleep';
 import fromGlobalId from '../../utils/fromGlobalId';
 import toGlobalId from '../../utils/toGlobalId';
@@ -83,11 +83,11 @@ describe('createEntityFilterScalarResolver', () => {
       ],
     });
 
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createEntitySchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 
-    const userSchema = createThingSchema(userConfig);
+    const userSchema = createEntitySchema(userConfig);
     const User = mongooseConn.model('User_Thing', userSchema);
     await User.createCollection();
 

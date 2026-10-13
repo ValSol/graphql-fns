@@ -4,7 +4,7 @@ import { GeneralConfig } from '../tsTypes';
 import isCommonlyAllowedTypeName from '../utils/isCommonlyAllowedTypeName';
 
 // alsow used in "composeInterfaceTypeDic" util
-const forbiddenThingNames = ['DateTime', 'Node', 'node', 'PageInfo'];
+const forbiddenEntityNames = ['DateTime', 'Node', 'node', 'PageInfo'];
 
 const IMPLEMETNS = ' implements ';
 
@@ -62,7 +62,7 @@ const composeInterfaceTypeDic = (
       throw new TypeError(`Interface name: "${interfaceName}" already used as entity name!`);
     }
 
-    if (forbiddenThingNames.includes(interfaceName)) {
+    if (forbiddenEntityNames.includes(interfaceName)) {
       throw new TypeError(`Forbidden interface name: "${interfaceName}"!`);
     }
   });

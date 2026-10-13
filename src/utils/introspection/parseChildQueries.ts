@@ -8,14 +8,14 @@ const parseChildQueries = (
   const { allEntityConfigs, representations } = generalConfig;
 
   return childQueries.map((item) => {
-    const [baseAction, representationThingName] = item.split(':');
+    const [baseAction, representationEntityName] = item.split(':');
 
-    if (allEntityConfigs[representationThingName]) {
+    if (allEntityConfigs[representationEntityName]) {
       return {
         actionName: baseAction,
         baseAction,
         representationKey: '',
-        entityName: representationThingName,
+        entityName: representationEntityName,
       };
     }
 
@@ -25,8 +25,8 @@ const parseChildQueries = (
       for (let i = 0; i < representationKeys.length; i += 1) {
         const representationKey = representationKeys[i];
 
-        if (representationThingName.endsWith(representationKey)) {
-          const entityName = representationThingName.slice(0, -representationKey.length);
+        if (representationEntityName.endsWith(representationKey)) {
+          const entityName = representationEntityName.slice(0, -representationKey.length);
 
           if (allEntityConfigs[entityName]) {
             return {

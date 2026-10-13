@@ -2,22 +2,22 @@ import mongoose from 'mongoose';
 
 import type { Enums, EntityConfig } from '../tsTypes';
 
-type ThingSchemaProperty = {
+type EntitySchemaProperty = {
   type: any | [any];
   default?: string;
   required?: boolean;
 };
-type ThingSchemaProperties = {
-  [key: string]: ThingSchemaProperty;
+type EntitySchemaProperties = {
+  [key: string]: EntitySchemaProperty;
 };
 
 const { Schema } = mongoose;
 
-const composeThingSchemaProperties = (
+const composeEntitySchemaProperties = (
   entityConfig: EntityConfig,
   enums: Enums,
   parentIndexedField = '',
-): ThingSchemaProperties => {
+): EntitySchemaProperties => {
   const {
     booleanFields = [],
     dateTimeFields = [],
@@ -232,7 +232,7 @@ const composeThingSchemaProperties = (
       }, result);
 
     duplexFields.reduce(
-      (prev, { array, config: { name: duplexThingName }, index, name, required, unique }) => {
+      (prev, { array, config: { name: duplexEntityName }, index, name, required, unique }) => {
         if (configType !== 'tangible') {
           throw new TypeError(`Must not have an "duplexField" in an "${configType}" document!`);
         }
@@ -246,7 +246,7 @@ const composeThingSchemaProperties = (
           index?: boolean;
           unique?: boolean;
         } = {
-          ref: duplexThingName,
+          ref: duplexEntityName,
           type: 'ObjectId',
         };
 
@@ -284,7 +284,7 @@ const composeThingSchemaProperties = (
   }
 
   embeddedFields.reduce((prev, { array, name, config, index }) => {
-    const obj = composeThingSchemaProperties(config, enums, index ? `${entityName}.${name}` : '');
+    const obj = composeEntitySchemaProperties(config, enums, index ? `${entityName}.${name}` : '');
 
     prev[name] = array ? [obj] : { type: new Schema(obj) };
 
@@ -400,4 +400,4 @@ const composeThingSchemaProperties = (
   return result;
 };
 
-export default composeThingSchemaProperties;
+export default composeEntitySchemaProperties;

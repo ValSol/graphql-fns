@@ -4,7 +4,7 @@ import type { GeneralConfig, EntityConfig, TangibleEntityConfig } from '../../..
 
 import mongoOptions from '../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createEntityExistencesQueryResolver from './index';
@@ -69,7 +69,7 @@ describe('createEntityExistencesQueryResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Person: personConfig } };
 
-    const exampleSchema = createThingSchema(personConfig);
+    const exampleSchema = createEntitySchema(personConfig);
     const Example = mongooseConn.model('Person_', exampleSchema);
     await Example.createCollection();
 
@@ -233,11 +233,11 @@ describe('createEntityExistencesQueryResolver', () => {
       allEntityConfigs: { Parent: parentConfig, Child: childConfig },
     };
 
-    const exampleSchema = createThingSchema(parentConfig);
+    const exampleSchema = createEntitySchema(parentConfig);
     const Example = mongooseConn.model('Parent_', exampleSchema);
     await Example.createCollection();
 
-    const exampleSchema2 = createThingSchema(childConfig);
+    const exampleSchema2 = createEntitySchema(childConfig);
     const Example2 = mongooseConn.model('Child_', exampleSchema2);
     await Example2.createCollection();
 

@@ -10,7 +10,7 @@ A geospatial field is stored as GeoJSON: `{ type: 'Point', coordinates: [lng, la
 
 | ID | Fact |
 |---|---|
-| GI1 | ✅ `index: true` of a `Point` field creates the `2dsphere` index on the nested array of numbers, not on the field: `{ '<field>.coordinates': '2dsphere' }` (`src/mongooseModels/composeThingSchemaProperties.ts`). For an array of points (`array: true`) it is `{ '<field>.coordinates': '2dsphere' }` too, a multikey index. |
+| GI1 | ✅ `index: true` of a `Point` field creates the `2dsphere` index on the nested array of numbers, not on the field: `{ '<field>.coordinates': '2dsphere' }` (`src/mongooseModels/composeEntitySchemaProperties.ts`). For an array of points (`array: true`) it is `{ '<field>.coordinates': '2dsphere' }` too, a multikey index. |
 | GI2 | 📖 The path of the index is kept as it is: changing it would need rebuilding the indexes of existing databases. |
 
 ## 2. Conditions

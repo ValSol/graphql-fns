@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, TangibleEntityConfig, GraphqlObject } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
 import createEntityQueryResolver from '@/resolvers/queries/createEntityQueryResolver';
@@ -231,27 +231,27 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
   const serversideConfig = { transactions: true };
 
   test('should create mutation add entity resolver', async () => {
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createEntitySchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 
-    const restaurantCloneSchema = createThingSchema(restaurantCloneConfig);
+    const restaurantCloneSchema = createEntitySchema(restaurantCloneConfig);
     const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', restaurantCloneSchema);
     await RestaurantClone.createCollection();
 
-    const menuSchema = createThingSchema(menuConfig);
+    const menuSchema = createEntitySchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', menuSchema);
     await Menu.createCollection();
 
-    const menuSectionSchema = createThingSchema(menuSectionConfig);
+    const menuSectionSchema = createEntitySchema(menuSectionConfig);
     const MenuSection = mongooseConn.model('MenuSection_Thing', menuSectionSchema);
     await MenuSection.createCollection();
 
-    const menuCloneSchema = createThingSchema(menuCloneConfig);
+    const menuCloneSchema = createEntitySchema(menuCloneConfig);
     const MenuClone = mongooseConn.model('MenuClone_Thing', menuCloneSchema);
     await MenuClone.createCollection();
 
-    const menuCloneSectionSchema = createThingSchema(menuCloneSectionConfig);
+    const menuCloneSectionSchema = createEntitySchema(menuCloneSectionConfig);
     const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
     await MenuCloneSection.createCollection();
 

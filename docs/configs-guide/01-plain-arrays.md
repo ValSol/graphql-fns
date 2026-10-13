@@ -226,7 +226,7 @@ const models = await initMongooseModels(mongooseConn, generalConfig);
 await models.Currency.insertMany(currencies);
 ```
 
-`initMongooseModels` returns the models the resolvers use (keyed by entity name), with their collections and indexes already created ([mongoose-models.md](../mongoose-models.md) MM12). The model of `Currency` is `Currency_Thing`, its collection `currency_things` ✅; the schema (fields, indexes, `timestamps`) is built from the same entity config by `createThingSchema`. Documents inserted this way are immediately visible through the GraphQL API ✅. This way skips the library's own create logic (no subscriptions, no processing of relations): for relations see [part 2, step 4](02-relations.md#step-4-load-the-arrays).
+`initMongooseModels` returns the models the resolvers use (keyed by entity name), with their collections and indexes already created ([mongoose-models.md](../mongoose-models.md) MM12). The model of `Currency` is `Currency_Thing`, its collection `currency_things` ✅; the schema (fields, indexes, `timestamps`) is built from the same entity config by `createEntitySchema`. Documents inserted this way are immediately visible through the GraphQL API ✅. This way skips the library's own create logic (no subscriptions, no processing of relations): for relations see [part 2, step 4](02-relations.md#step-4-load-the-arrays).
 
 ### Step 7. What you get
 

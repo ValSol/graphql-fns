@@ -8,9 +8,9 @@
 
 | ID | Fact |
 |---|---|
-| MM1 | ✅ `createThingSchema(entityConfig, enums)` builds the schema of a tangible entity with indexes from the config: `index`/`unique` of fields, `counter` (unique `counter_1`), `uniqueCompoundIndexes` (unique `f1_1_f2_1…`), `weight` (one text index named `TextIndex`), geospatial fields (`2dsphere`), plus `createdAt_1` and `updatedAt_1`. More than 64 indexes throw. The schema is cached by the entity name (the first `enums` win). |
+| MM1 | ✅ `createEntitySchema(entityConfig, enums)` builds the schema of a tangible entity with indexes from the config: `index`/`unique` of fields, `counter` (unique `counter_1`), `uniqueCompoundIndexes` (unique `f1_1_f2_1…`), `weight` (one text index named `TextIndex`), geospatial fields (`2dsphere`), plus `createdAt_1` and `updatedAt_1`. More than 64 indexes throw. The schema is cached by the entity name (the first `enums` win). `createThingSchema` is a deprecated alias of it. |
 | MM2 | ✅ The schema has `autoIndex: false`, the counters schema (`Counter_Variable`, collection `counter_variables`, only `_id` + `seq`) too. Background index building of Mongoose (`Model.init()` → `ensureIndexes`) is never used: it creates indexes asynchronously after the first writes, fails silently (only an `index` event with the error) if the written documents violate a unique index, never drops indexes, and does nothing at all if `autoIndex` is turned off on the connection. |
-| MM3 | ✅ `createThingSchema` doesn't register a model on the global `mongoose`, so no model gets onto the default connection with background indexes. |
+| MM3 | ✅ `createEntitySchema` doesn't register a model on the global `mongoose`, so no model gets onto the default connection with background indexes. |
 
 ## 2. Getting a model
 

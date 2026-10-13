@@ -1,22 +1,22 @@
-import moveThingsToObject from './moveThingsToObject';
+import moveEntitiesToObject from './moveEntitiesToObject';
 
-describe('moveThingsToObject', () => {
+describe('moveEntitiesToObject', () => {
   test('have to return compressed inventoryByRoles', () => {
     const inventoryByRoles = {
       '': {
         name: '',
         include: {
           Mutation: {
-            allowAccessToThing: ['Restaurant'],
-            removeStaticThing: ['Post', 'Restaurant'],
-            renewThingForView: ['User'],
-            signinThingForView: ['User'],
+            allowAccessToEntity: ['Restaurant'],
+            removeStaticEntity: ['Post', 'Restaurant'],
+            renewEntityForView: ['User'],
+            signinEntityForView: ['User'],
           },
           Query: {
             entitiesForView: ['Restaurant', 'Post', 'MenuSection'],
             entityForView: ['Restaurant', 'Post', 'Menu'],
-            childThingForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
-            childThingsForView: ['Post', 'MenuSection'],
+            childEntityForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
+            childEntitiesForView: ['Post', 'MenuSection'],
           },
         },
       },
@@ -24,10 +24,10 @@ describe('moveThingsToObject', () => {
         name: 'publisher',
         include: {
           Query: {
-            thingForApprove: ['Restaurant', 'Post'],
+            entityForApprove: ['Restaurant', 'Post'],
             childEntities: ['MenuSectionClone'],
-            thingsForApprove: ['Post', 'Restaurant'],
-            childThingForApprove: ['User'],
+            entitiesForApprove: ['Post', 'Restaurant'],
+            childEntityForApprove: ['User'],
           },
           Mutation: {
             cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
@@ -50,9 +50,9 @@ describe('moveThingsToObject', () => {
               'RestaurantClone',
             ],
             createEntity: ['Menu'],
-            deleteWithChildrenThing: ['MenuClone'],
-            removeStaticThing: ['Restaurant', 'Post'],
-            cloneLevelOfThing: ['Restaurant'],
+            deleteWithChildrenEntity: ['MenuClone'],
+            removeStaticEntity: ['Restaurant', 'Post'],
+            cloneLevelOfEntity: ['Restaurant'],
           },
         },
       },
@@ -64,21 +64,21 @@ describe('moveThingsToObject', () => {
         name: '',
         include: {
           Mutation: {
-            allowAccessToThing: { Restaurant: true },
-            removeStaticThing: { Post: true, Restaurant: true },
-            renewThingForView: { User: true },
-            signinThingForView: { User: true },
+            allowAccessToEntity: { Restaurant: true },
+            removeStaticEntity: { Post: true, Restaurant: true },
+            renewEntityForView: { User: true },
+            signinEntityForView: { User: true },
           },
           Query: {
             entitiesForView: { Restaurant: true, Post: true, MenuSection: true },
             entityForView: { Restaurant: true, Post: true, Menu: true },
-            childThingForView: {
+            childEntityForView: {
               BanquetHall: true,
               ConferenceHall: true,
               Restaurant: true,
               Menu: true,
             },
-            childThingsForView: { Post: true, MenuSection: true },
+            childEntitiesForView: { Post: true, MenuSection: true },
           },
         },
       },
@@ -86,10 +86,10 @@ describe('moveThingsToObject', () => {
         name: 'publisher',
         include: {
           Query: {
-            thingForApprove: { Restaurant: true, Post: true },
+            entityForApprove: { Restaurant: true, Post: true },
             childEntities: { MenuSectionClone: true },
-            thingsForApprove: { Post: true, Restaurant: true },
-            childThingForApprove: { User: true },
+            entitiesForApprove: { Post: true, Restaurant: true },
+            childEntityForApprove: { User: true },
           },
           Mutation: {
             cloneEntity: {
@@ -118,16 +118,16 @@ describe('moveThingsToObject', () => {
               RestaurantClone: true,
             },
             createEntity: { Menu: true },
-            deleteWithChildrenThing: { MenuClone: true },
-            removeStaticThing: { Restaurant: true, Post: true },
-            cloneLevelOfThing: { Restaurant: true },
+            deleteWithChildrenEntity: { MenuClone: true },
+            removeStaticEntity: { Restaurant: true, Post: true },
+            cloneLevelOfEntity: { Restaurant: true },
           },
         },
       },
       root: { name: 'root' },
     };
 
-    const result = moveThingsToObject(inventoryByRoles);
+    const result = moveEntitiesToObject(inventoryByRoles);
 
     expect(result).toEqual(expectedResult);
   });

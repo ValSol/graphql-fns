@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import sleep from '../../../utils/sleep';
 import pubsub from '../../utils/pubsub';
 import toGlobalId from '../../utils/toGlobalId';
@@ -59,7 +59,7 @@ describe('createEntityOppositeRelationCountResolver', () => {
       ],
     });
 
-    const exampleSchema = createThingSchema(placeConfig);
+    const exampleSchema = createEntitySchema(placeConfig);
     const Example = mongooseConn.model('Place_Thing', exampleSchema);
     await Example.createCollection();
 

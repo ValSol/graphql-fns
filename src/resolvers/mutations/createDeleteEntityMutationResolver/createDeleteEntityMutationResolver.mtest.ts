@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import sleep from '@/utils/sleep';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
@@ -102,11 +102,11 @@ describe('createDeleteEntityMutationResolver', () => {
       ],
     });
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
 
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createEntitySchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.createCollection();
 
@@ -345,11 +345,11 @@ describe('createDeleteEntityMutationResolver', () => {
       ],
     });
 
-    const parentSchema = createThingSchema(parentConfig);
+    const parentSchema = createEntitySchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.createCollection();
 
-    const childSchema = createThingSchema(childConfig);
+    const childSchema = createEntitySchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
@@ -507,11 +507,11 @@ describe('createDeleteEntityMutationResolver', () => {
       ],
     });
 
-    const userSchema = createThingSchema(userConfig);
+    const userSchema = createEntitySchema(userConfig);
     const User = mongooseConn.model('User_Thing', userSchema);
     await User.createCollection();
 
-    const textbookSchema = createThingSchema(textbookConfig);
+    const textbookSchema = createEntitySchema(textbookConfig);
     const Textbook = mongooseConn.model('Textbook_Thing', textbookSchema);
     await Textbook.createCollection();
 

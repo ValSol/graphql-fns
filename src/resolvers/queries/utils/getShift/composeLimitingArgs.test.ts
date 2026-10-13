@@ -1,7 +1,7 @@
 import composeLimitingArgs from './composeLimitingArgs';
 
 describe('composeLimitingArgs', () => {
-  const thing = {
+  const entity = {
     _id: '1234567890',
     textField1: 'field1 text',
     textField2: 'field2 text',
@@ -12,7 +12,7 @@ describe('composeLimitingArgs', () => {
   test('emty args object', () => {
     const args: Record<string, any> = {};
 
-    const result = composeLimitingArgs(args, thing);
+    const result = composeLimitingArgs(args, entity);
 
     const expectedResult: Record<string, any> = {};
 
@@ -22,7 +22,7 @@ describe('composeLimitingArgs', () => {
   test('args with sort', () => {
     const args = { sort: { sortBy: ['textField1_ASC', 'uniqueField_DESC', 'id_ASC'] } };
 
-    const result = composeLimitingArgs(args, thing);
+    const result = composeLimitingArgs(args, entity);
 
     expect(result).toBe(args);
   });
@@ -35,7 +35,7 @@ describe('composeLimitingArgs', () => {
     };
     const args = { near };
 
-    const result = composeLimitingArgs(args, thing);
+    const result = composeLimitingArgs(args, entity);
 
     const expectedResult = {
       near: {

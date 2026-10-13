@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, NearInput, TangibleEntityConfig } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '@/resolvers/mutations/createCreateEntityMutationResolver';
@@ -46,7 +46,7 @@ beforeAll(async () => {
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
-  Place = mongooseConn.model('Place_Thing', createThingSchema(placeConfig));
+  Place = mongooseConn.model('Place_Thing', createEntitySchema(placeConfig));
   await Place.init();
 
   const createPlace = createCreateEntityMutationResolver(

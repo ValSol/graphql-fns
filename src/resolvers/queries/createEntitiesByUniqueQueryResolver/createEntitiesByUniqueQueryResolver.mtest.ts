@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, EntityConfig } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import sleep from '@/utils/sleep';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
@@ -70,7 +70,7 @@ describe('createEntityQueryResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Person: personConfig } };
 
-    const exampleSchema = createThingSchema(personConfig);
+    const exampleSchema = createEntitySchema(personConfig);
     const Example = mongooseConn.model('Person_Thing', exampleSchema);
     await Example.createCollection();
 

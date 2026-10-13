@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import createCreateManyEntitiesMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
@@ -59,7 +59,7 @@ describe('createCreateManyEntitiesMutationResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
-    const exampleSchema = createThingSchema(entityConfig);
+    const exampleSchema = createEntitySchema(entityConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
     await Example.createCollection();
@@ -150,7 +150,7 @@ describe('createCreateManyEntitiesMutationResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example2: entityConfig } };
 
-    const exampleSchema = createThingSchema(entityConfig);
+    const exampleSchema = createEntitySchema(entityConfig);
     const Example2 = mongooseConn.model('Example2_Thing', exampleSchema);
     await Example2.init();
     await Example2.createCollection();

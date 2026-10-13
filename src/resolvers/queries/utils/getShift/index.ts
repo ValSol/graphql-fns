@@ -32,7 +32,7 @@ const getShift = async (
 
   if (!filter) return null;
 
-  const thing = await entityQueryResolver(
+  const entity = await entityQueryResolver(
     parent,
     { whereOne: { id: _id } },
     context,
@@ -40,9 +40,9 @@ const getShift = async (
     { ...resolverArg.resolverOptions, involvedFilters },
   );
 
-  if (!thing) return null;
+  if (!entity) return null;
 
-  const limitingArgs = composeLimitingArgs(args, thing);
+  const limitingArgs = composeLimitingArgs(args, entity);
 
   const {
     near,

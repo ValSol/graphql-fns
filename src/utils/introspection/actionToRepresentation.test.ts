@@ -146,7 +146,7 @@ describe('actionToRepresentation', () => {
   test('have to return representationAttributes with Person: [entitiesByUnique]', () => {
     const actionToParse: ActionToParse = {
       actionType: 'Query',
-      actionName: 'thingsByUniqueForCatalog',
+      actionName: 'entitiesByUniqueForCatalog',
       entityName: 'Person',
     };
 

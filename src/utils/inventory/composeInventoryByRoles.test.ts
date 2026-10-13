@@ -11,7 +11,7 @@ describe('composeInventoryByRoles', () => {
           entityForView: true,
           entitiesForView: true,
         },
-        Mutation: { renewThingForView: true, signinThingForView: true },
+        Mutation: { renewEntityForView: true, signinEntityForView: true },
       },
     };
 
@@ -19,8 +19,8 @@ describe('composeInventoryByRoles', () => {
       name: 'guest',
       include: {
         Mutation: {
-          signoutThingForView: true,
-          pushIntoThingForView: ['CommentListForRestaurant'],
+          signoutEntityForView: true,
+          pushIntoEntityForView: ['CommentListForRestaurant'],
         },
       },
     };
@@ -29,7 +29,7 @@ describe('composeInventoryByRoles', () => {
       name: 'informer',
       include: {
         Query: {
-          thingForEdit: true,
+          entityForEdit: true,
           entitiesForEdit: true,
           entity: ['RestaurantClone', 'PostClone'],
         },
@@ -44,13 +44,13 @@ describe('composeInventoryByRoles', () => {
       name: 'editor',
       include: {
         Query: {
-          thingForEdit: true,
+          entityForEdit: true,
           entitiesForEdit: true,
           entity: ['RestaurantClone', 'PostClone'],
         },
         Mutation: {
           cloneEntity: true,
-          toggleCommentsOfThing: ['Restaurant'],
+          toggleCommentsOfEntity: ['Restaurant'],
           updateEntity: ['RestaurantClone', 'PostClone'],
         },
       },
@@ -60,8 +60,8 @@ describe('composeInventoryByRoles', () => {
       name: 'publisher',
       include: {
         Query: {
-          thingForApprove: true,
-          thingsForApprove: true,
+          entityForApprove: true,
+          entitiesForApprove: true,
           entity: ['RestaurantClone', 'PostClone'],
         },
         Mutation: {
@@ -76,11 +76,11 @@ describe('composeInventoryByRoles', () => {
       name: 'toggler',
       include: {
         Query: {
-          thingForToggle: true,
-          thingsForToggle: true,
+          entityForToggle: true,
+          entitiesForToggle: true,
         },
         Mutation: {
-          updateThingForToggle: ['Restaurant', 'Post'],
+          updateEntityForToggle: ['Restaurant', 'Post'],
         },
       },
     };
@@ -89,10 +89,10 @@ describe('composeInventoryByRoles', () => {
       name: 'creator',
       include: {
         Query: {
-          thingForCreate: true,
+          entityForCreate: true,
         },
         Mutation: {
-          createThingForCreate: ['Restaurant', 'Post'],
+          createEntityForCreate: ['Restaurant', 'Post'],
         },
       },
     };

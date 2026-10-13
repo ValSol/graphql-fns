@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import workOutMutations from '../workOutMutations';
 import createGetOrCreateEntityMutationResolver from './index';
 
@@ -59,11 +59,11 @@ describe('createGetOrCreateEntityMutationResolver', () => {
   let Menu;
 
   beforeAll(async () => {
-    Person = mongooseConn.model('Person_Thing', createThingSchema(personConfig));
+    Person = mongooseConn.model('Person_Thing', createEntitySchema(personConfig));
     await Person.init(); // build unique index on "email"
     await Person.createCollection();
 
-    Menu = mongooseConn.model('Menu_Thing', createThingSchema(menuConfig));
+    Menu = mongooseConn.model('Menu_Thing', createEntitySchema(menuConfig));
     await Menu.init(); // build unique compound index
     await Menu.createCollection();
   });

@@ -4,7 +4,7 @@ import type { EntityFilters, GeneralConfig, EntityConfig, ServersideConfig } fro
 
 import mongoOptions from '@/test/mongo-options';
 import sleep from '@/utils/sleep';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '@/resolvers/mutations/createCreateEntityMutationResolver';
@@ -76,7 +76,7 @@ describe('createNodeQueryResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
-    const exampleSchema = createThingSchema(entityConfig);
+    const exampleSchema = createEntitySchema(entityConfig);
     const ExampleEntity = mongooseConn.model('Example_Thing', exampleSchema);
     await ExampleEntity.createCollection();
 

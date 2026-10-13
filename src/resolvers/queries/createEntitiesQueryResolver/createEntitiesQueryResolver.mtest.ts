@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, NearInput, EntityConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import sleep from '@/utils/sleep';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
@@ -89,7 +89,7 @@ describe('createEntityQueryResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Person: personConfig } };
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
 
@@ -240,7 +240,7 @@ describe('createEntityQueryResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Restaurant: restaurantConfig } };
 
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createEntitySchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 
@@ -462,7 +462,7 @@ describe('createEntityQueryResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Restaurant2: restaurantConfig } };
 
-    const exampleSchema = createThingSchema(restaurantConfig);
+    const exampleSchema = createEntitySchema(restaurantConfig);
     const Example = mongooseConn.model('Restaurant2_Thing', exampleSchema);
     await Example.createCollection();
 
@@ -595,11 +595,11 @@ describe('createEntityQueryResolver', () => {
       allEntityConfigs: { Table: tableConfig, TableItem: tableItemConfig },
     };
 
-    const exampleSchema = createThingSchema(tableConfig);
+    const exampleSchema = createEntitySchema(tableConfig);
     const Example = mongooseConn.model('Table_Thing', exampleSchema);
     await Example.createCollection();
 
-    const example2Schema = createThingSchema(tableItemConfig);
+    const example2Schema = createEntitySchema(tableItemConfig);
     const Example2 = mongooseConn.model('TableItem_Thing', example2Schema);
     await Example2.createCollection();
 
@@ -895,11 +895,11 @@ describe('createEntityQueryResolver', () => {
       allEntityConfigs: { Parent: parentConfig, Child: childConfig },
     };
 
-    const exampleSchema = createThingSchema(parentConfig);
+    const exampleSchema = createEntitySchema(parentConfig);
     const Example = mongooseConn.model('Parent_Thing', exampleSchema);
     await Example.createCollection();
 
-    const example2Schema = createThingSchema(childConfig);
+    const example2Schema = createEntitySchema(childConfig);
     const Example2 = mongooseConn.model('Child_Thing', example2Schema);
     await Example2.createCollection();
 
@@ -1076,15 +1076,15 @@ describe('createEntityQueryResolver', () => {
       allEntityConfigs: { User: userConfig, Textbook: textbookConfig, Lesson: lessonConfig },
     };
 
-    const userSchema = createThingSchema(userConfig);
+    const userSchema = createEntitySchema(userConfig);
     const User = mongooseConn.model('User_Thing', userSchema);
     await User.createCollection();
 
-    const textbookSchema = createThingSchema(textbookConfig);
+    const textbookSchema = createEntitySchema(textbookConfig);
     const Textbook = mongooseConn.model('Textbook_Thing', textbookSchema);
     await Textbook.createCollection();
 
-    const lessonSchema = createThingSchema(lessonConfig);
+    const lessonSchema = createEntitySchema(lessonConfig);
     const Lesson = mongooseConn.model('Lesson_Thing', lessonSchema);
     await Lesson.createCollection();
 

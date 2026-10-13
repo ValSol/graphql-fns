@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
@@ -104,12 +104,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       allEntityConfigs: { Person: personConfig, Place: placeConfig },
     };
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.init();
     await Person.createCollection();
 
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createEntitySchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.init();
     await Place.createCollection();
@@ -346,12 +346,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       allEntityConfigs: { Parent: parentConfig, Child: childConfig },
     };
 
-    const parentSchema = createThingSchema(parentConfig);
+    const parentSchema = createEntitySchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.init();
     await Parent.createCollection();
 
-    const childSchema = createThingSchema(childConfig);
+    const childSchema = createEntitySchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.init();
     await Child.createCollection();
@@ -480,12 +480,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       allEntityConfigs: { Parent: parentConfig, Child: childConfig },
     };
 
-    const parentSchema = createThingSchema(parentConfig);
+    const parentSchema = createEntitySchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.init();
     await Parent.createCollection();
 
-    const childSchema = createThingSchema(childConfig);
+    const childSchema = createEntitySchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.init();
     await Child.createCollection();

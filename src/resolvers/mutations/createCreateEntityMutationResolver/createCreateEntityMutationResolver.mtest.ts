@@ -8,7 +8,7 @@ import type {
 } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from './index';
 
@@ -102,7 +102,7 @@ describe('createCreateEntityMutationResolver', () => {
       allEntityConfigs: { Example: entityConfig, Embedded: embeddedConfig },
     };
 
-    const exampleSchema = createThingSchema(entityConfig);
+    const exampleSchema = createEntitySchema(entityConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
 
@@ -199,7 +199,7 @@ describe('createCreateEntityMutationResolver', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Person: personConfig } };
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
 
@@ -363,15 +363,15 @@ describe('createCreateEntityMutationResolver', () => {
       allEntityConfigs: { Person2: personConfig, Place: placeConfig, City: cityConfig },
     };
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person2_Thing', personSchema);
     await Person.createCollection();
 
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createEntitySchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.createCollection();
 
-    const citySchema = createThingSchema(cityConfig);
+    const citySchema = createEntitySchema(cityConfig);
     const City = mongooseConn.model('City_Thing', citySchema);
     await City.createCollection();
 
@@ -554,9 +554,9 @@ describe('createCreateEntityMutationResolver', () => {
       allEntityConfigs: { Person3: personConfig, Place2: placeConfig },
     };
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person3_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createEntitySchema(placeConfig);
     const Place = mongooseConn.model('Place2_Thing', placeSchema);
 
     await Person.createCollection();
@@ -775,9 +775,9 @@ describe('createCreateEntityMutationResolver', () => {
       ],
     });
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person4_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createEntitySchema(placeConfig);
     const Place = mongooseConn.model('Place3_Thing', placeSchema);
 
     const generalConfig: GeneralConfig = {
@@ -1007,15 +1007,15 @@ describe('createCreateEntityMutationResolver', () => {
       allEntityConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
     };
 
-    const accessSchema = createThingSchema(accessConfig);
+    const accessSchema = createEntitySchema(accessConfig);
     const Access = mongooseConn.model('Access_Thing', accessSchema);
     await Access.createCollection();
 
-    const postSchema = createThingSchema(postConfig);
+    const postSchema = createEntitySchema(postConfig);
     const Post = mongooseConn.model('Post_Thing', postSchema);
     await Post.createCollection();
 
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createEntitySchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 

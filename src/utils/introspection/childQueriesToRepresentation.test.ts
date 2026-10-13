@@ -16,7 +16,7 @@ describe('childQueriesToRepresentation', () => {
         entityName: 'Country',
       },
       {
-        actionName: 'childThingForCatalog',
+        actionName: 'childEntityForCatalog',
         baseAction: 'childEntity',
         representationKey: 'ForCatalog',
         entityName: 'Place',

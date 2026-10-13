@@ -1,7 +1,10 @@
 // mongoose util
 
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import initMongooseModels from '@/mongooseModels/initMongooseModels';
+
+/** @deprecated use "createEntitySchema" */
+const createThingSchema = createEntitySchema;
 
 // build schema utils
 
@@ -102,6 +105,7 @@ export type * from '@/tsTypes';
 export {
   adaptProjectionForCalculatedFields,
   addChildActions,
+  createEntitySchema,
   createThingSchema,
   initMongooseModels,
   composeTypeDefsAndResolvers,

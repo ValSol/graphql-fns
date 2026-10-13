@@ -8,7 +8,7 @@ import type {
 } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
-import createThingSchema from '@/mongooseModels/createThingSchema';
+import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
@@ -448,22 +448,22 @@ beforeAll(async () => {
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
-  const parentSchema = createThingSchema(parentConfig);
+  const parentSchema = createEntitySchema(parentConfig);
   const Parent = mongooseConn.model('Parent_Thing', parentSchema);
   await Parent.init();
   await Parent.createCollection();
 
-  const childSchema = createThingSchema(childConfig);
+  const childSchema = createEntitySchema(childConfig);
   const Child = mongooseConn.model('Child_Thing', childSchema);
   await Child.init();
   await Child.createCollection();
 
-  const exampleSchema = createThingSchema(exampleConfig);
+  const exampleSchema = createEntitySchema(exampleConfig);
   const Example = mongooseConn.model('Example_Thing', exampleSchema);
   await Example.init();
   await Example.createCollection();
 
-  const exampleCloneSchema = createThingSchema(exampleCloneConfig);
+  const exampleCloneSchema = createEntitySchema(exampleCloneConfig);
   const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
   await ExampleClone.init();
   await ExampleClone.createCollection();
@@ -525,12 +525,12 @@ describe('workOutMutations', () => {
     expect(result[0]).toEqual(createdParent);
     expect(result[1].map(({ id }) => id)).toEqual(createdParent.children);
 
-    const parentSchema = createThingSchema(parentConfig);
+    const parentSchema = createEntitySchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.init();
     await Parent.createCollection();
 
-    const childSchema = createThingSchema(childConfig);
+    const childSchema = createEntitySchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.init();
     await Child.createCollection();
@@ -682,12 +682,12 @@ describe('workOutMutations', () => {
     expect(result.counts).toEqual([0, 10, 20, 30, 40, 50, 60]);
     expect(result2.counts).toEqual([99, 55]);
 
-    const exampleCloneSchema = createThingSchema(exampleCloneConfig);
+    const exampleCloneSchema = createEntitySchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
     await ExampleClone.createCollection();
 
-    const exampleSchema = createThingSchema(exampleConfig);
+    const exampleSchema = createEntitySchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
     await Example.createCollection();
@@ -713,7 +713,7 @@ describe('workOutMutations', () => {
       { name: 'Name 2' },
       { name: 'Name 3' },
     ];
-    const standardMutationsArgsToCreateManyThings = [
+    const standardMutationsArgsToCreateManyEntities = [
       {
         actionGeneralName: 'createManyEntities',
         entityConfig: exampleCloneConfig,
@@ -737,7 +737,7 @@ describe('workOutMutations', () => {
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const [resultToCreateExampleClones, resultToCreateExamples] = await workOutMutations(
-      standardMutationsArgsToCreateManyThings,
+      standardMutationsArgsToCreateManyEntities,
       commonResolverCreatorArg,
     );
 
@@ -761,7 +761,7 @@ describe('workOutMutations', () => {
       { name: 'Name 2' },
       { name: 'Name 3' },
     ];
-    const standardMutationsArgsToCreateManyThings = [
+    const standardMutationsArgsToCreateManyEntities = [
       {
         actionGeneralName: 'createManyEntities',
         entityConfig: exampleCloneConfig,
@@ -805,7 +805,7 @@ describe('workOutMutations', () => {
       resultEmptyDeleteExampleClones,
       resultToCreateExamples,
       resultEmptyDeleteExamples,
-    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
+    ] = await workOutMutations(standardMutationsArgsToCreateManyEntities, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name }) => ({ name }))).toEqual(
       dataToCreateExampleClones,
@@ -818,7 +818,7 @@ describe('workOutMutations', () => {
 
     const whereOneToDeleteManyExamples = resultToCreateExamples.map(({ id }) => ({ id }));
 
-    const standardMutationsArgsToDeleteManyThings = [
+    const standardMutationsArgsToDeleteManyEntities = [
       {
         actionGeneralName: 'deleteManyEntities',
         entityConfig: exampleCloneConfig,
@@ -837,12 +837,12 @@ describe('workOutMutations', () => {
       },
     ];
 
-    const exampleCloneSchema = createThingSchema(exampleCloneConfig);
+    const exampleCloneSchema = createEntitySchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
     await ExampleClone.createCollection();
 
-    const exampleSchema = createThingSchema(exampleConfig);
+    const exampleSchema = createEntitySchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
     await Example.createCollection();
@@ -851,7 +851,7 @@ describe('workOutMutations', () => {
     const examplesBeforeDelete = await Example.find({});
 
     const [resultToDeleteManyExampleClones, resultToDeleteManyExamples] = await workOutMutations(
-      standardMutationsArgsToDeleteManyThings,
+      standardMutationsArgsToDeleteManyEntities,
       commonResolverCreatorArg,
     );
 
@@ -885,7 +885,7 @@ describe('workOutMutations', () => {
       { name: 'Name 2', label: 'xxx' },
       { name: 'Name 3', label: 'xxx' },
     ];
-    const standardMutationsArgsToCreateManyThings = [
+    const standardMutationsArgsToCreateManyEntities = [
       {
         actionGeneralName: 'createManyEntities',
         entityConfig: exampleCloneConfig,
@@ -947,7 +947,7 @@ describe('workOutMutations', () => {
       resultToCreateExamples,
       emptyResultToCreateExamples,
       emptyResultToDeleteExamples,
-    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
+    ] = await workOutMutations(standardMutationsArgsToCreateManyEntities, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExampleClones,
@@ -963,7 +963,7 @@ describe('workOutMutations', () => {
     const whereToDeleteExampleClones = { label: 'aaa' };
     const whereToDeleteExamples = { label: 'xxx' };
 
-    const standardMutationsArgsToDeleteFilteredThings = [
+    const standardMutationsArgsToDeleteFilteredEntities = [
       {
         actionGeneralName: 'deleteFilteredEntities',
         entityConfig: exampleCloneConfig,
@@ -982,12 +982,12 @@ describe('workOutMutations', () => {
       },
     ];
 
-    const exampleCloneSchema = createThingSchema(exampleCloneConfig);
+    const exampleCloneSchema = createEntitySchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
     await ExampleClone.createCollection();
 
-    const exampleSchema = createThingSchema(exampleConfig);
+    const exampleSchema = createEntitySchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
     await Example.createCollection();
@@ -996,7 +996,10 @@ describe('workOutMutations', () => {
     const examplesBeforeDelete = await Example.find(whereToDeleteExamples);
 
     const [resultToDeleteFilteredExampleClones, resultToDeleteFilteredExamples] =
-      await workOutMutations(standardMutationsArgsToDeleteFilteredThings, commonResolverCreatorArg);
+      await workOutMutations(
+        standardMutationsArgsToDeleteFilteredEntities,
+        commonResolverCreatorArg,
+      );
 
     expect(resultToDeleteFilteredExampleClones.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExampleClones.filter(({ label }) => label === 'aaa'),
@@ -1032,7 +1035,7 @@ describe('workOutMutations', () => {
       { name: 'Name 2' },
       { name: 'Name 3' },
     ];
-    const standardMutationsArgsToCreateManyThings = [
+    const standardMutationsArgsToCreateManyEntities = [
       {
         actionGeneralName: 'createManyEntities',
         entityConfig: exampleCloneConfig,
@@ -1076,7 +1079,7 @@ describe('workOutMutations', () => {
       emptyResultToUpdateExampleClones,
       resultToCreateExamples,
       emptyResultToUpdateExamples,
-    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
+    ] = await workOutMutations(standardMutationsArgsToCreateManyEntities, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name }) => ({ name }))).toEqual(
       dataToCreateExampleClones,
@@ -1103,7 +1106,7 @@ describe('workOutMutations', () => {
       { name: 'Name updated 3' },
     ];
 
-    const standardMutationsArgsToUpdateManyThings = [
+    const standardMutationsArgsToUpdateManyEntities = [
       {
         actionGeneralName: 'updateManyEntities',
         entityConfig: exampleCloneConfig,
@@ -1129,7 +1132,7 @@ describe('workOutMutations', () => {
     ];
 
     const [resultToUpdateManyExampleClones, resultToUpdateManyExamples] = await workOutMutations(
-      standardMutationsArgsToUpdateManyThings,
+      standardMutationsArgsToUpdateManyEntities,
       commonResolverCreatorArg,
     );
 
@@ -1138,12 +1141,12 @@ describe('workOutMutations', () => {
     );
     expect(resultToUpdateManyExamples.map(({ name }) => ({ name }))).toEqual(dataToUpdateExamples);
 
-    const exampleCloneSchema = createThingSchema(exampleCloneConfig);
+    const exampleCloneSchema = createEntitySchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
     await ExampleClone.createCollection();
 
-    const exampleSchema = createThingSchema(exampleConfig);
+    const exampleSchema = createEntitySchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
     await Example.createCollection();
@@ -1173,7 +1176,7 @@ describe('workOutMutations', () => {
       { name: 'Name 2', label: '' },
       { name: 'Name 3', label: 'updateFiltered2' },
     ];
-    const standardMutationsArgsToCreateManyThings = [
+    const standardMutationsArgsToCreateManyEntities = [
       {
         actionGeneralName: 'createManyEntities',
         entityConfig: exampleCloneConfig,
@@ -1219,7 +1222,7 @@ describe('workOutMutations', () => {
       emptyResultToUpdateExampleClones,
       resultToCreateExamples,
       emptyResultToUpdateExamples,
-    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
+    ] = await workOutMutations(standardMutationsArgsToCreateManyEntities, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExampleClones,
@@ -1233,7 +1236,7 @@ describe('workOutMutations', () => {
     const dataToUpdateExampleClones = { label: 'updateFiltered updated' };
     const dataToUpdateExamples = { label: 'updateFiltered updated2' };
 
-    const standardMutationsArgsToUpdateFilteredThings = [
+    const standardMutationsArgsToUpdateFilteredEntities = [
       {
         actionGeneralName: 'updateFilteredEntities',
         entityConfig: exampleCloneConfig,
@@ -1255,7 +1258,10 @@ describe('workOutMutations', () => {
     ];
 
     const [resultToUpdateFilteredExampleClones, resultToUpdateFilteredExamples] =
-      await workOutMutations(standardMutationsArgsToUpdateFilteredThings, commonResolverCreatorArg);
+      await workOutMutations(
+        standardMutationsArgsToUpdateFilteredEntities,
+        commonResolverCreatorArg,
+      );
 
     expect(resultToUpdateFilteredExampleClones.map(({ label }) => ({ label }))).toEqual(
       dataToCreateExampleClones
@@ -1272,12 +1278,12 @@ describe('workOutMutations', () => {
         })),
     );
 
-    const exampleCloneSchema = createThingSchema(exampleCloneConfig);
+    const exampleCloneSchema = createEntitySchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
     await ExampleClone.createCollection();
 
-    const exampleSchema = createThingSchema(exampleConfig);
+    const exampleSchema = createEntitySchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
     await Example.createCollection();
@@ -1295,12 +1301,12 @@ describe('workOutMutations', () => {
   });
 
   test('should create resolvers for chain of 1 copyEntity', async () => {
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createEntitySchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.init();
     await Person.createCollection();
 
-    const personCloneSchema = createThingSchema(personCloneConfig);
+    const personCloneSchema = createEntitySchema(personCloneConfig);
     const PersonClone = mongooseConn.model('PersonClone_Thing', personCloneSchema);
     await PersonClone.init();
     await PersonClone.createCollection();
@@ -1377,22 +1383,22 @@ describe('workOutMutations', () => {
   });
 
   test('should create resolvers for chain of 1 copyEntityWithChildren', async () => {
-    const menuSchema = createThingSchema(menuConfig);
+    const menuSchema = createEntitySchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', menuSchema);
     await Menu.init();
     await Menu.createCollection();
 
-    const menuSectionSchema = createThingSchema(menuSectionConfig);
+    const menuSectionSchema = createEntitySchema(menuSectionConfig);
     const MenuSection = mongooseConn.model('MenuSection_Thing', menuSectionSchema);
     await MenuSection.init();
     await MenuSection.createCollection();
 
-    const menuCloneSchema = createThingSchema(menuCloneConfig);
+    const menuCloneSchema = createEntitySchema(menuCloneConfig);
     const MenuClone = mongooseConn.model('MenuClone_Thing', menuCloneSchema);
     await MenuClone.init();
     await MenuClone.createCollection();
 
-    const menuCloneSectionSchema = createThingSchema(menuSectionCloneConfig);
+    const menuCloneSectionSchema = createEntitySchema(menuSectionCloneConfig);
     const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
     await MenuCloneSection.init();
     await MenuCloneSection.createCollection();
@@ -1579,7 +1585,7 @@ describe('workOutMutations', () => {
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
 
-    const standardMutationsArgsToCopyManyThingsWithChildren = [
+    const standardMutationsArgsToCopyManyEntitiesWithChildren = [
       {
         actionGeneralName: 'copyManyEntitiesWithChildren',
         entityConfig: menuCloneConfig,
@@ -1595,7 +1601,7 @@ describe('workOutMutations', () => {
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const [menuClones] = await workOutMutations(
-      standardMutationsArgsToCopyManyThingsWithChildren,
+      standardMutationsArgsToCopyManyEntitiesWithChildren,
       commonResolverCreatorArg,
     );
 
@@ -1622,7 +1628,7 @@ describe('workOutMutations', () => {
     await workOutMutations(standardMutationsArgsToUpdateEntity, commonResolverCreatorArg);
 
     const [menuClones2] = await workOutMutations(
-      standardMutationsArgsToCopyManyThingsWithChildren,
+      standardMutationsArgsToCopyManyEntitiesWithChildren,
       commonResolverCreatorArg,
     );
 
@@ -1634,12 +1640,12 @@ describe('workOutMutations', () => {
   });
 
   test('regression test: workout copy', async () => {
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createEntitySchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.init();
     await Restaurant.createCollection();
 
-    const restaurantArchiveSchema = createThingSchema(restaurantArchiveConfig);
+    const restaurantArchiveSchema = createEntitySchema(restaurantArchiveConfig);
     const RestaurantArchive = mongooseConn.model(
       'RestaurantArchive_Thing',
       restaurantArchiveSchema,
@@ -1647,12 +1653,12 @@ describe('workOutMutations', () => {
     await RestaurantArchive.init();
     await RestaurantArchive.createCollection();
 
-    const restaurantCloneSchema = createThingSchema(restaurantCloneConfig);
+    const restaurantCloneSchema = createEntitySchema(restaurantCloneConfig);
     const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', restaurantCloneSchema);
     await RestaurantClone.init();
     await RestaurantClone.createCollection();
 
-    const restaurantBackupSchema = createThingSchema(restaurantBackupConfig);
+    const restaurantBackupSchema = createEntitySchema(restaurantBackupConfig);
     const RestaurantBackup = mongooseConn.model('RestaurantBackup_Thing', restaurantBackupSchema);
     await RestaurantBackup.init();
     await RestaurantBackup.createCollection();
@@ -1708,7 +1714,7 @@ describe('workOutMutations', () => {
 
     // *********
 
-    const standardMutationsArgsToCopyThing = [
+    const standardMutationsArgsToCopyEntity = [
       {
         actionGeneralName: 'copyEntity',
         entityConfig: restaurantConfig,
@@ -1757,7 +1763,7 @@ describe('workOutMutations', () => {
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const result = await workOutMutations(
-      standardMutationsArgsToCopyThing as any,
+      standardMutationsArgsToCopyEntity as any,
       commonResolverCreatorArg,
     );
 
@@ -1770,7 +1776,7 @@ describe('workOutMutations', () => {
 
     const { id: archive } = archiveRestaurant;
 
-    const standardMutationsArgsToCopyThing2 = [
+    const standardMutationsArgsToCopyEntity2 = [
       {
         actionGeneralName: 'updateEntity',
         entityConfig: restaurantCloneConfig,
@@ -1782,9 +1788,9 @@ describe('workOutMutations', () => {
       },
     ];
 
-    await workOutMutations(standardMutationsArgsToCopyThing2 as any, commonResolverCreatorArg);
+    await workOutMutations(standardMutationsArgsToCopyEntity2 as any, commonResolverCreatorArg);
 
-    await workOutMutations(standardMutationsArgsToCopyThing as any, commonResolverCreatorArg);
+    await workOutMutations(standardMutationsArgsToCopyEntity as any, commonResolverCreatorArg);
 
     {
       const standardMutationsArgs = [
@@ -1893,13 +1899,13 @@ describe('workOutMutations', () => {
       })
       .asPromise();
 
-    const Restaurant = conn.model('Restaurant_Thing', createThingSchema(restaurantConfig));
+    const Restaurant = conn.model('Restaurant_Thing', createEntitySchema(restaurantConfig));
     await Restaurant.init();
     await Restaurant.createCollection();
 
     const RestaurantBackup = conn.model(
       'RestaurantBackup_Thing',
-      createThingSchema(restaurantBackupConfig),
+      createEntitySchema(restaurantBackupConfig),
     );
     await RestaurantBackup.init(); // builds unique index on "original"
     await RestaurantBackup.createCollection();
