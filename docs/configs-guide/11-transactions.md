@@ -169,7 +169,7 @@ An item of the chain 📖:
 
 | Key | Meaning |
 |---|---|
-| `actionGeneralName` | the general name of a standard mutation: `createEntity`, `createManyEntities`, `updateEntity`, `updateManyEntities`, `updateFilteredEntities`, `deleteEntity`, `deleteManyEntities`, `deleteFilteredEntities`, `copyEntity`, `copyManyEntities` and their `…WithChildren` / `…ReturnScalar` variants |
+| `actionGeneralName` | the general name of a standard mutation: `createEntity`, `createManyEntities`, `getOrCreateEntity`, `updateEntity`, `updateManyEntities`, `updateFilteredEntities`, `deleteEntity`, `deleteManyEntities`, `deleteFilteredEntities`, `copyEntity`, `copyManyEntities` and their `…WithChildren` / `…ReturnScalar` variants |
 | `entityConfig` | the entity of the mutation, from `generalConfig.allEntityConfigs` |
 | `args` | the arguments of the mutation, as in the GraphQL API but with Mongo ids |
 | `returnResult` | required. `true`: the result of the mutation is put into the returned array; `false`: `null` is put there. The array has the order of the chain |

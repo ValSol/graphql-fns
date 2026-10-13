@@ -21,11 +21,11 @@ type CountryUpdatedPayload { updatedFields(slice: SliceInput): [String!]!  node:
 
 ### Step 2. Which mutations publish
 
-Only the single-entity mutations publish events (checked for `createX`, `updateX`, `deleteX`, `createManyXs`, `updateManyXs` ✅, the rest from the code 📖):
+Only the single-entity mutations publish events (checked for `createX`, `getOrCreateX`, `updateX`, `deleteX`, `createManyXs`, `updateManyXs` ✅, the rest from the code 📖):
 
 | Event | Published by | Not published by |
 |---|---|---|
-| `createdX` | `createX` | `createManyXs` |
+| `createdX` | `createX`, `getOrCreateX` (only when it creates the entity) | `createManyXs` |
 | `updatedX` | `updateX` | `updateManyXs`, `updateFilteredXs…` |
 | `deletedX` | `deleteX` | `deleteManyXs`, `deleteFilteredXs…`, `…WithChildren` |
 
@@ -116,7 +116,7 @@ Authorization of subscriptions runs once, when a client subscribes: the user mus
 ### Checklist
 
 - [ ] subscriptions needed → `pubsub` in the context of every call; a shared PubSub (e.g. Redis) for several server processes; not needed → `exclude: { Subscription: true }`;
-- [ ] only `createX`, `updateX`, `deleteX` publish; bulk mutations do not;
+- [ ] only `createX`, `getOrCreateX` (when it creates), `updateX`, `deleteX` publish; bulk mutations do not;
 - [ ] `wherePayload` works on all fields; an `updatedX` event comes if one state matches, the other one is `null` (an entity entered or left the set);
 - [ ] "who changed it" → a virtual actor config + `subscriptionActorConfigName` + same-named (calculated) fields of the entity; async ones listed in `allowedCalculatedWithAsyncFuncFieldNames`.
 

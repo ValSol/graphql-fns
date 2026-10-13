@@ -106,6 +106,7 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | M17 | `copyManyEntities` | `copyManyXs(sourceAndTargetAndData: [XCopySourceAndTargetAndDataInput!]!, sourceAndCompoundTargetAndData: [..!], options, token)` → `[X!]!` (****) | (**) | ❌ |
 | M18 | `copyEntityWithChildren` | `copyXWithChildren(whereKeyToSource!, options, whereTarget, whereCompoundTarget, token)` → `X!` (****) | (**) and (*) | ❌ |
 | M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(sourceAndTarget: [XCopySourceAndTargetInput!]!, sourceAndCompoundTarget: [..!], options, token)` → `[X!]!` (****) | (**) and (*) | ❌ |
+| M20 | `getOrCreateEntity` | `getOrCreateX(whereOne: XWhereOneInput[!], whereCompoundOne: XWhereCompoundOneInput, data: XCreateInput!, token)` → `X!` (`whereOne` / `whereCompoundOne` as in Q1, `data` as in M1; §4.1) | — | ✅ `created`, only if the entity is created |
 
 (*) "Children" are records X refers to through duplex fields with **`parent: true`** whose opposite field is **scalar** (`getNotArrayOppositeDuplexFields`: `parent && !oppositeArray`). The same condition (the `getChildDuplexFields` util) is used both by the schema (`actionAllowed` of all `…WithChildren` mutations, the `deleteXWithChildrenOptionsInput` enum) and at runtime (deleting with children in `processFieldToDelete`, copying the tree in `composeCreateTree`).
 (**) There is a duplex field `f` for which `getMatchingFields(X, Y)` yields at least one field other than `f` (i.e. X and Y have same-named fields that can be copied).
@@ -117,6 +118,24 @@ All mutations except `workOutMutations` are built by `composeStandardMutationRes
 **`lockedData` in `workOutMutations`** is optimistic locking (not part of the GraphQL schema). Before the mutation `checkLockedData` runs the standard query of the entity the mutation changes (for `copy…`, the X being copied into) with `lockedData.args` and compares the result with `lockedData.result`: if `result` is an object or `null`, `X(whereOne | whereCompoundOne)` is called; if it is an array, `Xs(where, sort, …)` is called and results are compared **by index**, so for arrays `lockedData.args` should include `sort`, otherwise the MongoDB order is not guaranteed and the check may fail spuriously. `whereOne` in `lockedData.args` is an argument of the `X` query, not the `whereTarget` of `copy…` mutations. ✅ `whereCompoundOne` works both in `lockedData.args` and in `args` of the mutations of `workOutMutations` (with mongo ids).
 
 Results of `…Many…` mutations are returned in the order of MongoDB, **not** in the order of `whereOne` / `whereCompoundOne` / `whereOneAndData` / `sourceAnd…Target…` items, for `whereOne` as well: ✅ `updateManyXs`, `copyManyXs` (`produceResult` reads them by `id_in`); 📖 `deleteManyXs` (returns what `getPrevious` found by `$in`/`OR`).
+
+`workOutMutations` returns `result.previous` with entities as `getPrevious` got them, without the entities created by `prepareBulkData` (the same as standard mutations). If the batch contains `getOrCreateEntity`, it is repeated once on a duplicate key error (§4.1).
+
+### 4.1. `getOrCreateEntity`
+
+✅ `getOrCreateX` returns the entity selected by `whereOne` or `whereCompoundOne` (exactly one of them, checked as in the `X` query by `checkWhereOneArgs`), or creates it from `data` like `createX`.
+
+1. **Get.** The entity is searched with the role filter of the user (as the `X` query does) inside the transaction. If it is found, it is returned as is: `data` is ignored, nothing is written, no event is published.
+2. **Create.** If it is not found, fields of `whereOne` / `whereCompoundOne` (except `id`) are added to `data` (`composeDataToCreate`), so the next call with the same args finds the created entity:
+   - scalar fields are copied, relational / duplex fields become `{ connect: id }`, array fields become arrays with the value;
+   - a value in `data` that differs from the one in `whereOne` / `whereCompoundOne` (or `create` instead of the same `connect`) throws `Value of field "…" in "data" arg conflicts with "…" arg`; a `null` field of `whereCompoundOne` is allowed only if the field is absent in `data`;
+   - then everything goes as in `createX`: `data` is checked by the role filter (`checkData`), the entity is created and the `createdX` event is published.
+3. **Concurrent creation.** If another request creates the same entity between the search and the creation, the unique index gives a duplicate key error. The mutation is repeated once (`retryOnDuplicateKey`) and returns the entity created by the other request. If the repeated attempt fails too, the entity exists but the role of the user cannot see it, and the mutation returns `null` (for `X!` the client gets a non-null error, as with other denied mutations). Without a unique index on the `whereOne` / `whereCompoundOne` fields concurrent calls may create duplicates.
+4. **Authorization.** One inventory action `getOrCreateEntity` (`Mutation: { getOrCreateEntity: [...] }`, also in `inventoryByRoles` and `representations[Key].allow`) and one role filter for both getting and creating.
+5. **`workOutMutations`.** `{ actionGeneralName: 'getOrCreateEntity', entityConfig, args: { whereOne, data } }` works in batches. All entities of a batch are searched before any write, so two `getOrCreateEntity` with the same `whereOne` in one batch both try to create the entity: with transactions the batch is repeated once and then throws the duplicate key error, so do not put the same entity twice into one batch. On a repeated duplicate key error `workOutMutations` throws it (instead of returning `null`).
+6. **Without transactions** a failed creation attempt may leave writes to linked entities, the same as `createX`.
+
+Unit tests cover all the steps with mocked MongoDB; `createGetOrCreateEntityMutationResolver.mtest.ts` checks them on MongoDB (📖: it could not be run in the environment where the mutation was written).
 
 ## 5. Subscription (for tangible `X`)
 
@@ -171,7 +190,7 @@ Runtime decorator chain ([resolver-decorators.md](./resolver-decorators.md)): `r
 
 | ID | Decision |
 |---|---|
-| DD1 | Subscription events are published only by `createEntity`, `updateEntity`, `deleteEntity`. Bulk mutations (`createMany…`, `updateMany/Filtered…`, `deleteMany/Filtered/WithChildren…`, `copy…`) publish no events. |
+| DD1 | Subscription events are published only by `createEntity`, `updateEntity`, `deleteEntity` and `getOrCreateEntity` (`created`, only if the entity is created). Bulk mutations (`createMany…`, `updateMany/Filtered…`, `deleteMany/Filtered/WithChildren…`, `copy…`) publish no events. |
 | DD2 | `freezedFields[X]` of a representation makes **exactly** the listed fields frozen (the rest get `freeze: false`, even if frozen in the base config); `unfreezedFields` works the other way round. If both are set, the last one wins. |
 | DD3 | `XCount`, `XCounts`, `XExistences`, `XDistinctValues`, `XManyDistinctValues` have no `near`: `near` not only selects but also sorts by distance, which they do not need; for selection without sorting there are the geospatial filters of `where` (e.g. `coordinates_withinSphere`). |
 | DD4 | `node(id: ID!): Node` has no `token` argument (Relay compiler requires exactly this signature: `Invalid use of @refetchable … has a node(id: ID): Node field`), so `node` takes authentication from `context` (cookies / headers) only. |
@@ -187,7 +206,7 @@ Runtime decorator chain ([resolver-decorators.md](./resolver-decorators.md)): `r
 
 | ID | Question |
 |---|---|
-| ?1 | `childEntityGetOrCreate` has `actionType: 'Query'` but may create a record: writing data in a Query field. |
+| ?1 | `childEntityGetOrCreate` has `actionType: 'Query'` but may create a record: writing data in a Query field. The root mutation `getOrCreateX` (M20, §4.1) may be a base for it. |
 | ?2 | `data` of `copy…` has type `XUpdateInput` also when a copy is created: frozen fields of a new copy cannot be set via `data`, and required X fields that are not among the common fields are not checked by the schema (the error appears only on write). |
 
 ---

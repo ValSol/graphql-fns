@@ -77,12 +77,12 @@ These are limits of the **generated** actions. Calculated fields, representation
 
 | ID | Limitation | Consequence / what to do |
 |---|---|---|
-| LM38 | 📖 The mutations have fixed shapes: `createX`, `updateX`, `deleteX`, their `…Many…` and `…Filtered…` variants, `copy…`, `…WithChildren` ([schema-and-resolvers-analysis.md](schema-and-resolvers-analysis.md) §4). There is no root upsert; the only "get or create" is a child field (`…GetOrCreate`, open question ?1 there). | Upsert: a query and then `create` / `update`, or `workOutMutations` in a transaction. |
+| LM38 | 📖 The mutations have fixed shapes: `createX`, `updateX`, `deleteX`, their `…Many…` and `…Filtered…` variants, `copy…`, `…WithChildren` ([schema-and-resolvers-analysis.md](schema-and-resolvers-analysis.md) §4). `getOrCreateX` returns the entity selected by unique fields or creates it (§4.1 there), but there is no root upsert that changes an existing entity; the child field `…GetOrCreate` is a Query (open question ?1 there). | Upsert: a query and then `create` / `update`, or `workOutMutations` in a transaction. |
 | LM39 | ✅ An update replaces the value of a field; an array (of scalars, embedded objects or links) is replaced as a whole: `connect: [...]` sets the full list ([configs-guide/02, step 7](configs-guide/02-relations.md#step-7-change-and-delete); DD7). | Adding an item = sending the whole new list. |
 | LM40 | 📖 No MongoDB update operators: no `$inc`, `$push`, `$pull`, `$addToSet`, `$min`, `$max`. A change that depends on the current value is a read and a write. | Two concurrent "+1000" lose one of them; do it in a manually created mutation with `transactions: true` (a write conflict is retried) or with your own `updateOne` with `$inc`. |
 | LM41 | 📖 The generated mutations check no version of a document: the last write wins. | `workOutMutations` with `lockedData` in a resolver of your own (9.2). |
 | LM42 | ✅ A mutation is several writes (one `bulkWrite` per collection). It is atomic only with `serversideConfig.transactions: true`, which needs a replica set; queries never run in a transaction ([configs-guide/11](configs-guide/11-transactions.md)). | — |
-| LM43 | ✅ Only `createX`, `updateX`, `deleteX` publish subscription events; bulk mutations and writes made outside the library publish nothing; MongoDB change streams are not used ([configs-guide/09, step 2](configs-guide/09-subscriptions.md#step-2-which-mutations-publish); DD1). | Clients that must see bulk changes refetch. |
+| LM43 | ✅ Only `createX`, `getOrCreateX` (when it creates the entity), `updateX`, `deleteX` publish subscription events; bulk mutations and writes made outside the library publish nothing; MongoDB change streams are not used ([configs-guide/09, step 2](configs-guide/09-subscriptions.md#step-2-which-mutations-publish); DD1). | Clients that must see bulk changes refetch. |
 
 ## 7. The GraphQL schema
 
