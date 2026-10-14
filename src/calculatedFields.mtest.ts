@@ -102,6 +102,7 @@ const declarations: SimplifiedEntityConfig[] = [
       { name: 'summary', calculatedType: 'virtualFields', configName: 'Summary', async: true },
       { name: 'editor', calculatedType: 'textFields', async: true },
       { name: 'labels', calculatedType: 'embeddedFields', configName: 'Label', array: true },
+      { name: 'letters', calculatedType: 'textFields', async: true, array: true },
       {
         name: 'sameAuthorBooks',
         calculatedType: 'filterFields',
@@ -137,6 +138,11 @@ const callbacks: ServersideConfig['calculatedFields'] = {
       func: recordFunc('labels', (args, data) =>
         data.title.split('').map((text: string) => ({ text })),
       ),
+    },
+    letters: {
+      fieldsToUseNames: ['title'],
+      asyncFunc: recordAsyncFunc('letters', (entity) => entity.title.split('')),
+      func: recordFunc('letters', pickByIndex),
     },
     sameAuthorBooks: {
       fieldsToUseNames: ['author'],
@@ -347,6 +353,27 @@ describe('calculated fields: queries', () => {
       all: [{ text: 'a' }, { text: 'b' }, { text: 'c' }],
       sliced: [{ text: 'b' }, { text: 'c' }],
     });
+  });
+
+  test('calculated async array with slice: every entity of a list gets its own result', async () => {
+    const { Books } = await run(`{
+      Books(sort: { sortBy: [title_ASC] }) {
+        all: letters
+        first: letters(slice: { end: 1 })
+        rest: letters(slice: { begin: 1 })
+        middle: letters(slice: { begin: 1, end: 2 })
+      }
+    }`);
+
+    expect(Books).toEqual(
+      ['abc', 'def', 'ghi', 'xyz'].map((title) => {
+        const letters = title.split('');
+
+        return { all: letters, first: [letters[0]], rest: letters.slice(1), middle: [letters[1]] };
+      }),
+    );
+
+    expect(asyncCalls('letters')).toEqual([expect.objectContaining({ list: true, length: 4 })]);
   });
 
   test('calculated filter field in all variants', async () => {

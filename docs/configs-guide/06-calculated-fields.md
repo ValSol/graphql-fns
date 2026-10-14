@@ -24,7 +24,7 @@ A calculated field is computed when it is read and is never stored. It is the fi
 | Property | Meaning |
 |---|---|
 | `calculatedType` | the kind of the value: `booleanFields`, `dateTimeFields`, `intFields`, `floatFields`, `textFields`, `enumFields` (+ `enumName`), `geospatialFields` (+ `geospatialType`), `embeddedFields` (+ `configName` of an embedded config), `virtualFields` (+ `configName` of a `type: 'virtual'` config, an object type that exists only in the API), `filterFields` (+ `configName` of a tangible entity) |
-| `array` | a list of such values |
+| `array` | a list of such values; the field gets the `slice` argument like any array field (step 2) ✅ |
 | `inputTypes` | arguments of the field: `{ lang: 'String!' }` → `localName(lang: String!): String` ✅ |
 | `async: true` | the field has an `asyncFunc` (step 3) |
 
@@ -64,6 +64,7 @@ const serversideConfig: ServersideConfig = {
 
 - The callbacks are keyed by entity name and field name; `composeTypeDefsAndResolvers` rejects callbacks of unknown entities / fields, `fieldsToUseNames` that are not fields of the entity, and `async` without `asyncFunc` (or the reverse) 📖.
 - `func(args, data, resolverArg, asyncFuncResult, index)` returns the value. `args` are the arguments of this field (`{ lang: 'pl' }`); aliases with different arguments work: `pl: localName(lang: "pl") en: localName(lang: "en")` ✅.
+- For an `array` field, `func` returns the whole list: graphql-fns applies `slice` to it, in every case (also for materialized values, [calculated-fields.md](../calculated-fields.md) CF20) ✅. `func` sees `slice` in `args` but does not have to use it, and `asyncFunc` is not called again for another `slice` of the same field ✅. `x(slice: { begin: 1, end: 3 })` returns the 2nd and the 3rd elements; `null` stays `null`, `[]` stays `[]`.
 - `data` is the raw entity from MongoDB: ids are Mongo ids, not global ones ✅, and only the fetched fields are there. **`fieldsToUseNames`** lists the fields the function needs: they are added to the Mongo projection even if the client does not request them ✅.
 
 ### Step 3. Async fields: one call for the whole list

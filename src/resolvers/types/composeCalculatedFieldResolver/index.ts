@@ -8,7 +8,7 @@ const fallbackResults = new WeakMap<object, Map<string, Promise<any>>>();
 
 // returns the value synchronously if it is already calculated or the root resolver left the context
 const composeCalculatedFieldResolver = (
-  { name, async }: CalculatedField,
+  { name, array, async }: CalculatedField,
   resolverCreatorArg: ResolverCreatorArg,
 ) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
@@ -49,7 +49,11 @@ const composeCalculatedFieldResolver = (
 
     const parentResults = fallbackResults.get(parent) as Map<string, Promise<any>>;
 
-    const key = `${name}:${JSON.stringify(args ?? {})}`;
+    // "composeEntityResolvers" slices the value of an array field after "func", so "asyncFunc"...
+    // ... does not depend on "slice" and its result is shared by different slices
+    const { slice, ...asyncFuncArgs } = args ?? {};
+
+    const key = `${name}:${JSON.stringify(array ? asyncFuncArgs : (args ?? {}))}`;
 
     if (!parentResults.has(key)) {
       parentResults.set(
