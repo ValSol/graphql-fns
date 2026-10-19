@@ -215,6 +215,49 @@ describe('createGetOrCreateManyEntitiesMutationResolver', () => {
     expect(await Menu.countDocuments({ title: 'Lunch' })).toBe(2);
   });
 
+  test('should get the same existing entity selected by "id" & then by "email"', async () => {
+    const { _id: id } = await Person.create({ email: 'nia@b.c', name: 'Nia' });
+
+    const result = await getOrCreateManyPeople(
+      null,
+      {
+        whereOneAndData: [
+          { whereOne: { id }, data: { name: 'Other' } },
+          { whereOne: { email: 'nia@b.c' }, data: { name: 'Other' } },
+        ],
+      },
+      { mongooseConn, pubsub },
+      null,
+      fullAccess,
+    );
+
+    expect(result.map((item) => item.id.toString())).toEqual([id.toString(), id.toString()]);
+    expect(result.map(({ name }) => name)).toEqual(['Nia', 'Nia']);
+    expect(await Person.countDocuments({ email: 'nia@b.c' })).toBe(1);
+  });
+
+  test('should create once entity selected by not found "id" with "email" in "data" & then by this "email"', async () => {
+    const id = new mongoose.Types.ObjectId();
+
+    const result = await getOrCreateManyPeople(
+      null,
+      {
+        whereOneAndData: [
+          { whereOne: { id }, data: { email: 'oli@b.c', name: 'Oli' } },
+          { whereOne: { email: 'oli@b.c' }, data: { name: 'Other' } },
+        ],
+      },
+      { mongooseConn, pubsub },
+      null,
+      fullAccess,
+    );
+
+    expect(result).toHaveLength(2);
+    expect(result[1].id.toString()).toBe(result[0].id.toString());
+    expect(result[0]).toMatchObject({ email: 'oli@b.c', name: 'Oli' });
+    expect(await Person.countDocuments({ email: 'oli@b.c' })).toBe(1);
+  });
+
   test('should match found entities by "Int" & "DateTime" fields of "whereCompoundOne"', async () => {
     const getOrCreateManySlots = createGetOrCreateManyEntitiesMutationResolver(
       slotConfig,

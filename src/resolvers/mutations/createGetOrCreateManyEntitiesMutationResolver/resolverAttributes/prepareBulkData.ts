@@ -4,6 +4,7 @@ import type { PrepareBulkData, PreparedData } from '@/resolvers/tsTypes';
 import processCreateInputData from '@/resolvers/mutations/processCreateInputData';
 import composeDataToCreate from '../../createGetOrCreateEntityMutationResolver/resolverAttributes/composeDataToCreate';
 import composeItems from './composeItems';
+import composeUniqueKeys from './composeUniqueKeys';
 import foundItemsByResolverArg from './foundItemsByResolverArg';
 
 const sortKeys = (value: any): any =>
@@ -18,11 +19,13 @@ const sortKeys = (value: any): any =>
 
 // the same key for items that select the same entity
 const composeWhereKey = ({ whereOne, whereCompoundOne }: Record<string, any>) =>
-  JSON.stringify(sortKeys(whereOne || whereCompoundOne));
+  JSON.stringify(['where', sortKeys(whereOne || whereCompoundOne)]);
 
 // found entities are not changed, not found ones are created; "mains" get entities in the order of items;...
-// ... a not found entity selected by several items is created once (by the first of them, "data" of...
-// ... the rest is not used) and all these items get it
+// ... a not found entity is created once for several items (by the first of them, "data" of the rest...
+// ... is not used) and all these items get it, if the items have the same selector or entities...
+// ... created by them would have the same value of a unique field (or of fields of a unique compound...
+// ... index), e.g. one item selects by "id" & sets "email" in "data", other one selects by this "email"
 const prepareBulkData: PrepareBulkData = (resolverCreatorArg, resolverArg, prevPreparedData) => {
   const { entityConfig } = resolverCreatorArg;
   const { args } = resolverArg;
@@ -41,7 +44,7 @@ const prepareBulkData: PrepareBulkData = (resolverCreatorArg, resolverArg, prevP
   let preparedData: PreparedData = { ...prevPreparedData, mains: [] };
   let j = 0;
 
-  // index in "mains" of the entity created for the "where" key
+  // index in "mains" of the entity created for the selector or unique key
   const createdIndexes: Record<string, number> = {};
 
   items.forEach((item, i) => {
@@ -52,18 +55,31 @@ const prepareBulkData: PrepareBulkData = (resolverCreatorArg, resolverArg, prevP
       return;
     }
 
-    const whereKey = composeWhereKey(item);
+    const dataToCreate = composeDataToCreate(item, entityConfig);
 
-    if (createdIndexes[whereKey] !== undefined) {
-      preparedData.mains.push(preparedData.mains[createdIndexes[whereKey]]);
+    const keys = [composeWhereKey(item), ...composeUniqueKeys(dataToCreate, entityConfig)];
+
+    const createdKey = keys.find((key) => createdIndexes[key] !== undefined);
+
+    if (createdKey) {
+      const index = createdIndexes[createdKey];
+
+      // other keys of the item (e.g. its selector) also select the created entity
+      keys.forEach((key) => {
+        if (createdIndexes[key] === undefined) createdIndexes[key] = index;
+      });
+
+      preparedData.mains.push(preparedData.mains[index]);
 
       return;
     }
 
-    createdIndexes[whereKey] = preparedData.mains.length;
+    keys.forEach((key) => {
+      createdIndexes[key] = preparedData.mains.length;
+    });
 
     preparedData = processCreateInputData(
-      composeDataToCreate(item, entityConfig),
+      dataToCreate,
       preparedData,
       entityConfig as TangibleEntityConfig,
       'create',

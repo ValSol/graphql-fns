@@ -363,6 +363,95 @@ describe('getOrCreateManyEntities prepareBulkData', () => {
     expect(preparedData.mains[1]).toBe(preparedData.mains[0]);
   });
 
+  test('should get the same existing entity selected by "id" & then by "email"', async () => {
+    const id = new Types.ObjectId('5f85d2a8ac4bc4a3c6a2fa67');
+    const bob = { _id: id, email: 'bob@b.c', name: 'Bob' };
+    db[bob.email] = bob;
+
+    const resolverArg = composeResolverArg({
+      whereOneAndData: [
+        { whereOne: { id: id.toString() }, data: { name: 'Other' } },
+        { whereOne: { email: 'bob@b.c' }, data: { name: 'Other' } },
+      ],
+    });
+
+    const { previous, preparedData } = await getAndPrepare(resolverArg);
+
+    expect(find).toHaveBeenCalledTimes(1);
+    expect(checkDataMock).not.toHaveBeenCalled();
+    expect(insertedDocuments(preparedData)).toEqual([]);
+    expect(previous).toEqual([bob, bob]);
+    expect(preparedData.mains).toEqual([bob, bob]);
+  });
+
+  test('should create once entity selected by not found "id" with "email" in "data" & then by this "email"', async () => {
+    const resolverArg = composeResolverArg({
+      whereOneAndData: [
+        { whereOne: { id: '5f85d2a8ac4bc4a3c6a2fa68' }, data: { email: 'new@b.c', name: 'First' } },
+        { whereOne: { email: 'new@b.c' }, data: { name: 'Second' } },
+        { whereOne: { id: '5f85d2a8ac4bc4a3c6a2fa68' }, data: { email: 'new@b.c' } },
+      ],
+    });
+
+    const { preparedData } = await getAndPrepare(resolverArg);
+
+    const inserted = insertedDocuments(preparedData);
+
+    expect(inserted).toHaveLength(1);
+    expect(inserted[0]).toMatchObject({ email: 'new@b.c', name: 'First' });
+    expect(preparedData.mains).toEqual([inserted[0], inserted[0], inserted[0]]);
+  });
+
+  test('should create once entity selected by "email" & then by not found "id" with this "email" in "data"', async () => {
+    const resolverArg = composeResolverArg({
+      whereOneAndData: [
+        { whereOne: { email: 'new@b.c' }, data: { name: 'First' } },
+        { whereOne: { id: '5f85d2a8ac4bc4a3c6a2fa68' }, data: { email: 'new@b.c' } },
+      ],
+    });
+
+    const { preparedData } = await getAndPrepare(resolverArg);
+
+    const inserted = insertedDocuments(preparedData);
+
+    expect(inserted).toHaveLength(1);
+    expect(inserted[0]).toMatchObject({ email: 'new@b.c', name: 'First' });
+    expect(preparedData.mains).toEqual([inserted[0], inserted[0]]);
+  });
+
+  test('should create once entity with the same fields of unique compound index in "data"', async () => {
+    const resolverArg = composeResolverArg({
+      whereOneAndData: [
+        { whereOne: { email: 'ann@b.c' }, data: { firstName: 'Ann', lastName: 'Lee' } },
+        { whereOne: { email: 'ann2@b.c' }, data: { lastName: 'Lee', firstName: 'Ann' } },
+        { whereOne: { email: 'bob@b.c' }, data: { firstName: 'Bob', lastName: 'Lee' } },
+      ],
+    });
+
+    const { preparedData } = await getAndPrepare(resolverArg);
+
+    const inserted = insertedDocuments(preparedData);
+
+    expect(inserted).toHaveLength(2);
+    expect(inserted[0]).toMatchObject({ email: 'ann@b.c', firstName: 'Ann' });
+    expect(inserted[1]).toMatchObject({ email: 'bob@b.c', firstName: 'Bob' });
+    expect(preparedData.mains).toEqual([inserted[0], inserted[0], inserted[1]]);
+  });
+
+  test('should create different entities for different unique values', async () => {
+    const resolverArg = composeResolverArg({
+      whereOneAndData: [
+        { whereOne: { id: '5f85d2a8ac4bc4a3c6a2fa68' }, data: { email: 'a@b.c' } },
+        { whereOne: { id: '5f85d2a8ac4bc4a3c6a2fa69' }, data: { email: 'b@b.c' } },
+        { whereOne: { id: '5f85d2a8ac4bc4a3c6a2fa6a' }, data: { name: 'No unique fields' } },
+      ],
+    });
+
+    const { preparedData } = await getAndPrepare(resolverArg);
+
+    expect(insertedDocuments(preparedData)).toHaveLength(3);
+  });
+
   test('should throw if "getPrevious" was not called with the same "resolverArg"', () => {
     const resolverArg = composeResolverArg({ whereOneAndData: [] });
 
