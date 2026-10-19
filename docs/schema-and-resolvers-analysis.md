@@ -136,7 +136,7 @@ Results of `…Many…` mutations are returned in the order of MongoDB, **not** 
 5. **`workOutMutations`.** `{ actionGeneralName: 'getOrCreateEntity', entityConfig, args: { whereOne, data } }` works in batches. All entities of a batch are searched before any write, so two `getOrCreateEntity` with the same `whereOne` in one batch both try to create the entity: with transactions the batch is repeated once and then throws the duplicate key error, so do not put the same entity twice into one batch. On a repeated duplicate key error `workOutMutations` throws it (instead of returning `null`).
 6. **Without transactions** a failed creation attempt may leave writes to linked entities, the same as `createX`.
 
-Unit tests cover all the steps with mocked MongoDB; `createGetOrCreateEntityMutationResolver.mtest.ts` checks them on MongoDB (📖: it could not be run in the environment where the mutation was written).
+Unit tests cover all the steps with mocked MongoDB; `createGetOrCreateEntityMutationResolver.mtest.ts` checks them on MongoDB ✅.
 
 ### 4.2. `getOrCreateManyEntities`
 
@@ -159,7 +159,7 @@ mutation {
 6. **`workOutMutations`**: `{ actionGeneralName: 'getOrCreateManyEntities', entityConfig, args: { whereOneAndData: [...] } }`. `getPrevious` returns only the found entities (`result.previous`); it tells `prepareBulkData` which items are found through a `WeakMap` keyed by the `resolverArg` of the call. `prepareBulkData` puts the found and the created entities into `mains` in the order of items, reusing the array got from `getPrevious`, because `workOutMutations` produces the result from it.
 7. **Global ids**: items go through `transformPairedItems`, as items of `updateManyXs` (`…WhereOneAndCreateDataInput`, `…WhereCompoundOneAndCreateDataInput`).
 
-Unit tests: `createGetOrCreateManyEntitiesMutationResolver/resolverAttributes/resolverAttributes.test.ts`, `globalIds.test.ts`, `workOutMutations.getOrCreate.test.ts`, `schema.test.ts`; `createGetOrCreateManyEntitiesMutationResolver.mtest.ts` checks them on MongoDB (📖: it could not be run in the environment where the mutation was written).
+Unit tests: `createGetOrCreateManyEntitiesMutationResolver/resolverAttributes/resolverAttributes.test.ts`, `globalIds.test.ts`, `workOutMutations.getOrCreate.test.ts`, `schema.test.ts`; `createGetOrCreateManyEntitiesMutationResolver.mtest.ts` checks them on MongoDB ✅.
 
 ## 5. Subscription (for tangible `X`)
 
