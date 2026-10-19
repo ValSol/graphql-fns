@@ -1,11 +1,11 @@
 import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
-import getOrCreateEntitiesMutationAttributes from '@/types/actionAttributes/getOrCreateEntitiesMutationAttributes';
+import getOrCreateManyEntitiesMutationAttributes from '@/types/actionAttributes/getOrCreateManyEntitiesMutationAttributes';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import resolverDecorator from '@/resolvers/utils/resolverDecorator';
 import toGlobalId from '@/resolvers/utils/toGlobalId';
 
-describe('global ids in args of "getOrCreateEntities"', () => {
+describe('global ids in args of "getOrCreateManyEntities"', () => {
   const allEntityConfigs = composeAllEntityConfigs([
     {
       name: 'Person',
@@ -27,8 +27,8 @@ describe('global ids in args of "getOrCreateEntities"', () => {
 
     const resolver = resolverDecorator(
       func,
-      ['Mutation', 'getOrCreateEntities', 'Person'],
-      getOrCreateEntitiesMutationAttributes,
+      ['Mutation', 'getOrCreateManyEntities', 'Person'],
+      getOrCreateManyEntitiesMutationAttributes,
       personConfig,
       generalConfig,
       {},

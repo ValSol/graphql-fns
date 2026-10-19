@@ -10,10 +10,10 @@ import createStringInputType from '../inputs/createStringInputType';
 const actionType = 'Mutation';
 
 const actionGeneralName = (representationKey = ''): string =>
-  `getOrCreateEntities${representationKey}`;
+  `getOrCreateManyEntities${representationKey}`;
 
 const actionName = (baseName: string, representationKey = ''): string =>
-  `getOrCreate${pluralize(baseName)}${representationKey}`;
+  `getOrCreateMany${pluralize(baseName)}${representationKey}`;
 
 // every item pairs "whereOne" ("whereCompoundOne") of "getOrCreateEntity" with its "data"
 const inputCreators = [
@@ -52,7 +52,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
   `[${name}${representationKey}!]!`;
 
-const getOrCreateEntitiesMutationAttributes = {
+const getOrCreateManyEntitiesMutationAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -65,4 +65,4 @@ const getOrCreateEntitiesMutationAttributes = {
   actionAllowed,
 } as const;
 
-export default getOrCreateEntitiesMutationAttributes;
+export default getOrCreateManyEntitiesMutationAttributes;

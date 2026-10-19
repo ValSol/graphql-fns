@@ -3,7 +3,7 @@ import type { EntityConfig, InputCreator } from '../../tsTypes';
 import createEntityCreateInputType from './createEntityCreateInputType';
 import createEntityWhereCompoundOneInputType from './createEntityWhereCompoundOneInputType';
 
-// item of the "whereCompoundOneAndData" arg of "getOrCreateEntities" (alternative to "whereOneAndData")
+// item of the "whereCompoundOneAndData" arg of "getOrCreateManyEntities" (alternative to "whereOneAndData")
 const createEntityWhereCompoundOneAndCreateDataInputType: InputCreator = (entityConfig) => {
   const { name } = entityConfig;
 

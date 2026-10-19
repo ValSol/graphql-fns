@@ -1002,10 +1002,10 @@ type Mutation {
   deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection!
   deleteMenuWithChildren(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, options: deleteMenuWithChildrenOptionsInput, token: String): Menu!
   deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): MenuClone!
-  getOrCreateMenus(whereOneAndData: [MenuWhereOneAndCreateDataInput!], whereCompoundOneAndData: [MenuWhereCompoundOneAndCreateDataInput!], token: String): [Menu!]!
-  getOrCreateMenuClones(whereOneAndData: [MenuCloneWhereOneAndCreateDataInput!]!, token: String): [MenuClone!]!
-  getOrCreateMenuSections(whereOneAndData: [MenuSectionWhereOneAndCreateDataInput!]!, token: String): [MenuSection!]!
-  getOrCreateMenuCloneSections(whereOneAndData: [MenuCloneSectionWhereOneAndCreateDataInput!]!, token: String): [MenuCloneSection!]!
+  getOrCreateManyMenus(whereOneAndData: [MenuWhereOneAndCreateDataInput!], whereCompoundOneAndData: [MenuWhereCompoundOneAndCreateDataInput!], token: String): [Menu!]!
+  getOrCreateManyMenuClones(whereOneAndData: [MenuCloneWhereOneAndCreateDataInput!]!, token: String): [MenuClone!]!
+  getOrCreateManyMenuSections(whereOneAndData: [MenuSectionWhereOneAndCreateDataInput!]!, token: String): [MenuSection!]!
+  getOrCreateManyMenuCloneSections(whereOneAndData: [MenuCloneSectionWhereOneAndCreateDataInput!]!, token: String): [MenuCloneSection!]!
   getOrCreateMenu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, data: MenuCreateInput!, token: String): Menu!
   getOrCreateMenuClone(whereOne: MenuCloneWhereOneInput!, data: MenuCloneCreateInput!, token: String): MenuClone!
   getOrCreateMenuSection(whereOne: MenuSectionWhereOneInput!, data: MenuSectionCreateInput!, token: String): MenuSection!
@@ -1577,8 +1577,8 @@ type Mutation {
   deleteManyExample2s(whereOne: [Example2WhereOneInput!]!, token: String): [Example2!]!
   deleteExample1(whereOne: Example1WhereOneInput!, token: String): Example1!
   deleteExample2(whereOne: Example2WhereOneInput!, token: String): Example2!
-  getOrCreateExample1s(whereOneAndData: [Example1WhereOneAndCreateDataInput!]!, token: String): [Example1!]!
-  getOrCreateExample2s(whereOneAndData: [Example2WhereOneAndCreateDataInput!]!, token: String): [Example2!]!
+  getOrCreateManyExample1s(whereOneAndData: [Example1WhereOneAndCreateDataInput!]!, token: String): [Example1!]!
+  getOrCreateManyExample2s(whereOneAndData: [Example2WhereOneAndCreateDataInput!]!, token: String): [Example2!]!
   getOrCreateExample1(whereOne: Example1WhereOneInput!, data: Example1CreateInput!, token: String): Example1!
   getOrCreateExample2(whereOne: Example2WhereOneInput!, data: Example2CreateInput!, token: String): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
@@ -2073,8 +2073,8 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
-  getOrCreatePeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
-  getOrCreatePlaces(whereOneAndData: [PlaceWhereOneAndCreateDataInput!]!, token: String): [Place!]!
+  getOrCreateManyPeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
+  getOrCreateManyPlaces(whereOneAndData: [PlaceWhereOneAndCreateDataInput!]!, token: String): [Place!]!
   getOrCreatePerson(whereOne: PersonWhereOneInput!, data: PersonCreateInput!, token: String): Person!
   getOrCreatePlace(whereOne: PlaceWhereOneInput!, data: PlaceCreateInput!, token: String): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
@@ -2462,7 +2462,7 @@ type Mutation {
   deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
-  getOrCreatePeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
+  getOrCreateManyPeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
   getOrCreatePerson(whereOne: PersonWhereOneInput!, data: PersonCreateInput!, token: String): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
@@ -3028,8 +3028,8 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
-  getOrCreatePeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
-  getOrCreatePlaces(whereOneAndData: [PlaceWhereOneAndCreateDataInput!]!, token: String): [Place!]!
+  getOrCreateManyPeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
+  getOrCreateManyPlaces(whereOneAndData: [PlaceWhereOneAndCreateDataInput!]!, token: String): [Place!]!
   getOrCreatePerson(whereOne: PersonWhereOneInput!, data: PersonCreateInput!, token: String): Person!
   getOrCreatePlace(whereOne: PlaceWhereOneInput!, data: PlaceCreateInput!, token: String): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
@@ -3278,7 +3278,7 @@ type Mutation {
   deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, token: String): Int!
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!, token: String): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
-  getOrCreateExamples(whereOneAndData: [ExampleWhereOneAndCreateDataInput!]!, token: String): [Example!]!
+  getOrCreateManyExamples(whereOneAndData: [ExampleWhereOneAndCreateDataInput!]!, token: String): [Example!]!
   getOrCreateExample(whereOne: ExampleWhereOneInput!, data: ExampleCreateInput!, token: String): Example!
   updateFilteredExamples(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): [Example!]!
   updateFilteredExamplesReturnScalar(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): Int!

@@ -61,7 +61,7 @@ beforeEach(() => {
 
 const getAndPrepare = async (resolverArg: any) => {
   const previous = await getPrevious(
-    'getOrCreateEntities',
+    'getOrCreateManyEntities',
     resolverCreatorArg,
     resolverArg,
     session,
@@ -83,10 +83,10 @@ const insertedDocuments = (preparedData: any) =>
     .filter((item: any) => item.insertOne)
     .map(({ insertOne: { document } }: any) => document);
 
-describe('getOrCreateEntities resolverAttributes', () => {
+describe('getOrCreateManyEntities resolverAttributes', () => {
   test('should be array mutation without reports that retries on duplicate key', () => {
     expect(resolverAttributes).toMatchObject({
-      actionGeneralName: 'getOrCreateEntities',
+      actionGeneralName: 'getOrCreateManyEntities',
       array: true,
       produceCurrent: true,
       retryOnDuplicateKey: true,
@@ -100,7 +100,7 @@ describe('getOrCreateEntities resolverAttributes', () => {
   });
 });
 
-describe('getOrCreateEntities getPrevious', () => {
+describe('getOrCreateManyEntities getPrevious', () => {
   test('should return only found entities & check creation of not found ones', async () => {
     const resolverArg = composeResolverArg({
       whereOneAndData: [
@@ -110,7 +110,7 @@ describe('getOrCreateEntities getPrevious', () => {
     });
 
     const result = await getPrevious(
-      'getOrCreateEntities',
+      'getOrCreateManyEntities',
       resolverCreatorArg,
       resolverArg,
       session,
@@ -137,7 +137,7 @@ describe('getOrCreateEntities getPrevious', () => {
       [[{ owner: 'user1' }]],
     );
 
-    await getPrevious('getOrCreateEntities', resolverCreatorArg, resolverArg, session);
+    await getPrevious('getOrCreateManyEntities', resolverCreatorArg, resolverArg, session);
 
     expect(findOne.mock.calls[0][0]).toEqual({
       $and: [{ email: { $eq: 'a@b.c' } }, { owner: { $eq: 'user1' } }],
@@ -152,7 +152,7 @@ describe('getOrCreateEntities getPrevious', () => {
     });
 
     const result = await getPrevious(
-      'getOrCreateEntities',
+      'getOrCreateManyEntities',
       resolverCreatorArg,
       resolverArg,
       session,
@@ -181,7 +181,7 @@ describe('getOrCreateEntities getPrevious', () => {
     });
 
     const result = await getPrevious(
-      'getOrCreateEntities',
+      'getOrCreateManyEntities',
       resolverCreatorArg,
       resolverArg,
       session,
@@ -197,7 +197,7 @@ describe('getOrCreateEntities getPrevious', () => {
     );
 
     const result = await getPrevious(
-      'getOrCreateEntities',
+      'getOrCreateManyEntities',
       resolverCreatorArg,
       resolverArg,
       session,
@@ -211,14 +211,14 @@ describe('getOrCreateEntities getPrevious', () => {
     const resolverArg = composeResolverArg({ whereOneAndData: [] });
 
     expect(
-      await getPrevious('getOrCreateEntities', resolverCreatorArg, resolverArg, session),
+      await getPrevious('getOrCreateManyEntities', resolverCreatorArg, resolverArg, session),
     ).toEqual([]);
   });
 
   test('should throw if both or none of items args are got', async () => {
     await expect(
       getPrevious(
-        'getOrCreateEntities',
+        'getOrCreateManyEntities',
         resolverCreatorArg,
         composeResolverArg({ whereOneAndData: [], whereCompoundOneAndData: [] }),
         session,
@@ -228,7 +228,7 @@ describe('getOrCreateEntities getPrevious', () => {
     );
 
     await expect(
-      getPrevious('getOrCreateEntities', resolverCreatorArg, composeResolverArg({}), session),
+      getPrevious('getOrCreateManyEntities', resolverCreatorArg, composeResolverArg({}), session),
     ).rejects.toThrow('Expected "whereCompoundOneAndData" or "whereOneAndData" input!');
   });
 
@@ -241,7 +241,7 @@ describe('getOrCreateEntities getPrevious', () => {
     });
 
     await expect(
-      getPrevious('getOrCreateEntities', resolverCreatorArg, resolverArg, session),
+      getPrevious('getOrCreateManyEntities', resolverCreatorArg, resolverArg, session),
     ).rejects.toThrow('Expected exactly one key in whereOne arg!');
 
     expect(findOne).not.toHaveBeenCalled();
@@ -253,12 +253,12 @@ describe('getOrCreateEntities getPrevious', () => {
     });
 
     await expect(
-      getPrevious('getOrCreateEntities', resolverCreatorArg, resolverArg, session),
+      getPrevious('getOrCreateManyEntities', resolverCreatorArg, resolverArg, session),
     ).rejects.toThrow('Value of field "email" in "data" arg conflicts with "whereOne" arg');
   });
 });
 
-describe('getOrCreateEntities prepareBulkData', () => {
+describe('getOrCreateManyEntities prepareBulkData', () => {
   test('should create not found entities & keep the order of items', async () => {
     const resolverArg = composeResolverArg({
       whereOneAndData: [
@@ -357,6 +357,6 @@ describe('getOrCreateEntities prepareBulkData', () => {
         { core: new Map(), periphery: new Map(), mains: [] },
         session,
       ),
-    ).toThrow('Not got found items of "getOrCreateEntities" from "getPrevious"!');
+    ).toThrow('Not got found items of "getOrCreateManyEntities" from "getPrevious"!');
   });
 });

@@ -3,8 +3,8 @@ import type { ResolverAttributes } from '@/resolvers/tsTypes';
 import getPrevious from './getPrevious';
 import prepareBulkData from './prepareBulkData';
 
-const getOrCreateEntitiesResolverAttributes: ResolverAttributes = {
-  actionGeneralName: 'getOrCreateEntities',
+const getOrCreateManyEntitiesResolverAttributes: ResolverAttributes = {
+  actionGeneralName: 'getOrCreateManyEntities',
   array: true,
   getPrevious,
   produceCurrent: true,
@@ -15,4 +15,4 @@ const getOrCreateEntitiesResolverAttributes: ResolverAttributes = {
   retryOnDuplicateKey: true,
 };
 
-export default getOrCreateEntitiesResolverAttributes;
+export default getOrCreateManyEntitiesResolverAttributes;

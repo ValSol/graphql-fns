@@ -25,7 +25,7 @@ Only the single-entity mutations publish events (checked for `createX`, `getOrCr
 
 | Event | Published by | Not published by |
 |---|---|---|
-| `createdX` | `createX`, `getOrCreateX` (only when it creates the entity) | `createManyXs`, `getOrCreateXs` |
+| `createdX` | `createX`, `getOrCreateX` (only when it creates the entity) | `createManyXs`, `getOrCreateManyXs` |
 | `updatedX` | `updateX` | `updateManyXs`, `updateFilteredXs…` |
 | `deletedX` | `deleteX` | `deleteManyXs`, `deleteFilteredXs…`, `…WithChildren` |
 
@@ -116,7 +116,7 @@ Authorization of subscriptions runs once, when a client subscribes: the user mus
 ### Checklist
 
 - [ ] subscriptions needed → `pubsub` in the context of every call; a shared PubSub (e.g. Redis) for several server processes; not needed → `exclude: { Subscription: true }`;
-- [ ] only `createX`, `getOrCreateX` (when it creates), `updateX`, `deleteX` publish; bulk mutations (`getOrCreateXs` too) do not;
+- [ ] only `createX`, `getOrCreateX` (when it creates), `updateX`, `deleteX` publish; bulk mutations (`getOrCreateManyXs` too) do not;
 - [ ] `wherePayload` works on all fields; an `updatedX` event comes if one state matches, the other one is `null` (an entity entered or left the set);
 - [ ] "who changed it" → a virtual actor config + `subscriptionActorConfigName` + same-named (calculated) fields of the entity; async ones listed in `allowedCalculatedWithAsyncFuncFieldNames`.
 

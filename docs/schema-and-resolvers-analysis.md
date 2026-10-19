@@ -107,20 +107,20 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | M18 | `copyEntityWithChildren` | `copyXWithChildren(whereKeyToSource!, options, whereTarget, whereCompoundTarget, token)` → `X!` (****) | (**) and (*) | ❌ |
 | M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(sourceAndTarget: [XCopySourceAndTargetInput!]!, sourceAndCompoundTarget: [..!], options, token)` → `[X!]!` (****) | (**) and (*) | ❌ |
 | M20 | `getOrCreateEntity` | `getOrCreateX(whereOne: XWhereOneInput[!], whereCompoundOne: XWhereCompoundOneInput, data: XCreateInput!, token)` → `X!` (`whereOne` / `whereCompoundOne` as in Q1, `data` as in M1; §4.1) | — | ✅ `created`, only if the entity is created |
-| M21 | `getOrCreateEntities` | `getOrCreateXs(whereOneAndData: [XWhereOneAndCreateDataInput!][!], whereCompoundOneAndData: [XWhereCompoundOneAndCreateDataInput!], token)` → `[X!]!` (items pair `whereOne` / `whereCompoundOne` with `data: XCreateInput!`; results in the order of items; §4.2) | — | ❌ |
+| M21 | `getOrCreateManyEntities` | `getOrCreateManyXs(whereOneAndData: [XWhereOneAndCreateDataInput!][!], whereCompoundOneAndData: [XWhereCompoundOneAndCreateDataInput!], token)` → `[X!]!` (items pair `whereOne` / `whereCompoundOne` with `data: XCreateInput!`; results in the order of items; §4.2) | — | ❌ |
 
 (*) "Children" are records X refers to through duplex fields with **`parent: true`** whose opposite field is **scalar** (`getNotArrayOppositeDuplexFields`: `parent && !oppositeArray`). The same condition (the `getChildDuplexFields` util) is used both by the schema (`actionAllowed` of all `…WithChildren` mutations, the `deleteXWithChildrenOptionsInput` enum) and at runtime (deleting with children in `processFieldToDelete`, copying the tree in `composeCreateTree`).
 (**) There is a duplex field `f` for which `getMatchingFields(X, Y)` yields at least one field other than `f` (i.e. X and Y have same-named fields that can be copied).
-(***) ✅ If X has `uniqueCompoundIndexes`, `whereOne` loses `!` (`XWhereOneInput` / `[XWhereOneInput!]`) and `whereCompoundOne: XWhereCompoundOneInput` (`[XWhereCompoundOneInput!]` for `…Many…`) is added, as in Q1. Exactly one of the two is required at runtime. `updateManyXs` and `getOrCreateXs` have `whereOneAndData` / `whereCompoundOneAndData` instead: items pair the selector with `data` ([paired-items-args.md](./paired-items-args.md)). Items of `whereCompoundOne` may use different indexes, mixing `whereOne` and `whereCompoundOne` in one call is not possible. Not found by `whereCompoundOne` gives the same result as not found by `whereOne`. Details: [where-compound-one.md](./where-compound-one.md).
+(***) ✅ If X has `uniqueCompoundIndexes`, `whereOne` loses `!` (`XWhereOneInput` / `[XWhereOneInput!]`) and `whereCompoundOne: XWhereCompoundOneInput` (`[XWhereCompoundOneInput!]` for `…Many…`) is added, as in Q1. Exactly one of the two is required at runtime. `updateManyXs` and `getOrCreateManyXs` have `whereOneAndData` / `whereCompoundOneAndData` instead: items pair the selector with `data` ([paired-items-args.md](./paired-items-args.md)). Items of `whereCompoundOne` may use different indexes, mixing `whereOne` and `whereCompoundOne` in one call is not possible. Not found by `whereCompoundOne` gives the same result as not found by `whereOne`. Details: [where-compound-one.md](./where-compound-one.md).
 (****) ✅ `whereCompoundTarget` (alternative to `whereTarget`, exactly one of them or none) exists if X can be a copy target and has `uniqueCompoundIndexes`; not found → `Not found "X" entity to copy to: …`, as for `whereTarget`. `whereKeyToSource` has no compound variant (DD11). In `copyMany…` the source, the target and `data` are paired in items of `sourceAndTarget…` / `sourceAndCompoundTarget…` ([paired-items-args.md](./paired-items-args.md)).
 
 All mutations except `workOutMutations` are built by `composeStandardMutationResolver(resolverAttributes)`: the loop `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, then `produceResult`, `report` (publishing to pubsub) and `finalResult`. The whole transaction is retried (up to 7 attempts with backoff) only for errors labelled `TransientTransactionError` / `WriteConflict` and only when `serversideConfig.transactions` is enabled; on `UnknownTransactionCommitResult` only `commitTransaction` is retried. Other errors are rethrown as is. The same rule applies to `workOutMutations`.
 
 **`lockedData` in `workOutMutations`** is optimistic locking (not part of the GraphQL schema). Before the mutation `checkLockedData` runs the standard query of the entity the mutation changes (for `copy…`, the X being copied into) with `lockedData.args` and compares the result with `lockedData.result`: if `result` is an object or `null`, `X(whereOne | whereCompoundOne)` is called; if it is an array, `Xs(where, sort, …)` is called and results are compared **by index**, so for arrays `lockedData.args` should include `sort`, otherwise the MongoDB order is not guaranteed and the check may fail spuriously. `whereOne` in `lockedData.args` is an argument of the `X` query, not the `whereTarget` of `copy…` mutations. ✅ `whereCompoundOne` works both in `lockedData.args` and in `args` of the mutations of `workOutMutations` (with mongo ids).
 
-Results of `…Many…` mutations are returned in the order of MongoDB, **not** in the order of `whereOne` / `whereCompoundOne` / `whereOneAndData` / `sourceAnd…Target…` items, for `whereOne` as well: ✅ `updateManyXs`, `copyManyXs` (`produceResult` reads them by `id_in`); 📖 `deleteManyXs` (returns what `getPrevious` found by `$in`/`OR`). ✅ `getOrCreateXs` is the exception: its results are in the order of items (§4.2).
+Results of `…Many…` mutations are returned in the order of MongoDB, **not** in the order of `whereOne` / `whereCompoundOne` / `whereOneAndData` / `sourceAnd…Target…` items, for `whereOne` as well: ✅ `updateManyXs`, `copyManyXs` (`produceResult` reads them by `id_in`); 📖 `deleteManyXs` (returns what `getPrevious` found by `$in`/`OR`). ✅ `getOrCreateManyXs` is the exception: its results are in the order of items (§4.2).
 
-`workOutMutations` returns `result.previous` with entities as `getPrevious` got them, without the entities created by `prepareBulkData` (the same as standard mutations). If the batch contains `getOrCreateEntity` or `getOrCreateEntities`, it is repeated once on a duplicate key error (§4.1, §4.2).
+`workOutMutations` returns `result.previous` with entities as `getPrevious` got them, without the entities created by `prepareBulkData` (the same as standard mutations). If the batch contains `getOrCreateEntity` or `getOrCreateManyEntities`, it is repeated once on a duplicate key error (§4.1, §4.2).
 
 ### 4.1. `getOrCreateEntity`
 
@@ -138,13 +138,13 @@ Results of `…Many…` mutations are returned in the order of MongoDB, **not** 
 
 Unit tests cover all the steps with mocked MongoDB; `createGetOrCreateEntityMutationResolver.mtest.ts` checks them on MongoDB (📖: it could not be run in the environment where the mutation was written).
 
-### 4.2. `getOrCreateEntities`
+### 4.2. `getOrCreateManyEntities`
 
-✅ `getOrCreateXs` is to `getOrCreateX` what `createManyXs` is to `createX`: it gets or creates several entities in one transaction.
+✅ `getOrCreateManyXs` is to `getOrCreateX` what `createManyXs` is to `createX`: it gets or creates several entities in one transaction.
 
 ```graphql
 mutation {
-  getOrCreatePeople(whereOneAndData: [
+  getOrCreateManyPeople(whereOneAndData: [
     { whereOne: { email: "ann@b.c" }, data: { name: "Ann" } }
     { whereOne: { id: "<global id>" }, data: { email: "bob@b.c", name: "Bob" } }
   ]) { id email name }
@@ -154,12 +154,12 @@ mutation {
 1. **Args.** Every item pairs the selector with `data`, as in `updateManyXs` ([paired-items-args.md](./paired-items-args.md)): `input XWhereOneAndCreateDataInput { whereOne: XWhereOneInput!  data: XCreateInput! }`, `input XWhereCompoundOneAndCreateDataInput { whereCompoundOne: XWhereCompoundOneInput!  data: XCreateInput! }`. `whereCompoundOneAndData` exists only with `uniqueCompoundIndexes`, then `whereOneAndData` loses `!`; exactly one of the two args is required (`Expected exactly one input from "whereOneAndData" && "whereCompoundOneAndData"!`, `Expected "whereCompoundOneAndData" or "whereOneAndData" input!`). The selectors of all items are checked (`checkWhereOneArgs`) before any search.
 2. **Every item** works as `getOrCreateX` (§4.1): the entity is searched with the role filter; a found entity is returned as is; for a not found one the fields of the selector are added to `data` (a conflict throws), and `data` is checked by the role filter. If the creation of any entity is not allowed, the whole mutation returns `null` and writes nothing.
 3. **Results** are in the order of items (unlike other `…Many…` mutations), so the client matches them by index. Several items that select the same not found entity (the same `whereOne`, including the same `id`, or the same `whereCompoundOne` with keys in any order) create it once, with `data` of the first of them, and all these items return it.
-4. **No events**: like `createManyXs`, `getOrCreateXs` publishes no `createdX` events (DD1).
-5. **Concurrent creation** and **authorization** are as in `getOrCreateX`: one retry on a duplicate key error, then `null`; one inventory action `getOrCreateEntities` and one role filter for getting and creating.
-6. **`workOutMutations`**: `{ actionGeneralName: 'getOrCreateEntities', entityConfig, args: { whereOneAndData: [...] } }`. `getPrevious` returns only the found entities (`result.previous`); it tells `prepareBulkData` which items are found through a `WeakMap` keyed by the `resolverArg` of the call. `prepareBulkData` puts the found and the created entities into `mains` in the order of items, reusing the array got from `getPrevious`, because `workOutMutations` produces the result from it.
+4. **No events**: like `createManyXs`, `getOrCreateManyXs` publishes no `createdX` events (DD1).
+5. **Concurrent creation** and **authorization** are as in `getOrCreateX`: one retry on a duplicate key error, then `null`; one inventory action `getOrCreateManyEntities` and one role filter for getting and creating.
+6. **`workOutMutations`**: `{ actionGeneralName: 'getOrCreateManyEntities', entityConfig, args: { whereOneAndData: [...] } }`. `getPrevious` returns only the found entities (`result.previous`); it tells `prepareBulkData` which items are found through a `WeakMap` keyed by the `resolverArg` of the call. `prepareBulkData` puts the found and the created entities into `mains` in the order of items, reusing the array got from `getPrevious`, because `workOutMutations` produces the result from it.
 7. **Global ids**: items go through `transformPairedItems`, as items of `updateManyXs` (`…WhereOneAndCreateDataInput`, `…WhereCompoundOneAndCreateDataInput`).
 
-Unit tests: `createGetOrCreateEntitiesMutationResolver/resolverAttributes/resolverAttributes.test.ts`, `globalIds.test.ts`, `workOutMutations.getOrCreate.test.ts`, `schema.test.ts`; `createGetOrCreateEntitiesMutationResolver.mtest.ts` checks them on MongoDB (📖: it could not be run in the environment where the mutation was written).
+Unit tests: `createGetOrCreateManyEntitiesMutationResolver/resolverAttributes/resolverAttributes.test.ts`, `globalIds.test.ts`, `workOutMutations.getOrCreate.test.ts`, `schema.test.ts`; `createGetOrCreateManyEntitiesMutationResolver.mtest.ts` checks them on MongoDB (📖: it could not be run in the environment where the mutation was written).
 
 ## 5. Subscription (for tangible `X`)
 
@@ -213,7 +213,7 @@ Runtime decorator chain ([resolver-decorators.md](./resolver-decorators.md)): `r
 
 | ID | Decision |
 |---|---|
-| DD1 | Subscription events are published only by `createEntity`, `updateEntity`, `deleteEntity` and `getOrCreateEntity` (`created`, only if the entity is created). Bulk mutations (`createMany…`, `getOrCreateEntities`, `updateMany/Filtered…`, `deleteMany/Filtered/WithChildren…`, `copy…`) publish no events. |
+| DD1 | Subscription events are published only by `createEntity`, `updateEntity`, `deleteEntity` and `getOrCreateEntity` (`created`, only if the entity is created). Bulk mutations (`createMany…`, `getOrCreateManyEntities`, `updateMany/Filtered…`, `deleteMany/Filtered/WithChildren…`, `copy…`) publish no events. |
 | DD2 | `freezedFields[X]` of a representation makes **exactly** the listed fields frozen (the rest get `freeze: false`, even if frozen in the base config); `unfreezedFields` works the other way round. If both are set, the last one wins. |
 | DD3 | `XCount`, `XCounts`, `XExistences`, `XDistinctValues`, `XManyDistinctValues` have no `near`: `near` not only selects but also sorts by distance, which they do not need; for selection without sorting there are the geospatial filters of `where` (e.g. `coordinates_withinSphere`). |
 | DD4 | `node(id: ID!): Node` has no `token` argument (Relay compiler requires exactly this signature: `Invalid use of @refetchable … has a node(id: ID): Node field`), so `node` takes authentication from `context` (cookies / headers) only. |

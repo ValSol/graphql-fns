@@ -748,7 +748,7 @@ export type InventoryOptions = {
     | true
     | {
         // 'mutationName' may be: 'copyEntity', 'createEntity', 'createManyEntities', 'updateManyEntities', 'updateEntity', 'deleteEntity', ...
-        // ... 'getOrCreateEntity', 'getOrCreateEntities' or custom mutation
+        // ... 'getOrCreateEntity', 'getOrCreateManyEntities' or custom mutation
 
         [mutationName: string]: entityNamesList;
       };
@@ -797,7 +797,7 @@ export type RepresentationAttributesActionName =
   | 'deleteManyEntitiesWithChildren'
   | 'deleteEntity'
   | 'deleteEntityWithChildren'
-  | 'getOrCreateEntities'
+  | 'getOrCreateManyEntities'
   | 'getOrCreateEntity'
   | 'updateFilteredEntities'
   | 'updateFilteredEntitiesReturnScalar'

@@ -65,7 +65,7 @@ describe('getTransformerAndConfig', () => {
     expect(result).toEqual([transformData, null]);
   });
 
-  test('should return transformer for list of paired items of "getOrCreateEntities"', () => {
+  test('should return transformer for list of paired items of "getOrCreateManyEntities"', () => {
     expect(getTransformerAndConfig('[PersonWhereOneAndCreateDataInput!]', generalConfig)).toEqual([
       transformPairedItems,
       personConfig,

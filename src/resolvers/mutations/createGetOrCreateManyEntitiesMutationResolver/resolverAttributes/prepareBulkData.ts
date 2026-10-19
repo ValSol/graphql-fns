@@ -30,7 +30,7 @@ const prepareBulkData: PrepareBulkData = (resolverCreatorArg, resolverArg, prevP
   const foundItems = foundItemsByResolverArg.get(resolverArg);
 
   if (!foundItems) {
-    throw new TypeError('Not got found items of "getOrCreateEntities" from "getPrevious"!');
+    throw new TypeError('Not got found items of "getOrCreateManyEntities" from "getPrevious"!');
   }
 
   const items = composeItems(args);

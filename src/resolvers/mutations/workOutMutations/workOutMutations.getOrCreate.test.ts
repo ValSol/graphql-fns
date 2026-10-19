@@ -179,7 +179,7 @@ describe('workOutMutations with "getOrCreateEntity"', () => {
 });
 
 const getOrCreateMany = (items: Array<[string, string]>) => ({
-  actionGeneralName: 'getOrCreateEntities',
+  actionGeneralName: 'getOrCreateManyEntities',
   entityConfig: personConfig,
   args: {
     whereOneAndData: items.map(([email, name]) => ({ whereOne: { email }, data: { name } })),
@@ -189,7 +189,7 @@ const getOrCreateMany = (items: Array<[string, string]>) => ({
   returnReport: true,
 });
 
-describe('workOutMutations with "getOrCreateEntities"', () => {
+describe('workOutMutations with "getOrCreateManyEntities"', () => {
   test('should get & create entities in the order of items without events', async () => {
     const [result] = await workOutMutations(
       [

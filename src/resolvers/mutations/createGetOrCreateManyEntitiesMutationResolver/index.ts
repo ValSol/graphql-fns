@@ -10,7 +10,7 @@ type Result = (
   inAnyCase?: boolean,
 ) => any | null;
 
-const createGetOrCreateEntitiesMutationResolver: Result =
+const createGetOrCreateManyEntitiesMutationResolver: Result =
   composeStandardMutationResolver(resolverAttributes);
 
-export default createGetOrCreateEntitiesMutationResolver;
+export default createGetOrCreateManyEntitiesMutationResolver;

@@ -126,7 +126,7 @@ describe('unwindInverntoryOptions', () => {
       deleteFilteredEntities: ['Example', 'ChildExample'],
       deleteFilteredEntitiesReturnScalar: ['Example', 'ChildExample'],
       deleteManyEntities: ['Example', 'ChildExample'],
-      getOrCreateEntities: ['Example', 'ChildExample'],
+      getOrCreateManyEntities: ['Example', 'ChildExample'],
       getOrCreateEntity: ['Example', 'ChildExample'],
       updateEntity: ['Example', 'ChildExample'],
       updateEntityForCatalog: ['Example'],

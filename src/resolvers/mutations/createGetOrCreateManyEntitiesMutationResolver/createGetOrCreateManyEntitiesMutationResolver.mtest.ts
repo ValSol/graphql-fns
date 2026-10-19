@@ -6,7 +6,7 @@ import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 import mongoOptions from '../../../test/mongo-options';
 import createEntitySchema from '../../../mongooseModels/createEntitySchema';
 import workOutMutations from '../workOutMutations';
-import createGetOrCreateEntitiesMutationResolver from './index';
+import createGetOrCreateManyEntitiesMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -23,7 +23,7 @@ afterAll(async () => {
   await mongoose.disconnect();
 });
 
-describe('createGetOrCreateEntitiesMutationResolver', () => {
+describe('createGetOrCreateManyEntitiesMutationResolver', () => {
   const serversideConfig = { transactions: true };
 
   const personConfig: TangibleEntityConfig = {
@@ -72,20 +72,20 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
     pubsub.publish.mockClear();
   });
 
-  const getOrCreatePeople = createGetOrCreateEntitiesMutationResolver(
+  const getOrCreateManyPeople = createGetOrCreateManyEntitiesMutationResolver(
     personConfig,
     generalConfig,
     serversideConfig,
   );
 
-  const getOrCreateMenus = createGetOrCreateEntitiesMutationResolver(
+  const getOrCreateManyMenus = createGetOrCreateManyEntitiesMutationResolver(
     menuConfig,
     generalConfig,
     serversideConfig,
   );
 
   test('should create entities with "whereOne" fields & then get them', async () => {
-    const created = await getOrCreatePeople(
+    const created = await getOrCreateManyPeople(
       null,
       {
         whereOneAndData: [
@@ -102,7 +102,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
     expect(created[0]).toMatchObject({ email: 'ann@b.c', name: 'Ann' });
     expect(created[1]).toMatchObject({ email: 'bob@b.c', name: 'Bob' });
 
-    const got = await getOrCreatePeople(
+    const got = await getOrCreateManyPeople(
       null,
       {
         whereOneAndData: [
@@ -127,7 +127,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
   test('should get & create entities in the order of items', async () => {
     const { _id: id } = await Person.create({ email: 'carl@b.c', name: 'Carl' });
 
-    const result = await getOrCreatePeople(
+    const result = await getOrCreateManyPeople(
       null,
       {
         whereOneAndData: [
@@ -151,7 +151,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
   });
 
   test('should create once entity selected by several items', async () => {
-    const result = await getOrCreatePeople(
+    const result = await getOrCreateManyPeople(
       null,
       {
         whereOneAndData: [
@@ -171,7 +171,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
   });
 
   test('should create & get entities by "whereCompoundOne"', async () => {
-    const created = await getOrCreateMenus(
+    const created = await getOrCreateManyMenus(
       null,
       {
         whereCompoundOneAndData: [
@@ -187,7 +187,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
     expect(created[0]).toMatchObject({ title: 'Lunch', lang: 'en', description: 'Daily' });
     expect(created[1]).toMatchObject({ title: 'Lunch', lang: 'uk' });
 
-    const got = await getOrCreateMenus(
+    const got = await getOrCreateManyMenus(
       null,
       {
         whereCompoundOneAndData: [{ whereCompoundOne: { title: 'Lunch', lang: 'en' }, data: {} }],
@@ -203,7 +203,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
 
   test('should throw on "data" that conflicts with "whereOne" without any writes', async () => {
     await expect(
-      getOrCreatePeople(
+      getOrCreateManyPeople(
         null,
         {
           whereOneAndData: [
@@ -223,7 +223,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
   });
 
   test('should return "null" without access', async () => {
-    const result = await getOrCreatePeople(
+    const result = await getOrCreateManyPeople(
       null,
       { whereOneAndData: [{ whereOne: { email: 'ian@b.c' }, data: {} }] },
       { mongooseConn, pubsub },
@@ -238,7 +238,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
   test('should return "null" if existing entity is not available for user', async () => {
     await Person.create({ email: 'jan@b.c', name: 'Jan', owner: 'user1' });
 
-    const result = await getOrCreatePeople(
+    const result = await getOrCreateManyPeople(
       null,
       {
         whereOneAndData: [
@@ -266,7 +266,7 @@ describe('createGetOrCreateEntitiesMutationResolver', () => {
     const [many, one] = await workOutMutations(
       [
         {
-          actionGeneralName: 'getOrCreateEntities',
+          actionGeneralName: 'getOrCreateManyEntities',
           entityConfig: personConfig,
           args: {
             whereOneAndData: [
