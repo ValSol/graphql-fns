@@ -34,6 +34,9 @@ let db: Record<string, any> = {};
 
 const findOne = jest.fn(async (where) => db[where.email?.$eq] || null);
 
+// "getOrCreateManyEntities" gets entities by one query & matches them with items in memory
+const find = jest.fn(async (...args: any[]) => Object.values(db));
+
 const publish = jest.fn();
 
 const commonResolverCreatorArg = {
@@ -77,9 +80,10 @@ const insertedDocuments = (callIndex = 0) =>
 beforeEach(() => {
   db = { [existing.email]: existing };
   findOne.mockClear();
+  find.mockClear();
   publish.mockClear();
   executeBulkItemsMock.mockReset();
-  (createMongooseModel as jest.Mock).mockResolvedValue({ findOne });
+  (createMongooseModel as jest.Mock).mockResolvedValue({ findOne, find });
 });
 
 describe('workOutMutations with "getOrCreateEntity"', () => {
@@ -209,6 +213,10 @@ describe('workOutMutations with "getOrCreateManyEntities"', () => {
     expect(documents[1]).toMatchObject({ email: 'new2@b.c', name: 'New2' });
     expect(result).toEqual([documents[0], existing, documents[1]]);
     expect(publish).not.toHaveBeenCalled();
+
+    // all items are searched by one query
+    expect(find).toHaveBeenCalledTimes(1);
+    expect(findOne).not.toHaveBeenCalled();
   });
 
   test('should work in one batch with "getOrCreateEntity"', async () => {

@@ -47,8 +47,17 @@ describe('createGetOrCreateManyEntitiesMutationResolver', () => {
     uniqueCompoundIndexes: [['title', 'lang']],
   };
 
+  const slotConfig: TangibleEntityConfig = {
+    name: 'Slot',
+    type: 'tangible',
+    intFields: [{ name: 'room', type: 'intFields' }],
+    dateTimeFields: [{ name: 'start', type: 'dateTimeFields' }],
+    textFields: [{ name: 'note', type: 'textFields' }],
+    uniqueCompoundIndexes: [['room', 'start']],
+  };
+
   const generalConfig: GeneralConfig = {
-    allEntityConfigs: { Person: personConfig, Menu: menuConfig },
+    allEntityConfigs: { Person: personConfig, Menu: menuConfig, Slot: slotConfig },
   };
 
   const pubsub = { publish: jest.fn<(channel: string, payload: any) => void>() };
@@ -57,6 +66,7 @@ describe('createGetOrCreateManyEntitiesMutationResolver', () => {
 
   let Person;
   let Menu;
+  let Slot;
 
   beforeAll(async () => {
     Person = mongooseConn.model('Person_Thing', createEntitySchema(personConfig));
@@ -66,6 +76,10 @@ describe('createGetOrCreateManyEntitiesMutationResolver', () => {
     Menu = mongooseConn.model('Menu_Thing', createEntitySchema(menuConfig));
     await Menu.init(); // build unique compound index
     await Menu.createCollection();
+
+    Slot = mongooseConn.model('Slot_Thing', createEntitySchema(slotConfig));
+    await Slot.init(); // build unique compound index
+    await Slot.createCollection();
   });
 
   beforeEach(() => {
@@ -199,6 +213,47 @@ describe('createGetOrCreateManyEntitiesMutationResolver', () => {
 
     expect(got[0].id.toString()).toBe(created[0].id.toString());
     expect(await Menu.countDocuments({ title: 'Lunch' })).toBe(2);
+  });
+
+  test('should match found entities by "Int" & "DateTime" fields of "whereCompoundOne"', async () => {
+    const getOrCreateManySlots = createGetOrCreateManyEntitiesMutationResolver(
+      slotConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    const existing = await Slot.create({
+      room: 1,
+      start: new Date('2026-01-01T10:00:00.000Z'),
+      note: 'Existing',
+    });
+
+    const result = await getOrCreateManySlots(
+      null,
+      {
+        whereCompoundOneAndData: [
+          {
+            whereCompoundOne: { room: 1, start: new Date('2026-01-01T11:00:00.000Z') },
+            data: { note: 'New' },
+          },
+          {
+            whereCompoundOne: { start: new Date('2026-01-01T10:00:00.000Z'), room: 1 },
+            data: { note: 'Other' },
+          },
+          {
+            whereCompoundOne: { room: 2, start: new Date('2026-01-01T10:00:00.000Z') },
+            data: { note: 'New2' },
+          },
+        ],
+      },
+      { mongooseConn, pubsub },
+      null,
+      fullAccess,
+    );
+
+    expect(result.map(({ note }) => note)).toEqual(['New', 'Existing', 'New2']);
+    expect(result[1].id.toString()).toBe(existing._id.toString());
+    expect(await Slot.countDocuments({})).toBe(3);
   });
 
   test('should throw on "data" that conflicts with "whereOne" without any writes', async () => {

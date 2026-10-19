@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 import type { TangibleEntityConfig } from '@/tsTypes';
 
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
@@ -45,18 +47,19 @@ const composeResolverArg = (args: Record<string, any>, filter: any = [[]]) =>
 
 const existing = { _id: 'existing-id', email: 'old@b.c', name: 'Old' };
 
-// "db" of found entities by "email"
+// "db" of existing entities by "email"
 let db: Record<string, any> = {};
 
-const findOne = jest.fn(async (where: any, ...rest: any[]) => db[where.email?.$eq] || null);
+// entities are matched with items in memory, so the mock returns all of them
+const find = jest.fn(async (where: any, ...rest: any[]) => Object.values(db));
 
 const checkDataMock = checkData as jest.Mock;
 
 beforeEach(() => {
   db = { [existing.email]: existing };
-  findOne.mockClear();
+  find.mockClear();
   checkDataMock.mockClear();
-  (createMongooseModel as jest.Mock).mockResolvedValue({ findOne });
+  (createMongooseModel as jest.Mock).mockResolvedValue({ find });
 });
 
 const getAndPrepare = async (resolverArg: any) => {
@@ -117,8 +120,8 @@ describe('getOrCreateManyEntities getPrevious', () => {
     );
 
     expect(result).toEqual([existing]);
-    expect(findOne).toHaveBeenCalledTimes(2);
-    expect(findOne.mock.calls[0][2]).toEqual({ lean: true, session });
+    expect(find).toHaveBeenCalledTimes(1);
+    expect(find.mock.calls[0][2]).toEqual({ lean: true, session });
     expect(checkDataMock).toHaveBeenCalledTimes(1);
 
     const [resolverCreatorArg2, resolverArg2, filter, processingKind, session2] =
@@ -133,14 +136,28 @@ describe('getOrCreateManyEntities getPrevious', () => {
 
   test('should search with filter of user role', async () => {
     const resolverArg = composeResolverArg(
-      { whereOneAndData: [{ whereOne: { email: 'a@b.c' }, data: {} }] },
+      {
+        whereOneAndData: [
+          { whereOne: { email: 'a@b.c' }, data: {} },
+          { whereOne: { id: '5f85d2a8ac4bc4a3c6a2fa65' }, data: {} },
+        ],
+      },
       [[{ owner: 'user1' }]],
     );
 
     await getPrevious('getOrCreateManyEntities', resolverCreatorArg, resolverArg, session);
 
-    expect(findOne.mock.calls[0][0]).toEqual({
-      $and: [{ email: { $eq: 'a@b.c' } }, { owner: { $eq: 'user1' } }],
+    expect(find).toHaveBeenCalledTimes(1);
+    expect(find.mock.calls[0][0]).toEqual({
+      $and: [
+        {
+          $or: [
+            { email: { $eq: 'a@b.c' } },
+            { _id: { $eq: new Types.ObjectId('5f85d2a8ac4bc4a3c6a2fa65') } },
+          ],
+        },
+        { owner: { $eq: 'user1' } },
+      ],
     });
   });
 
@@ -159,9 +176,8 @@ describe('getOrCreateManyEntities getPrevious', () => {
     );
 
     expect(result).toEqual([]);
-    expect(findOne.mock.calls[0][0]).toEqual({
-      firstName: { $eq: 'Ann' },
-      lastName: { $eq: 'Lee' },
+    expect(find.mock.calls[0][0]).toEqual({
+      $or: [{ firstName: { $eq: 'Ann' }, lastName: { $eq: 'Lee' } }],
     });
     expect(checkDataMock.mock.calls[0][1].args.data).toEqual({
       firstName: 'Ann',
@@ -204,7 +220,7 @@ describe('getOrCreateManyEntities getPrevious', () => {
     );
 
     expect(result).toBeNull();
-    expect(findOne).not.toHaveBeenCalled();
+    expect(find).not.toHaveBeenCalled();
   });
 
   test('should return "[]" for empty items', async () => {
@@ -244,7 +260,7 @@ describe('getOrCreateManyEntities getPrevious', () => {
       getPrevious('getOrCreateManyEntities', resolverCreatorArg, resolverArg, session),
     ).rejects.toThrow('Expected exactly one key in whereOne arg!');
 
-    expect(findOne).not.toHaveBeenCalled();
+    expect(find).not.toHaveBeenCalled();
   });
 
   test('should throw on "data" that conflicts with "whereOne"', async () => {
