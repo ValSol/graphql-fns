@@ -1,10 +1,8 @@
-import { DataObject, GraphqlObject, InvolvedFilter, TangibleEntityConfig } from '@/tsTypes';
+import { GraphqlObject, InvolvedFilter, TangibleEntityConfig } from '@/tsTypes';
 import type { GetPrevious } from '@/resolvers/tsTypes';
 
-import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import getInputAndOutputFilters from '@/resolvers/utils/getInputAndOutputFilters';
-import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
-import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import findEntities from '@/resolvers/utils/findEntities';
 import checkData from '@/resolvers/mutations/checkData';
 
 const getPrevious: GetPrevious = async (
@@ -13,13 +11,11 @@ const getPrevious: GetPrevious = async (
   resolverArg,
   session,
 ) => {
-  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
+  const { entityConfig } = resolverCreatorArg;
   const {
     args,
-    context,
     resolverOptions: { involvedFilters },
   } = resolverArg;
-  const { enums } = generalConfig;
 
   const { inputFilter, outputFilter } = getInputAndOutputFilters(involvedFilters);
 
@@ -35,16 +31,11 @@ const getPrevious: GetPrevious = async (
   const whereOne = whereOneAndData.map(({ whereOne: whereOneItem }) => whereOneItem);
   const data = whereOneAndData.map(({ data: dataItem }) => dataItem);
 
-  const [whereKey] = Object.keys(whereOne[0]);
-
-  const incorrectWhreOneItem = whereOne.find((item) => !item[whereKey]);
-  if (incorrectWhreOneItem) {
-    throw new TypeError(
-      `Incorrect key in whereOne item: "${JSON.stringify(
-        incorrectWhreOneItem,
-      )}" instead of "${whereKey}"!`,
-    );
-  }
+  whereOne.forEach((item) => {
+    if (Object.keys(item).length !== 1) {
+      throw new TypeError(`Expected exactly one key in whereOne item: "${JSON.stringify(item)}"!`);
+    }
+  });
 
   const processingKind = 'update';
   for (let i = 0; i < data.length; i += 1) {
@@ -59,10 +50,6 @@ const getPrevious: GetPrevious = async (
     if (!allowUpdate) return null;
   }
 
-  const { mongooseConn } = context;
-
-  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
-
   const { duplexFields } = entityConfig as TangibleEntityConfig;
   const duplexFieldsProjection = duplexFields
     ? duplexFields.reduce(
@@ -70,58 +57,38 @@ const getPrevious: GetPrevious = async (
           prev[name2] = 1;
           return prev;
         },
-        { _id: 1 },
+        { _id: 1 } as Record<string, 1>,
       )
     : {};
 
-  if (whereKey !== 'id') {
-    duplexFieldsProjection[whereKey] = 1;
-  }
-
-  const { lookups, where: whereOne2 } = mergeWhereAndFilter(
+  // items may select entities by different keys (e.g. "id" in one item & "email" in other one)
+  const previousEntities = await findEntities(
+    whereOne,
     inputFilter,
-    { OR: whereOne },
-    entityConfig,
+    resolverCreatorArg,
+    resolverArg,
+    session,
+    duplexFieldsProjection,
   );
 
-  let whereOne3 = whereOne2;
+  if (previousEntities.some((entity) => !entity)) return null;
 
-  if (lookups.length) {
-    const pipeline = composeAggregateHead({ where: whereOne2, lookups });
+  // the same entity can't be updated by several items in one call
+  const indexesById: Record<string, number> = {};
 
-    pipeline.push({ $project: { _id: 1 } });
+  previousEntities.forEach((entity, i) => {
+    const id = String(entity!._id);
 
-    const entities = await (session
-      ? Entity.aggregate(pipeline).session(session).exec()
-      : Entity.aggregate(pipeline).exec());
+    if (indexesById[id] !== undefined) {
+      throw new TypeError(
+        `Got the same "${entityConfig.name}" entity in items ${indexesById[id]} & ${i} of "whereOneAndData"!`,
+      );
+    }
 
-    if (!entities || entities.length !== whereOne.length) return null;
-
-    whereOne3 = { _id: { $in: entities.map(({ _id }) => _id) } };
-  }
-
-  const previousEntities: DataObject[] = await Entity.find(whereOne3, duplexFieldsProjection, {
-    lean: true,
-    session,
+    indexesById[id] = i;
   });
 
-  if (!previousEntities || previousEntities.length !== whereOne.length) return null;
-
-  const whereKey2 = whereKey === 'id' ? '_id' : whereKey;
-
-  const previousentitiesObject = previousEntities.reduce(
-    (prev, entity) => {
-      prev[entity[whereKey2]] = entity;
-      return prev;
-    },
-    {} as { [id: string]: DataObject },
-  );
-
-  const result = whereOne.map(
-    ({ [whereKey]: key }) => previousentitiesObject[key as unknown as string] as GraphqlObject,
-  );
-
-  return result;
+  return previousEntities as GraphqlObject[];
 };
 
 export default getPrevious;

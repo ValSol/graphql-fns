@@ -4,7 +4,7 @@ import type { TangibleEntityConfig } from '@/tsTypes';
 
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
-import findEntities from './findEntities';
+import findEntities from '.';
 
 jest.mock('@/mongooseModels/createMongooseModel', () => ({ __esModule: true, default: jest.fn() }));
 

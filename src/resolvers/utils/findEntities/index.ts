@@ -15,13 +15,15 @@ import matchWhere from './matchWhere';
 
 // return for every "where" ("whereOne" or "whereCompoundOne" of an item) the entity it selects among...
 // ... entities available by "filter" or "null" if it is not found; all entities are got by one query...
-// ... (and one "aggregate" if "filter" needs lookups) & then matched with "wheres" in memory
+// ... (and one "aggregate" if "filter" needs lookups) & then matched with "wheres" in memory, so...
+// ... items may use different keys; without "projection" the fields requested by "info" are got
 const findEntities = async (
   wheres: InvolvedFilter[],
   filter: InvolvedFilter[],
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   session: any,
+  projectionToUse?: Record<string, 1>,
 ): Promise<Array<null | Record<string, any>>> => {
   if (wheres.length === 0) return [];
 
@@ -50,12 +52,14 @@ const findEntities = async (
     where2 = { _id: { $in: ids.map(({ _id }) => _id) } };
   }
 
-  const projection = adaptProjectionForCalculatedFields(
-    getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg),
-    getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
-    generalConfig,
-    serversideConfig,
-  );
+  const projection =
+    projectionToUse ||
+    adaptProjectionForCalculatedFields(
+      getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg),
+      getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
+      generalConfig,
+      serversideConfig,
+    );
 
   // fields of "wheres" are needed to match entities with "wheres"
   const projection2 =

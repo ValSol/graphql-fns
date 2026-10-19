@@ -4,7 +4,7 @@ import type { TangibleEntityConfig } from '@/tsTypes';
 
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
-import findEntities from './findEntities';
+import findEntities from '.';
 
 jest.mock('@/mongooseModels/createMongooseModel', () => ({ __esModule: true, default: jest.fn() }));
 
@@ -49,6 +49,7 @@ const find = jest.fn(async (...args: any[]) => [lee, ann]);
 
 beforeEach(() => {
   find.mockClear();
+  (getProjectionFromInfo as jest.Mock).mockClear();
   (createMongooseModel as jest.Mock).mockClear().mockResolvedValue({ find });
 });
 
@@ -94,6 +95,20 @@ describe('findEntities', () => {
     );
 
     expect(find.mock.calls[0][1]).toEqual({ name: 1, email: 1, lastName: 1, birthday: 1 });
+  });
+
+  test('should use got projection with fields of "wheres" instead of requested fields', async () => {
+    await findEntities(
+      [{ email: 'ann@b.c' }, { id: id2.toString() }],
+      [],
+      resolverCreatorArg,
+      composeResolverArg(),
+      session,
+      { _id: 1, friend: 1 },
+    );
+
+    expect(getProjectionFromInfo).not.toHaveBeenCalled();
+    expect(find.mock.calls[0][1]).toEqual({ _id: 1, friend: 1, email: 1 });
   });
 
   test('should not query db without "wheres"', async () => {

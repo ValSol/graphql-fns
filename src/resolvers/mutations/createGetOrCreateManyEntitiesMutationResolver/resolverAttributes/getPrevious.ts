@@ -6,7 +6,7 @@ import checkWhereOneArgs from '@/resolvers/utils/checkWhereOneArgs';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import composeDataToCreate from '../../createGetOrCreateEntityMutationResolver/resolverAttributes/composeDataToCreate';
 import composeItems from './composeItems';
-import findEntities from './findEntities';
+import findEntities from '@/resolvers/utils/findEntities';
 import foundItemsByResolverArg from './foundItemsByResolverArg';
 
 // return found entities (in the order of items) after checking that all not found entities may be created

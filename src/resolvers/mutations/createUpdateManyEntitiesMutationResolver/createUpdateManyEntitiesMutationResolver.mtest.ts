@@ -1319,3 +1319,97 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
     expect(updatedPosts2).toBe(null);
   });
 });
+
+describe('createUpdateManyEntitiesMutationResolver with different selectors', () => {
+  const memberConfig: TangibleEntityConfig = {
+    name: 'Member',
+    type: 'tangible',
+    textFields: [
+      { name: 'email', unique: true, type: 'textFields' },
+      { name: 'name', type: 'textFields' },
+    ],
+  };
+
+  const generalConfig: GeneralConfig = { allEntityConfigs: { Member: memberConfig } };
+
+  const fullAccess = { involvedFilters: { inputOutputFilterAndLimit: [[]] } };
+
+  let Member;
+
+  beforeAll(async () => {
+    Member = mongooseConn.model('Member_Thing', createEntitySchema(memberConfig));
+    await Member.init(); // build unique index on "email"
+    await Member.createCollection();
+  });
+
+  const updateManyMembers = createUpdateManyEntitiesMutationResolver(memberConfig, generalConfig, {
+    transactions: true,
+  });
+
+  test('should update entities selected by "id" & by "email" in one call', async () => {
+    const { _id: annId } = await Member.create({ email: 'ann@b.c', name: 'Ann' });
+    await Member.create({ email: 'bob@b.c', name: 'Bob' });
+
+    const result = await updateManyMembers(
+      null,
+      {
+        whereOneAndData: [
+          { whereOne: { email: 'bob@b.c' }, data: { name: 'Bob 2' } },
+          { whereOne: { id: annId }, data: { name: 'Ann 2' } },
+        ],
+      },
+      { mongooseConn, pubsub },
+      null,
+      fullAccess,
+    );
+
+    expect(result.map(({ email, name }) => [email, name])).toEqual([
+      ['bob@b.c', 'Bob 2'],
+      ['ann@b.c', 'Ann 2'],
+    ]);
+
+    expect((await Member.findOne({ email: 'ann@b.c' }).lean()).name).toBe('Ann 2');
+    expect((await Member.findOne({ email: 'bob@b.c' }).lean()).name).toBe('Bob 2');
+  });
+
+  test('should throw if the same entity is selected by "id" & by "email"', async () => {
+    const { _id: id } = await Member.create({ email: 'cat@b.c', name: 'Cat' });
+
+    await expect(
+      updateManyMembers(
+        null,
+        {
+          whereOneAndData: [
+            { whereOne: { id }, data: { name: 'Cat 2' } },
+            { whereOne: { email: 'cat@b.c' }, data: { name: 'Cat 3' } },
+          ],
+        },
+        { mongooseConn, pubsub },
+        null,
+        fullAccess,
+      ),
+    ).rejects.toThrow('Got the same "Member" entity in items 0 & 1 of "whereOneAndData"!');
+
+    expect((await Member.findOne({ email: 'cat@b.c' }).lean()).name).toBe('Cat');
+  });
+
+  test('should return "null" if any entity is not found', async () => {
+    await Member.create({ email: 'dan@b.c', name: 'Dan' });
+
+    const result = await updateManyMembers(
+      null,
+      {
+        whereOneAndData: [
+          { whereOne: { email: 'dan@b.c' }, data: { name: 'Dan 2' } },
+          { whereOne: { email: 'nobody@b.c' }, data: { name: 'Nobody' } },
+        ],
+      },
+      { mongooseConn, pubsub },
+      null,
+      fullAccess,
+    );
+
+    expect(result).toBeNull();
+    expect((await Member.findOne({ email: 'dan@b.c' }).lean()).name).toBe('Dan');
+  });
+});
