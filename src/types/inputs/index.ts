@@ -14,11 +14,13 @@ import createEntityTextNamesEnumType from './createEntityTextNamesEnumType';
 import createEntityUpdateInputType from './createEntityUpdateInputType';
 import createEntityWhereAndSearchInputType from './createEntityWhereAndSearchInputType';
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';
+import createEntityWhereCompoundOneAndCreateDataInputType from './createEntityWhereCompoundOneAndCreateDataInputType';
 import createEntityWhereCompoundOneAndDataInputType from './createEntityWhereCompoundOneAndDataInputType';
 import createEntityWhereCompoundOneInputType from './createEntityWhereCompoundOneInputType';
 import createEntityWhereInputType, {
   createEntityWhereWithoutBooleanOperationsInputType,
 } from './createEntityWhereInputType';
+import createEntityWhereOneAndCreateDataInputType from './createEntityWhereOneAndCreateDataInputType';
 import createEntityWhereOneAndDataInputType from './createEntityWhereOneAndDataInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import createEntityWherePayloadInputType from './createEntityWherePayloadInputType';
@@ -43,10 +45,12 @@ const inputs = [
   createEntityUpdateInputType,
   createEntityWhereAndSearchInputType,
   createEntityWhereByUniqueInputType,
+  createEntityWhereCompoundOneAndCreateDataInputType,
   createEntityWhereCompoundOneAndDataInputType,
   createEntityWhereCompoundOneInputType,
   createEntityWhereInputType,
   createEntityWhereWithoutBooleanOperationsInputType,
+  createEntityWhereOneAndCreateDataInputType,
   createEntityWhereOneAndDataInputType,
   createEntityWhereOneInputType,
   createEntityWherePayloadInputType,

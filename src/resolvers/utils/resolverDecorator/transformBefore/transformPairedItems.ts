@@ -27,8 +27,8 @@ const processItem = (item: GraphqlObject, entityConfig: EntityConfig): GraphqlOb
     return prev;
   }, {});
 
-// items of "whereOneAndData", "whereCompoundOneAndData" ("updateManyXs") & "sourceAnd…Target…"...
-// ... ("copyManyXs…") args
+// items of "whereOneAndData", "whereCompoundOneAndData" ("updateManyXs", "getOrCreateXs") &...
+// ... "sourceAnd…Target…" ("copyManyXs…") args
 const transformPairedItems = (
   items: GraphqlObject | GraphqlObject[],
   entityConfig: EntityConfig,

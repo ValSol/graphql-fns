@@ -676,6 +676,26 @@ enum deleteMenuCloneWithChildrenOptionsEnum {
 input deleteMenuCloneWithChildrenOptionsInput {
   fieldsToDelete: [deleteMenuCloneWithChildrenOptionsEnum]
 }
+input MenuWhereOneAndCreateDataInput {
+  whereOne: MenuWhereOneInput!
+  data: MenuCreateInput!
+}
+input MenuWhereCompoundOneAndCreateDataInput {
+  whereCompoundOne: MenuWhereCompoundOneInput!
+  data: MenuCreateInput!
+}
+input MenuCloneWhereOneAndCreateDataInput {
+  whereOne: MenuCloneWhereOneInput!
+  data: MenuCloneCreateInput!
+}
+input MenuSectionWhereOneAndCreateDataInput {
+  whereOne: MenuSectionWhereOneInput!
+  data: MenuSectionCreateInput!
+}
+input MenuCloneSectionWhereOneAndCreateDataInput {
+  whereOne: MenuCloneSectionWhereOneInput!
+  data: MenuCloneSectionCreateInput!
+}
 input MenuWhereOneAndDataInput {
   whereOne: MenuWhereOneInput!
   data: MenuUpdateInput!
@@ -982,6 +1002,10 @@ type Mutation {
   deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection!
   deleteMenuWithChildren(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, options: deleteMenuWithChildrenOptionsInput, token: String): Menu!
   deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): MenuClone!
+  getOrCreateMenus(whereOneAndData: [MenuWhereOneAndCreateDataInput!], whereCompoundOneAndData: [MenuWhereCompoundOneAndCreateDataInput!], token: String): [Menu!]!
+  getOrCreateMenuClones(whereOneAndData: [MenuCloneWhereOneAndCreateDataInput!]!, token: String): [MenuClone!]!
+  getOrCreateMenuSections(whereOneAndData: [MenuSectionWhereOneAndCreateDataInput!]!, token: String): [MenuSection!]!
+  getOrCreateMenuCloneSections(whereOneAndData: [MenuCloneSectionWhereOneAndCreateDataInput!]!, token: String): [MenuCloneSection!]!
   getOrCreateMenu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, data: MenuCreateInput!, token: String): Menu!
   getOrCreateMenuClone(whereOne: MenuCloneWhereOneInput!, data: MenuCloneCreateInput!, token: String): MenuClone!
   getOrCreateMenuSection(whereOne: MenuSectionWhereOneInput!, data: MenuSectionCreateInput!, token: String): MenuSection!
@@ -1370,6 +1394,14 @@ input Example2CreateInput {
   textField2: [String!]!
   area: GeospatialPolygonInput
 }
+input Example1WhereOneAndCreateDataInput {
+  whereOne: Example1WhereOneInput!
+  data: Example1CreateInput!
+}
+input Example2WhereOneAndCreateDataInput {
+  whereOne: Example2WhereOneInput!
+  data: Example2CreateInput!
+}
 input Example1UpdateInput {
   textField1: String
   textField2: String
@@ -1545,6 +1577,8 @@ type Mutation {
   deleteManyExample2s(whereOne: [Example2WhereOneInput!]!, token: String): [Example2!]!
   deleteExample1(whereOne: Example1WhereOneInput!, token: String): Example1!
   deleteExample2(whereOne: Example2WhereOneInput!, token: String): Example2!
+  getOrCreateExample1s(whereOneAndData: [Example1WhereOneAndCreateDataInput!]!, token: String): [Example1!]!
+  getOrCreateExample2s(whereOneAndData: [Example2WhereOneAndCreateDataInput!]!, token: String): [Example2!]!
   getOrCreateExample1(whereOne: Example1WhereOneInput!, data: Example1CreateInput!, token: String): Example1!
   getOrCreateExample2(whereOne: Example2WhereOneInput!, data: Example2CreateInput!, token: String): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
@@ -1861,6 +1895,14 @@ input PlaceCreateInput {
   id: ID
   title: String!
 }
+input PersonWhereOneAndCreateDataInput {
+  whereOne: PersonWhereOneInput!
+  data: PersonCreateInput!
+}
+input PlaceWhereOneAndCreateDataInput {
+  whereOne: PlaceWhereOneInput!
+  data: PlaceCreateInput!
+}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -2031,6 +2073,8 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
+  getOrCreatePeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
+  getOrCreatePlaces(whereOneAndData: [PlaceWhereOneAndCreateDataInput!]!, token: String): [Place!]!
   getOrCreatePerson(whereOne: PersonWhereOneInput!, data: PersonCreateInput!, token: String): Person!
   getOrCreatePlace(whereOne: PlaceWhereOneInput!, data: PlaceCreateInput!, token: String): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
@@ -2291,6 +2335,10 @@ input AddressCreateInput {
   country: String!
   province: String
 }
+input PersonWhereOneAndCreateDataInput {
+  whereOne: PersonWhereOneInput!
+  data: PersonCreateInput!
+}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -2414,6 +2462,7 @@ type Mutation {
   deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
+  getOrCreatePeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
   getOrCreatePerson(whereOne: PersonWhereOneInput!, data: PersonCreateInput!, token: String): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
@@ -2795,6 +2844,14 @@ input copyPersonOptionsInput {
   friends: copyPersonThroughfriendsOptionInput
   enemies: copyPersonThroughenemiesOptionInput
 }
+input PersonWhereOneAndCreateDataInput {
+  whereOne: PersonWhereOneInput!
+  data: PersonCreateInput!
+}
+input PlaceWhereOneAndCreateDataInput {
+  whereOne: PlaceWhereOneInput!
+  data: PlaceCreateInput!
+}
 input PlaceUpdateInput {
   name: String
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
@@ -2971,6 +3028,8 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
+  getOrCreatePeople(whereOneAndData: [PersonWhereOneAndCreateDataInput!]!, token: String): [Person!]!
+  getOrCreatePlaces(whereOneAndData: [PlaceWhereOneAndCreateDataInput!]!, token: String): [Place!]!
   getOrCreatePerson(whereOne: PersonWhereOneInput!, data: PersonCreateInput!, token: String): Person!
   getOrCreatePlace(whereOne: PlaceWhereOneInput!, data: PlaceCreateInput!, token: String): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
@@ -3198,6 +3257,10 @@ input ExampleWhereInput {
 input ExampleWhereOneInput {
   id: ID!
 }
+input ExampleWhereOneAndCreateDataInput {
+  whereOne: ExampleWhereOneInput!
+  data: ExampleCreateInput!
+}
 input ExampleUpdateInput {
   textField: String
 }
@@ -3215,6 +3278,7 @@ type Mutation {
   deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, token: String): Int!
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!, token: String): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
+  getOrCreateExamples(whereOneAndData: [ExampleWhereOneAndCreateDataInput!]!, token: String): [Example!]!
   getOrCreateExample(whereOne: ExampleWhereOneInput!, data: ExampleCreateInput!, token: String): Example!
   updateFilteredExamples(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): [Example!]!
   updateFilteredExamplesReturnScalar(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): Int!

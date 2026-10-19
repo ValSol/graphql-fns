@@ -31,6 +31,8 @@ const argTypesPrefixPlusSuffixes = [
   ['WhereKeyToSourceInput', transformWhereKeyToSource, false],
   ['WhereOneAndDataInput', transformPairedItems, false],
   ['WhereCompoundOneAndDataInput', transformPairedItems, false],
+  ['WhereOneAndCreateDataInput', transformPairedItems, false],
+  ['WhereCompoundOneAndCreateDataInput', transformPairedItems, false],
   ['CopySourceAndTargetAndDataInput', transformPairedItems, false],
   ['CopySourceAndCompoundTargetAndDataInput', transformPairedItems, false],
   ['CopySourceAndTargetInput', transformPairedItems, false],

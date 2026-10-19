@@ -1003,4 +1003,80 @@ describe('graphql schema', () => {
       expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
     });
   });
+
+  describe('"getOrCreateEntities" mutation', () => {
+    const allEntityConfigs = composeAllEntityConfigs([
+      {
+        name: 'Person',
+        textFields: [{ name: 'email', unique: true }, { name: 'name' }],
+      },
+      {
+        name: 'Menu',
+        textFields: [{ name: 'title' }, { name: 'lang' }],
+        uniqueCompoundIndexes: [['title', 'lang']],
+      },
+    ]);
+
+    test('should compose "getOrCreate…s" mutations with paired "whereOne" & "data" items', () => {
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+      expect(typeDefs).toMatch(
+        /\n  getOrCreatePeople\(whereOneAndData: \[PersonWhereOneAndCreateDataInput!\]!, token: String\): \[Person!\]!\n/,
+      );
+      expect(typeDefs).toMatch(
+        /\n  getOrCreateMenus\(whereOneAndData: \[MenuWhereOneAndCreateDataInput!\], whereCompoundOneAndData: \[MenuWhereCompoundOneAndCreateDataInput!\], token: String\): \[Menu!\]!\n/,
+      );
+      expect(typeDefs).toMatch(
+        /\ninput PersonWhereOneAndCreateDataInput \{\n  whereOne: PersonWhereOneInput!\n  data: PersonCreateInput!\n\}/,
+      );
+      expect(typeDefs).toMatch(
+        /\ninput MenuWhereCompoundOneAndCreateDataInput \{\n  whereCompoundOne: MenuWhereCompoundOneInput!\n  data: MenuCreateInput!\n\}/,
+      );
+      expect(typeDefs).not.toMatch(/PersonWhereCompoundOneAndCreateDataInput/);
+
+      const { Mutation } = resolvers as any;
+
+      expect(typeof Mutation.getOrCreatePeople).toBe('function');
+      expect(typeof Mutation.getOrCreateMenus).toBe('function');
+
+      expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+    });
+
+    test('should compose "getOrCreate…s" mutation allowed by inventory only', () => {
+      const inventory: Inventory = {
+        name: 'test',
+        include: { Mutation: { getOrCreateEntities: ['Person'] } },
+      };
+
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs, inventory });
+
+      const { Mutation } = resolvers as any;
+
+      expect(Object.keys(Mutation)).toEqual(['getOrCreatePeople']);
+      expect(typeDefs).not.toMatch(/getOrCreateMenus|getOrCreatePerson\(|createManyPeople\(/);
+
+      expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+    });
+
+    test('should compose representation "getOrCreate…s" mutation', () => {
+      const ForView: RepresentationAttributes = {
+        representationKey: 'ForView',
+        allow: { Person: ['getOrCreateEntities'] },
+      };
+
+      const generalConfig: GeneralConfig = {
+        allEntityConfigs,
+        representations: { ForView },
+      };
+
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig);
+
+      expect(typeDefs).toMatch(
+        /\n  getOrCreatePeopleForView\(whereOneAndData: \[PersonForViewWhereOneAndCreateDataInput!\]!, token: String\): \[PersonForView!\]!\n/,
+      );
+      expect(typeof (resolvers as any).Mutation.getOrCreatePeopleForView).toBe('function');
+
+      expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+    });
+  });
 });

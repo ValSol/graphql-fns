@@ -1,0 +1,18 @@
+import type { ResolverAttributes } from '@/resolvers/tsTypes';
+
+import getPrevious from './getPrevious';
+import prepareBulkData from './prepareBulkData';
+
+const getOrCreateEntitiesResolverAttributes: ResolverAttributes = {
+  actionGeneralName: 'getOrCreateEntities',
+  array: true,
+  getPrevious,
+  produceCurrent: true,
+  prepareBulkData,
+  report: () => null, // as "createManyEntities" it doesn't publish "created" events
+  finalResult: ({ current }) => current,
+  // entity created concurrently by other request: try again to get it
+  retryOnDuplicateKey: true,
+};
+
+export default getOrCreateEntitiesResolverAttributes;

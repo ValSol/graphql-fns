@@ -177,3 +177,74 @@ describe('workOutMutations with "getOrCreateEntity"', () => {
     expect(executeBulkItemsMock).toHaveBeenCalledTimes(2);
   });
 });
+
+const getOrCreateMany = (items: Array<[string, string]>) => ({
+  actionGeneralName: 'getOrCreateEntities',
+  entityConfig: personConfig,
+  args: {
+    whereOneAndData: items.map(([email, name]) => ({ whereOne: { email }, data: { name } })),
+  },
+  resolverOptions,
+  returnResult: true,
+  returnReport: true,
+});
+
+describe('workOutMutations with "getOrCreateEntities"', () => {
+  test('should get & create entities in the order of items without events', async () => {
+    const [result] = await workOutMutations(
+      [
+        getOrCreateMany([
+          ['new1@b.c', 'New1'],
+          ['old@b.c', 'Other'],
+          ['new2@b.c', 'New2'],
+        ]),
+      ] as any,
+      commonResolverCreatorArg,
+    );
+
+    const documents = insertedDocuments();
+
+    expect(documents).toHaveLength(2);
+    expect(documents[0]).toMatchObject({ email: 'new1@b.c', name: 'New1' });
+    expect(documents[1]).toMatchObject({ email: 'new2@b.c', name: 'New2' });
+    expect(result).toEqual([documents[0], existing, documents[1]]);
+    expect(publish).not.toHaveBeenCalled();
+  });
+
+  test('should work in one batch with "getOrCreateEntity"', async () => {
+    const [many, one] = await workOutMutations(
+      [getOrCreateMany([['old@b.c', 'Other']]), getOrCreate('new@b.c', 'New')] as any,
+      commonResolverCreatorArg,
+    );
+
+    const [document] = insertedDocuments();
+
+    expect(many).toEqual([existing]);
+    expect(one).toBe(document);
+    expect(publish).toHaveBeenCalledTimes(1);
+  });
+
+  test('should get entities created concurrently after duplicate key error', async () => {
+    const concurrent = { _id: 'concurrent-id', email: 'new@b.c', name: 'Concurrent' };
+
+    executeBulkItemsMock.mockImplementationOnce(async () => {
+      db[concurrent.email] = concurrent;
+
+      throw new MongoServerError({ message: 'E11000 duplicate key error', code: 11000 });
+    });
+
+    const [result] = await workOutMutations(
+      [
+        getOrCreateMany([
+          ['new@b.c', 'New'],
+          ['old@b.c', 'Old'],
+        ]),
+      ] as any,
+      commonResolverCreatorArg,
+    );
+
+    expect(executeBulkItemsMock).toHaveBeenCalledTimes(2);
+    expect(insertedDocuments(1)).toEqual([]);
+    expect(result).toEqual([concurrent, existing]);
+  });
+});

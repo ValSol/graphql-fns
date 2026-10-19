@@ -22,6 +22,7 @@ import entity from './entityQueryAttributes';
 import entities from './entitiesQueryAttributes';
 import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
 import entitiesByUnique from './entitiesByUniqueQueryAttributes';
+import getOrCreateEntities from './getOrCreateEntitiesMutationAttributes';
 import getOrCreateEntity from './getOrCreateEntityMutationAttributes';
 import createEntity from './createEntityMutationAttributes';
 import deletedEntity from './deletedEntitySubscriptionAttributes';
@@ -72,6 +73,7 @@ const actionAttributes = {
   entities,
   entitiesThroughConnection,
   entitiesByUnique,
+  getOrCreateEntities,
   getOrCreateEntity,
   updatedEntity,
   updateFilteredEntities,

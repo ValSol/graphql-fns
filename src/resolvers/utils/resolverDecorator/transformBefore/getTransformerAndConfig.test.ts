@@ -2,6 +2,7 @@ import type { GeneralConfig, TangibleEntityConfig } from '../../../../tsTypes';
 
 import getTransformerAndConfig from './getTransformerAndConfig';
 import transformData from './transformData';
+import transformPairedItems from './transformPairedItems';
 import transformWhere from './transformWhere';
 import transformWhereAndSearch from './transformWhereAndSearch';
 
@@ -62,6 +63,17 @@ describe('getTransformerAndConfig', () => {
     const result = getTransformerAndConfig('PersonCreateInput', generalConfig);
 
     expect(result).toEqual([transformData, null]);
+  });
+
+  test('should return transformer for list of paired items of "getOrCreateEntities"', () => {
+    expect(getTransformerAndConfig('[PersonWhereOneAndCreateDataInput!]', generalConfig)).toEqual([
+      transformPairedItems,
+      personConfig,
+    ]);
+
+    expect(
+      getTransformerAndConfig('[PersonWhereCompoundOneAndCreateDataInput!]', generalConfig),
+    ).toEqual([transformPairedItems, personConfig]);
   });
 
   test('should return null for scalar', () => {
