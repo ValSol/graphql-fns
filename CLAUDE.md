@@ -15,3 +15,17 @@ TypeScript library of helpers for building GraphQL schemas/resolvers on top of M
 
 - Commits follow Conventional Commits (`feat:`, `fix:`, `build:` …); releases are made by semantic-release.
 - Import alias `@/…` maps to `src/…`.
+
+## Codex integration
+
+OpenAI Codex CLI is available via the `codex` command.
+
+When the user asks to use Codex:
+
+- Invoke Codex through Bash using `codex exec`.
+- Use `--sandbox read-only` for code reviews.
+- Provide Codex with a clear, independent task.
+- Wait for the Codex response.
+- Analyze its findings critically.
+- Report confirmed issues and suggested fixes.
+- Do not let Codex modify files during reviews.
