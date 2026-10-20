@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import type { Enums, EntityConfig } from '../tsTypes';
 
 import composeCompoundIndexes from './composeCompoundIndexes';
+import getSortableFieldNames from '../utils/getSortableFieldNames';
 import composeTextIndexProperties from './composeTextIndexProperties';
 import composeEntitySchemaProperties from './composeEntitySchemaProperties';
 import composePolygonOrLineStringIndexProperties from './composePolygonOrLineStringIndexProperties';
@@ -20,8 +21,10 @@ const createEntitySchema = (entityConfig: EntityConfig, enums: Enums = {}): any 
   // indexes are built only by "syncModelIndexes" (see "createMongooseModel"): the background
   // "autoIndex" silently fails on conflicting documents and never drops indexes absent in the config
   const EntitySchema = new Schema(entitySchemaProperties, { timestamps: true, autoIndex: false });
-  EntitySchema.index({ createdAt: 1 });
-  EntitySchema.index({ updatedAt: 1 });
+  // "_id" completes the keys of sortable fields: a connection pages by the values of the sort keys
+  // and "_id" (see "docs/connection-pagination.md"), an index with "_id" serves the both directions
+  EntitySchema.index({ createdAt: 1, _id: 1 });
+  EntitySchema.index({ updatedAt: 1, _id: 1 });
 
   const weights = composeTextIndexProperties(entityConfig);
 
@@ -36,6 +39,10 @@ const createEntitySchema = (entityConfig: EntityConfig, enums: Enums = {}): any 
   if (entityType === 'tangible') {
     composeCompoundIndexes(entityConfig).forEach((index) => {
       EntitySchema.index(index, { unique: true });
+    });
+
+    getSortableFieldNames(entityConfig).forEach((fieldName) => {
+      EntitySchema.index({ [fieldName]: 1, _id: 1 });
     });
 
     const polygonIndexProperties = composePolygonOrLineStringIndexProperties(entityConfig);

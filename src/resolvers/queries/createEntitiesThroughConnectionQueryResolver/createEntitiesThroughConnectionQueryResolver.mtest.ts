@@ -6,6 +6,7 @@ import mongoOptions from '@/test/mongo-options';
 import createEntitySchema from '@/mongooseModels/createEntitySchema';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import toCursor from '@/resolvers/utils/toCursor';
+import { toKeysetCursor } from '../utils/keyset/keysetCursor';
 import createCreateManyEntitiesMutationResolver from '@/resolvers/mutations/createCreateManyEntitiesMutationResolver';
 import createEntitiesThroughConnectionQueryResolver from './index';
 
@@ -16,6 +17,12 @@ let mongooseConn;
 let createdExamples;
 let Example;
 let examplesThroughConnection;
+
+// cursors of the default sort and of "num_DESC" (with the tie-breaker)
+const idCursor = ({ id }) => toKeysetCursor(['id_ASC'], [new mongoose.Types.ObjectId(id)]);
+
+const numDescCursor = ({ id, num }) =>
+  toKeysetCursor(['num_DESC', 'id_DESC'], [num, new mongoose.Types.ObjectId(id)]);
 
 const entityConfig: EntityConfig = {
   name: 'Example',
@@ -116,15 +123,15 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(false);
     expect(hasNextPage).toBe(true);
-    expect(startCursor).toBe(toCursor(createdExamples[0].id, 0));
+    expect(startCursor).toBe(idCursor(createdExamples[0]));
     const lastPos = edges.length - 1;
-    expect(endCursor).toBe(toCursor(createdExamples[lastPos].id, lastPos));
+    expect(endCursor).toBe(idCursor(createdExamples[lastPos]));
 
     for (let i = 0; i < edges.length; i += 1) {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[i]);
-      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+      expect(cursor).toBe(idCursor(createdExamples[i]));
     }
 
     const examplesWithLimit = await examplesThroughConnection(
@@ -149,14 +156,14 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPageWithLimit).toBe(false);
     expect(hasNextPageWithLimit).toBe(true);
-    expect(startCursorWithLimit).toBe(toCursor(createdExamples[0].id, 0));
-    expect(endCursorWithLimit).toBe(toCursor(createdExamples[lastPos].id, lastPos));
+    expect(startCursorWithLimit).toBe(idCursor(createdExamples[0]));
+    expect(endCursorWithLimit).toBe(idCursor(createdExamples[lastPos]));
 
     for (let i = 0; i < egesWithLimits.length; i += 1) {
       const { node, cursor } = egesWithLimits[i];
 
       expect(node).toEqual(createdExamples[i]);
-      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+      expect(cursor).toBe(idCursor(createdExamples[i]));
     }
 
     const examples2 = await examplesThroughConnection(
@@ -181,9 +188,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage2).toBe(true);
     expect(hasNextPage2).toBe(true);
-    expect(startCursor2).toBe(toCursor(createdExamples[lastPos + 1].id, lastPos + 1));
+    expect(startCursor2).toBe(idCursor(createdExamples[lastPos + 1]));
     const lastPos2 = lastPos + edges2.length;
-    expect(endCursor2).toBe(toCursor(createdExamples[lastPos2].id, lastPos2));
+    expect(endCursor2).toBe(idCursor(createdExamples[lastPos2]));
 
     expect(edges2.length).toBe(5);
 
@@ -191,7 +198,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges2[i];
 
       expect(node).toEqual(createdExamples[lastPos + i + 1]);
-      expect(cursor).toBe(toCursor(createdExamples[lastPos + i + 1].id, lastPos + i + 1));
+      expect(cursor).toBe(idCursor(createdExamples[lastPos + i + 1]));
     }
 
     const examples2WithLimit = await examplesThroughConnection(
@@ -216,11 +223,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage2WithLimit).toBe(true);
     expect(hasNextPage2WithLimit).toBe(true);
-    expect(startCursor2).toBe(toCursor(createdExamples[lastPos + 1].id, lastPos + 1));
+    expect(startCursor2).toBe(idCursor(createdExamples[lastPos + 1]));
     const lastPos2WithLimit = lastPos + edges2WithLimit.length;
-    expect(endCursor2WithLimit).toBe(
-      toCursor(createdExamples[lastPos2WithLimit].id, lastPos2WithLimit),
-    );
+    expect(endCursor2WithLimit).toBe(idCursor(createdExamples[lastPos2WithLimit]));
 
     expect(edges2WithLimit.length).toBe(3);
 
@@ -228,7 +233,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges2WithLimit[i];
 
       expect(node).toEqual(createdExamples[lastPos + i + 1]);
-      expect(cursor).toBe(toCursor(createdExamples[lastPos + i + 1].id, lastPos + i + 1));
+      expect(cursor).toBe(idCursor(createdExamples[lastPos + i + 1]));
     }
 
     const examples3 = await examplesThroughConnection(
@@ -253,9 +258,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage3).toBe(true);
     expect(hasNextPage3).toBe(false);
-    expect(startCursor3).toBe(toCursor(createdExamples[lastPos2 + 1].id, lastPos2 + 1));
+    expect(startCursor3).toBe(idCursor(createdExamples[lastPos2 + 1]));
     const lastPos3 = lastPos2 + edges3.length;
-    expect(endCursor3).toBe(toCursor(createdExamples[lastPos3].id, lastPos3));
+    expect(endCursor3).toBe(idCursor(createdExamples[lastPos3]));
 
     expect(edges3.length).toBe(3);
 
@@ -263,7 +268,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges3[i];
 
       expect(node).toEqual(createdExamples[lastPos2 + i + 1]);
-      expect(cursor).toBe(toCursor(createdExamples[lastPos2 + i + 1].id, lastPos2 + i + 1));
+      expect(cursor).toBe(idCursor(createdExamples[lastPos2 + i + 1]));
     }
 
     const examples4 = await examplesThroughConnection(
@@ -289,8 +294,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage4).toBe(true);
     expect(hasNextPage4).toBe(true);
 
-    expect(startCursor4).toBe(toCursor(createdExamples[3].id, 3));
-    expect(endCursor4).toBe(toCursor(createdExamples[7].id, 7));
+    expect(startCursor4).toBe(idCursor(createdExamples[3]));
+    expect(endCursor4).toBe(idCursor(createdExamples[7]));
 
     expect(edges4.length).toBe(5);
 
@@ -298,7 +303,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges4[i];
 
       expect(node).toEqual(createdExamples[i + 3]);
-      expect(cursor).toBe(toCursor(createdExamples[i + 3].id, i + 3));
+      expect(cursor).toBe(idCursor(createdExamples[i + 3]));
     }
 
     const examples4WithLimit = await examplesThroughConnection(
@@ -324,8 +329,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage4WithLimit).toBe(true);
     expect(hasNextPage4WithLimit).toBe(true);
 
-    // expect(startCursor4WithLimit).toBe(toCursor(createdExamples[5].id, 5));
-    expect(endCursor4WithLimit).toBe(toCursor(createdExamples[7].id, 7));
+    // expect(startCursor4WithLimit).toBe(idCursor(createdExamples[5]));
+    expect(endCursor4WithLimit).toBe(idCursor(createdExamples[7]));
 
     expect(edges4WithLimit.length).toBe(3);
 
@@ -333,7 +338,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges4WithLimit[i];
 
       expect(node).toEqual(createdExamples[i + 5]);
-      expect(cursor).toBe(toCursor(createdExamples[i + 5].id, i + 5));
+      expect(cursor).toBe(idCursor(createdExamples[i + 5]));
     }
 
     const examples5 = await examplesThroughConnection(
@@ -359,8 +364,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage5).toBe(false);
     expect(hasNextPage5).toBe(true);
 
-    expect(startCursor5).toBe(toCursor(createdExamples[0].id, 0));
-    expect(endCursor5).toBe(toCursor(createdExamples[2].id, 2));
+    expect(startCursor5).toBe(idCursor(createdExamples[0]));
+    expect(endCursor5).toBe(idCursor(createdExamples[2]));
 
     expect(edges5.length).toBe(3);
 
@@ -368,7 +373,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges5[i];
 
       expect(node).toEqual(createdExamples[i]);
-      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+      expect(cursor).toBe(idCursor(createdExamples[i]));
     }
   });
 
@@ -395,8 +400,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage6).toBe(false);
     expect(hasNextPage6).toBe(false);
-    expect(startCursor6).toBe(toCursor(createdExamples[0].id, 0));
-    expect(endCursor6).toBe(toCursor(createdExamples[10].id, 10));
+    expect(startCursor6).toBe(idCursor(createdExamples[0]));
+    expect(endCursor6).toBe(idCursor(createdExamples[10]));
 
     expect(edges6.length).toBe(11);
 
@@ -404,7 +409,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges6[i];
 
       expect(node).toEqual(createdExamples[i]);
-      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+      expect(cursor).toBe(idCursor(createdExamples[i]));
     }
   });
 
@@ -431,8 +436,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage7).toBe(true);
     expect(hasNextPage7).toBe(false);
-    expect(startCursor7).toBe(toCursor(createdExamples[7].id, 7));
-    expect(endCursor7).toBe(toCursor(createdExamples[10].id, 10));
+    expect(startCursor7).toBe(idCursor(createdExamples[7]));
+    expect(endCursor7).toBe(idCursor(createdExamples[10]));
 
     expect(edges7.length).toBe(4);
 
@@ -440,7 +445,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges7[i];
 
       expect(node).toEqual(createdExamples[i + 7]);
-      expect(cursor).toBe(toCursor(createdExamples[i + 7].id, i + 7));
+      expect(cursor).toBe(idCursor(createdExamples[i + 7]));
     }
 
     const examples7WithLimit = await examplesThroughConnection(
@@ -465,8 +470,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage7WithLimit).toBe(true);
     expect(hasNextPage7WithLimit).toBe(false);
-    expect(startCursor7WithLimit).toBe(toCursor(createdExamples[8].id, 8));
-    expect(endCursor7WithLimit).toBe(toCursor(createdExamples[10].id, 10));
+    expect(startCursor7WithLimit).toBe(idCursor(createdExamples[8]));
+    expect(endCursor7WithLimit).toBe(idCursor(createdExamples[10]));
 
     expect(edges7WithLimit.length).toBe(3);
 
@@ -474,7 +479,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges7WithLimit[i];
 
       expect(node).toEqual(createdExamples[i + 8]);
-      expect(cursor).toBe(toCursor(createdExamples[i + 8].id, i + 8));
+      expect(cursor).toBe(idCursor(createdExamples[i + 8]));
     }
   });
 
@@ -501,8 +506,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage8).toBe(false);
     expect(hasNextPage8).toBe(false);
-    expect(startCursor8).toBe(toCursor(createdExamples[0].id, 0));
-    expect(endCursor8).toBe(toCursor(createdExamples[10].id, 10));
+    expect(startCursor8).toBe(idCursor(createdExamples[0]));
+    expect(endCursor8).toBe(idCursor(createdExamples[10]));
 
     expect(edges8.length).toBe(11);
 
@@ -510,7 +515,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges8[i];
 
       expect(node).toEqual(createdExamples[i]);
-      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+      expect(cursor).toBe(idCursor(createdExamples[i]));
     }
   });
 
@@ -534,8 +539,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(false);
     expect(hasNextPage).toBe(true);
-    expect(startCursor).toBe(toCursor(createdExamples[0].id, 0));
-    expect(endCursor).toBe(toCursor(createdExamples[2].id, 2));
+    expect(startCursor).toBe(idCursor(createdExamples[0]));
+    expect(endCursor).toBe(idCursor(createdExamples[2]));
 
     expect(edges.length).toBe(3);
 
@@ -543,7 +548,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[i]);
-      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+      expect(cursor).toBe(idCursor(createdExamples[i]));
     }
   });
 
@@ -567,8 +572,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(true);
     expect(hasNextPage).toBe(false);
-    expect(startCursor).toBe(toCursor(createdExamples[8].id, 8));
-    expect(endCursor).toBe(toCursor(createdExamples[10].id, 10));
+    expect(startCursor).toBe(idCursor(createdExamples[8]));
+    expect(endCursor).toBe(idCursor(createdExamples[10]));
 
     expect(edges.length).toBe(3);
 
@@ -576,12 +581,12 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[i + 8]);
-      expect(cursor).toBe(toCursor(createdExamples[i + 8].id, i + 8));
+      expect(cursor).toBe(idCursor(createdExamples[i + 8]));
     }
   });
 
   test('should create resolver 7', async () => {
-    const after = toCursor(createdExamples[1].id, 2);
+    const after = idCursor(createdExamples[1]);
 
     const examples = await examplesThroughConnection(
       null,
@@ -600,8 +605,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(true);
     expect(hasNextPage).toBe(true);
-    expect(startCursor).toBe(toCursor(createdExamples[2].id, 2));
-    expect(endCursor).toBe(toCursor(createdExamples[4].id, 4));
+    expect(startCursor).toBe(idCursor(createdExamples[2]));
+    expect(endCursor).toBe(idCursor(createdExamples[4]));
 
     expect(edges.length).toBe(3);
 
@@ -609,7 +614,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[i + 2]);
-      expect(cursor).toBe(toCursor(createdExamples[i + 2].id, i + 2));
+      expect(cursor).toBe(idCursor(createdExamples[i + 2]));
     }
   });
 
@@ -636,15 +641,15 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage).toBe(false);
     expect(hasNextPage).toBe(true);
 
-    expect(startCursor).toBe(toCursor(createdExamples[10].id, 0));
+    expect(startCursor).toBe(numDescCursor(createdExamples[10]));
     const lastPos = edges.length - 1;
-    expect(endCursor).toBe(toCursor(createdExamples[10 - lastPos].id, lastPos));
+    expect(endCursor).toBe(numDescCursor(createdExamples[10 - lastPos]));
 
     for (let i = 0; i < edges.length; i += 1) {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[10 - i]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i].id, i));
+      expect(cursor).toBe(numDescCursor(createdExamples[10 - i]));
     }
 
     const examples2 = await examplesThroughConnection(
@@ -669,9 +674,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage2).toBe(true);
     expect(hasNextPage2).toBe(true);
-    expect(startCursor2).toBe(toCursor(createdExamples[10 - lastPos - 1].id, lastPos + 1));
+    expect(startCursor2).toBe(numDescCursor(createdExamples[10 - lastPos - 1]));
     const lastPos2 = lastPos + edges2.length;
-    expect(endCursor2).toBe(toCursor(createdExamples[10 - lastPos2].id, lastPos2));
+    expect(endCursor2).toBe(numDescCursor(createdExamples[10 - lastPos2]));
 
     expect(edges2.length).toBe(5);
 
@@ -679,7 +684,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges2[i];
 
       expect(node).toEqual(createdExamples[10 - lastPos - i - 1]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - lastPos - i - 1].id, lastPos + i + 1));
+      expect(cursor).toBe(numDescCursor(createdExamples[10 - lastPos - i - 1]));
     }
 
     const examples3 = await examplesThroughConnection(
@@ -704,9 +709,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage3).toBe(true);
     expect(hasNextPage3).toBe(false);
-    expect(startCursor3).toBe(toCursor(createdExamples[10 - lastPos2 - 1].id, lastPos2 + 1));
+    expect(startCursor3).toBe(numDescCursor(createdExamples[10 - lastPos2 - 1]));
     const lastPos3 = lastPos2 + edges3.length;
-    expect(endCursor3).toBe(toCursor(createdExamples[10 - lastPos3].id, lastPos3));
+    expect(endCursor3).toBe(numDescCursor(createdExamples[10 - lastPos3]));
 
     expect(edges3.length).toBe(3);
 
@@ -714,7 +719,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges3[i];
 
       expect(node).toEqual(createdExamples[10 - lastPos2 - i - 1]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - lastPos2 - i - 1].id, lastPos2 + i + 1));
+      expect(cursor).toBe(numDescCursor(createdExamples[10 - lastPos2 - i - 1]));
     }
 
     const examples4 = await examplesThroughConnection(
@@ -740,8 +745,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage4).toBe(true);
     expect(hasNextPage4).toBe(true);
 
-    expect(startCursor4).toBe(toCursor(createdExamples[10 - 3].id, 3));
-    expect(endCursor4).toBe(toCursor(createdExamples[10 - 7].id, 7));
+    expect(startCursor4).toBe(numDescCursor(createdExamples[10 - 3]));
+    expect(endCursor4).toBe(numDescCursor(createdExamples[10 - 7]));
 
     expect(edges4.length).toBe(5);
 
@@ -749,7 +754,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges4[i];
 
       expect(node).toEqual(createdExamples[10 - i - 3]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i - 3].id, i + 3));
+      expect(cursor).toBe(numDescCursor(createdExamples[10 - i - 3]));
     }
 
     const examples5 = await examplesThroughConnection(
@@ -775,8 +780,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage5).toBe(false);
     expect(hasNextPage5).toBe(true);
 
-    expect(startCursor5).toBe(toCursor(createdExamples[10].id, 0));
-    expect(endCursor5).toBe(toCursor(createdExamples[10 - 2].id, 2));
+    expect(startCursor5).toBe(numDescCursor(createdExamples[10]));
+    expect(endCursor5).toBe(numDescCursor(createdExamples[10 - 2]));
 
     expect(edges5.length).toBe(3);
 
@@ -784,12 +789,12 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges5[i];
 
       expect(node).toEqual(createdExamples[10 - i]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i].id, i));
+      expect(cursor).toBe(numDescCursor(createdExamples[10 - i]));
     }
   });
 
   test('should create resolver with DESC sort & dynamic cursor', async () => {
-    const after = toCursor(createdExamples[10 - 1].id, 2);
+    const after = numDescCursor(createdExamples[10 - 1]);
 
     const examples = await examplesThroughConnection(
       null,
@@ -808,8 +813,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(true);
     expect(hasNextPage).toBe(true);
-    expect(startCursor).toBe(toCursor(createdExamples[10 - 2].id, 2));
-    expect(endCursor).toBe(toCursor(createdExamples[10 - 4].id, 4));
+    expect(startCursor).toBe(numDescCursor(createdExamples[10 - 2]));
+    expect(endCursor).toBe(numDescCursor(createdExamples[10 - 4]));
 
     expect(edges.length).toBe(3);
 
@@ -817,7 +822,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[10 - i - 2]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i - 2].id, i + 2));
+      expect(cursor).toBe(numDescCursor(createdExamples[10 - i - 2]));
     }
   });
 
@@ -843,15 +848,15 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(false);
     expect(hasNextPage).toBe(true);
-    expect(startCursor).toBe(toCursor(createdExamples[0].id, 0));
+    expect(startCursor).toBe(idCursor(createdExamples[0]));
     const lastPos = edges.length - 1;
-    expect(endCursor).toBe(toCursor(createdExamples[lastPos].id, lastPos));
+    expect(endCursor).toBe(idCursor(createdExamples[lastPos]));
 
     for (let i = 0; i < edges.length; i += 1) {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[i]);
-      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+      expect(cursor).toBe(idCursor(createdExamples[i]));
     }
 
     const examples2 = await examplesThroughConnection(
@@ -876,9 +881,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage2).toBe(true);
     expect(hasNextPage2).toBe(true);
-    expect(startCursor2).toBe(toCursor(createdExamples[lastPos + 1 * 2].id, lastPos + 1));
+    expect(startCursor2).toBe(idCursor(createdExamples[lastPos + 1 * 2]));
     const lastPos2 = lastPos + edges2.length;
-    expect(endCursor2).toBe(toCursor(createdExamples[lastPos2 * 2].id, lastPos2));
+    expect(endCursor2).toBe(idCursor(createdExamples[lastPos2 * 2]));
 
     expect(edges2.length).toBe(2);
 
@@ -886,12 +891,12 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges2[i];
       expect(node.oddEven).toBe('even');
       expect(node).toEqual(createdExamples[lastPos + (i + 1) * 2]);
-      expect(cursor).toBe(toCursor(createdExamples[lastPos + (i + 1) * 2].id, lastPos + i + 1));
+      expect(cursor).toBe(idCursor(createdExamples[lastPos + (i + 1) * 2]));
     }
   });
 
   test('should create resolver with where filter & dynamic cursor', async () => {
-    const after = toCursor(createdExamples[2].id, 2);
+    const after = idCursor(createdExamples[2]);
 
     const examples = await examplesThroughConnection(
       null,
@@ -910,8 +915,8 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(true);
     expect(hasNextPage).toBe(true);
-    expect(startCursor).toBe(toCursor(createdExamples[4].id, 2));
-    expect(endCursor).toBe(toCursor(createdExamples[8].id, 4));
+    expect(startCursor).toBe(idCursor(createdExamples[4]));
+    expect(endCursor).toBe(idCursor(createdExamples[8]));
 
     expect(edges.length).toBe(3);
 
@@ -919,7 +924,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       const { node, cursor } = edges[i];
 
       expect(node).toEqual(createdExamples[i * 2 + 4]);
-      expect(cursor).toBe(toCursor(createdExamples[i * 2 + 4].id, i + 2));
+      expect(cursor).toBe(idCursor(createdExamples[i * 2 + 4]));
     }
   });
 
@@ -1069,7 +1074,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     const examples5 = await examplesThroughConnection(
       null,
-      { last: 5, before: startCursor4, sort: { sortBy: ['num_DESC'] } },
+      { last: 5, before: startCursor4, near },
       { mongooseConn },
       createInfoEssence({
         projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },

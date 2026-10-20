@@ -68,7 +68,8 @@ const composeEntitySchemaProperties = (
       if (!required) prev[name].sparse = true;
     }
 
-    if (index && (configType === 'tangible' || parentIndexedField)) {
+    // a scalar indexed field of a tangible entity is sortable: indexed by "createEntitySchema" with "_id"
+    if (index && (configType === 'tangible' ? array : parentIndexedField)) {
       prev[name].index = true;
     }
 
@@ -101,7 +102,7 @@ const composeEntitySchemaProperties = (
       if (!required) prev[name].sparse = true;
     }
 
-    if (index && (configType === 'tangible' || parentIndexedField)) {
+    if (index && (configType === 'tangible' ? array : parentIndexedField)) {
       prev[name].index = true;
     }
 
@@ -132,7 +133,7 @@ const composeEntitySchemaProperties = (
       if (!required) prev[name].sparse = true;
     }
 
-    if (index && (configType === 'tangible' || parentIndexedField)) {
+    if (index && (configType === 'tangible' ? array : parentIndexedField)) {
       prev[name].index = true;
     }
 
@@ -166,7 +167,7 @@ const composeEntitySchemaProperties = (
       if (!required) prev[name].sparse = true;
     }
 
-    if (index && (configType === 'tangible' || parentIndexedField)) {
+    if (index && (configType === 'tangible' ? array : parentIndexedField)) {
       prev[name].index = true;
     }
 
@@ -190,7 +191,7 @@ const composeEntitySchemaProperties = (
 
     if (required) prev[name].required = true; // by default required = false
 
-    if (index && (configType === 'tangible' || parentIndexedField)) {
+    if (index && (configType === 'tangible' ? array : parentIndexedField)) {
       prev[name].index = true;
     }
 
@@ -388,7 +389,7 @@ const composeEntitySchemaProperties = (
 
     if (required) prev[name].required = true; // by default required = false
 
-    if (index && (configType === 'tangible' || parentIndexedField)) {
+    if (index && (configType === 'tangible' ? array : parentIndexedField)) {
       prev[name].index = true;
     }
 

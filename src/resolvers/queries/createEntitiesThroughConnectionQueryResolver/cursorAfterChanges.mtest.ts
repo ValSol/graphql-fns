@@ -9,8 +9,9 @@ import pubsub from '@/resolvers/utils/pubsub';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeTypeDefsAndResolvers from '@/composeTypeDefsAndResolvers';
 
-// A cursor keeps the position of its entity; when the data before it changes, the position is computed again
-// ("getShift"), and the next page has to continue right after the cursor entity.
+// A cursor of a sorted connection keeps the values of the sort keys of its entity (keyset): the next page
+// continues right after them whatever happens to the data. A cursor of "near" keeps the position of its entity;
+// when the data before it changes, the position is computed again ("getShift").
 
 const declarations: SimplifiedEntityConfig[] = [
   {
@@ -18,6 +19,12 @@ const declarations: SimplifiedEntityConfig[] = [
     type: 'tangible',
     intFields: [{ name: 'group', index: true }],
     textFields: [{ name: 'label', index: true }],
+  },
+  {
+    name: 'Place',
+    type: 'tangible',
+    textFields: [{ name: 'label' }],
+    geospatialFields: [{ name: 'position', geospatialType: 'Point', index: true }],
   },
 ];
 
@@ -49,20 +56,60 @@ const create = async (group: number, label: string): Promise<string> => {
   return data.createItem.id;
 };
 
-const readPage = async (
-  args: string,
-): Promise<{ items: string[]; ids: string[]; endCursor: string }> => {
+const createWithoutLabel = async (group: number): Promise<string> => {
+  const data = await run(`mutation { createItem(data: { group: ${group} }) { id } }`);
+
+  return data.createItem.id;
+};
+
+type Page = {
+  items: string[];
+  ids: string[];
+  startCursor: string;
+  endCursor: string;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};
+
+const readPage = async (args: string): Promise<Page> => {
   const data = await run(
-    `{ ItemsThroughConnection(${args}) { pageInfo { endCursor } edges { node { id group label } } } }`,
+    `{ ItemsThroughConnection(${args}) { pageInfo { startCursor endCursor hasNextPage hasPreviousPage } edges { node { id group label } } } }`,
   );
 
   const { edges, pageInfo } = data.ItemsThroughConnection;
 
   return {
-    items: edges.map(({ node: { group, label } }) => `${group}${label}`),
+    items: edges.map(({ node: { group, label } }) => `${group}${label ?? '-'}`),
     ids: edges.map(({ node: { id } }) => id),
-    endCursor: pageInfo.endCursor,
+    ...pageInfo,
   };
+};
+
+// reads all the pages forward or backward
+const readAll = async (args: string, backward = false): Promise<string[]> => {
+  const result: string[] = [];
+
+  let cursor = '';
+
+  for (let i = 0; i < 20; i += 1) {
+    const page = await readPage(
+      backward
+        ? `${args}, last: 2${cursor ? `, before: "${cursor}"` : ''}`
+        : `${args}, first: 2${cursor ? `, after: "${cursor}"` : ''}`,
+    );
+
+    if (backward) {
+      result.unshift(...page.items);
+    } else {
+      result.push(...page.items);
+    }
+
+    if (!(backward ? page.hasPreviousPage : page.hasNextPage)) return result;
+
+    cursor = backward ? page.startCursor : page.endCursor;
+  }
+
+  throw new TypeError('Too many pages!');
 };
 
 mongoose.set('strictQuery', false);
@@ -75,6 +122,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await mongooseConn.connection.db.collection('item_things').deleteMany({});
+  await mongooseConn.connection.db.collection('place_things').deleteMany({});
 });
 
 afterAll(async () => {
@@ -131,7 +179,7 @@ describe('a cursor of "XsThroughConnection" after changes of the data', () => {
     expect(page2.items).toEqual(['1d', '1c']);
   });
 
-  test('should start from the first page when the cursor entity no longer matches "where"', async () => {
+  test('should continue after the cursor entity that no longer matches "where"', async () => {
     for (const label of ['a', 'b', 'c', 'd', 'e']) {
       await create(1, label);
     }
@@ -146,10 +194,11 @@ describe('a cursor of "XsThroughConnection" after changes of the data', () => {
 
     const page2 = await readPage(`${args}, after: "${page1.endCursor}"`);
 
-    expect(page2.items).toEqual(['1a', '1c']);
+    expect(page2.items).toEqual(['1c', '1d']);
+    expect(page2.hasPreviousPage).toBe(true);
   });
 
-  test('should start from the first page when the cursor entity is deleted', async () => {
+  test('should continue after the cursor entity that is deleted', async () => {
     for (const label of ['a', 'b', 'c', 'd', 'e']) {
       await create(1, label);
     }
@@ -162,6 +211,142 @@ describe('a cursor of "XsThroughConnection" after changes of the data', () => {
 
     const page2 = await readPage(`${args}, after: "${page1.endCursor}"`);
 
-    expect(page2.items).toEqual(['1a', '1c']);
+    expect(page2.items).toEqual(['1c', '1d']);
+  });
+
+  test('should give exact "hasPreviousPage" after the entities before the cursor are deleted', async () => {
+    for (const label of ['a', 'b', 'c', 'd']) {
+      await create(1, label);
+    }
+
+    const args = 'sort: { sortBy: [label_ASC] }, first: 2';
+
+    const page1 = await readPage(args);
+
+    for (const id of page1.ids) {
+      await run(`mutation { deleteItem(whereOne: { id: "${id}" }) { id } }`);
+    }
+
+    const page2 = await readPage(`${args}, after: "${page1.endCursor}"`);
+
+    expect(page2.items).toEqual(['1c', '1d']);
+    expect(page2.hasPreviousPage).toBe(false);
+    expect(page2.hasNextPage).toBe(false);
+  });
+
+  test('should page through equal values and missing values in both directions', async () => {
+    for (const [group, label] of [
+      [2, 'b'],
+      [1, null],
+      [2, null],
+      [1, 'a'],
+      [1, 'b'],
+      [2, 'a'],
+      [1, 'a'],
+      [2, null],
+    ] as const) {
+      if (label === null) {
+        await createWithoutLabel(group);
+      } else {
+        await create(group, label);
+      }
+    }
+
+    // missing values come first in ASC and last in DESC
+    const asc = ['1-', '2-', '2-', '1a', '1a', '2a', '1b', '2b'];
+
+    expect((await readAll('sort: { sortBy: [label_ASC] }')).map((item) => item.slice(1))).toEqual(
+      asc.map((item) => item.slice(1)),
+    );
+
+    expect(await readAll('sort: { sortBy: [label_ASC, group_ASC] }')).toEqual([
+      '1-',
+      '2-',
+      '2-',
+      '1a',
+      '1a',
+      '2a',
+      '1b',
+      '2b',
+    ]);
+
+    expect(await readAll('sort: { sortBy: [label_DESC, group_ASC] }')).toEqual([
+      '1b',
+      '2b',
+      '1a',
+      '1a',
+      '2a',
+      '1-',
+      '2-',
+      '2-',
+    ]);
+
+    // every entity once
+    for (const sort of ['label_ASC', 'label_DESC', 'group_DESC, label_ASC']) {
+      const forward = await readAll(`sort: { sortBy: [${sort}] }`);
+      const backward = await readAll(`sort: { sortBy: [${sort}] }`, true);
+
+      expect(backward).toEqual(forward);
+      expect([...forward].sort()).toEqual([...asc].sort());
+    }
+  });
+
+  test('should ignore a cursor of another sort', async () => {
+    for (const label of ['a', 'b', 'c', 'd']) {
+      await create(1, label);
+    }
+
+    const page1 = await readPage('sort: { sortBy: [label_ASC] }, first: 2');
+
+    const page2 = await readPage(
+      `sort: { sortBy: [label_DESC] }, first: 2, after: "${page1.endCursor}"`,
+    );
+
+    expect(page2.items).toEqual(['1d', '1c']);
+    expect(page2.hasPreviousPage).toBe(false);
+  });
+
+  test('should keep the order of the places at the same distance of "near"', async () => {
+    const ids: string[] = [];
+
+    for (const [label, lng] of [
+      ['a', 30.5],
+      ['b', 30.6],
+      ['c', 30.5],
+      ['d', 30.6],
+      ['e', 30.5],
+      ['f', 30.7],
+    ] as const) {
+      const data = await run(
+        `mutation { createPlace(data: { label: "${label}", position: { lng: ${lng}, lat: 50.4 } }) { id } }`,
+      );
+
+      ids.push(data.createPlace.id);
+    }
+
+    const near = 'near: { geospatialField: position, coordinates: { lng: 30.5, lat: 50.4 } }';
+
+    const labels: string[] = [];
+
+    let after = '';
+
+    for (let i = 0; i < 3; i += 1) {
+      const data = await run(
+        `{ PlacesThroughConnection(${near}, first: 2${after ? `, after: "${after}"` : ''}) { pageInfo { endCursor } edges { node { label } } } }`,
+      );
+
+      const { edges, pageInfo } = data.PlacesThroughConnection;
+
+      labels.push(...edges.map(({ node: { label } }) => label));
+
+      after = pageInfo.endCursor;
+    }
+
+    // by the distance and then by the id (the order of creation)
+    expect(labels).toEqual(['a', 'c', 'e', 'b', 'd', 'f']);
+
+    const list = await run(`{ Places(${near}, pagination: { skip: 1, first: 3 }) { label } }`);
+
+    expect(list.Places.map(({ label }) => label)).toEqual(['c', 'e', 'b']);
   });
 });

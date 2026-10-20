@@ -50,7 +50,6 @@ describe('composeEntitySchemaProperties', () => {
     const expectedResult = {
       textField1: {
         type: String,
-        index: true,
       },
       textField2: {
         type: String,
@@ -784,7 +783,6 @@ describe('composeEntitySchemaProperties', () => {
       enumField1: {
         type: String,
         enum: enumeration1,
-        index: true,
       },
       enumField2: {
         type: String,
@@ -853,7 +851,6 @@ describe('composeEntitySchemaProperties', () => {
     const expectedResult = {
       birthday: {
         type: Date,
-        index: true,
       },
       startDate: {
         type: Date,
@@ -930,7 +927,6 @@ describe('composeEntitySchemaProperties', () => {
       },
       intField_2: {
         type: Number,
-        index: true,
         default: 0,
       },
       intField_3: {
@@ -999,7 +995,6 @@ describe('composeEntitySchemaProperties', () => {
       },
       floatField_2: {
         type: Number,
-        index: true,
         default: 0,
       },
       floatField_3: {
@@ -1061,7 +1056,6 @@ describe('composeEntitySchemaProperties', () => {
       },
       booleanField_2: {
         type: Boolean,
-        index: true,
         default: false,
       },
       booleanField_3: {

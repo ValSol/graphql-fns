@@ -157,19 +157,42 @@ describe('createEntityConnectionResolver', () => {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
+    // a cursor keeps the position of the id in the parent's array
     expect(hasNextPage2).toBe(false);
     expect(hasPreviousPage2).toBe(true);
-    expect(startCursor2).toBe(toCursor(id3, 1));
-    expect(endCursor2).toBe(toCursor(id1, 2));
+    expect(startCursor2).toBe(toCursor(id3, 2));
+    expect(endCursor2).toBe(toCursor(id1, 4));
 
     expect(edges2.length).toBe(2);
 
-    expect(edges2[0].cursor).toBe(toCursor(id3, 1));
+    expect(edges2[0].cursor).toBe(toCursor(id3, 2));
     expect(edges2[0].node.id).toEqual(id3);
     expect(edges2[0].node.title).toBe(data3.title);
 
-    expect(edges2[1].cursor).toBe(toCursor(id1, 2));
+    expect(edges2[1].cursor).toBe(toCursor(id1, 4));
     expect(edges2[1].node.id).toEqual(id1);
     expect(edges2[1].node.title).toBe(data1.title);
+
+    const {
+      pageInfo: { hasNextPage: hasNextPage3, hasPreviousPage: hasPreviousPage3 },
+      edges: edges3,
+    } = await Place(parent, { before: endCursor2, last: 1 }, { mongooseConn, pubsub }, info, {
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
+    });
+
+    expect(hasNextPage3).toBe(true);
+    expect(hasPreviousPage3).toBe(true);
+    expect(edges3.map(({ node: { id } }) => id)).toEqual([id3]);
+
+    const {
+      pageInfo: { hasNextPage: hasNextPage4, hasPreviousPage: hasPreviousPage4 },
+      edges: edges4,
+    } = await Place(parent, { last: 2 }, { mongooseConn, pubsub }, info, {
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
+    });
+
+    expect(hasNextPage4).toBe(false);
+    expect(hasPreviousPage4).toBe(true);
+    expect(edges4.map(({ node: { id } }) => id)).toEqual([id3, id1]);
   });
 });

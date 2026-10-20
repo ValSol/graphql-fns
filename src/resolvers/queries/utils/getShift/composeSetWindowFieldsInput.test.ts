@@ -15,7 +15,7 @@ describe('composeSetWindowFieldsInput', () => {
     const arg = { near };
 
     const expectedResult = {
-      sortBy: { position_distance: 1 },
+      sortBy: { position_distance: 1, _id: 1 },
       output: {
         calculated_number: { $sum: 1, window: { documents: ['unbounded', 'current'] } },
       },

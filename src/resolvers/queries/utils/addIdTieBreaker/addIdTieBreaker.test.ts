@@ -1,12 +1,16 @@
 import addIdTieBreaker from '.';
 
 describe('addIdTieBreaker', () => {
-  test('should add "id_ASC" as the last sort key', () => {
+  test('should add "id" as the last sort key in the direction of the previous key', () => {
     const args = { sort: { sortBy: ['group_ASC', 'label_DESC'] }, first: 2 };
 
     expect(addIdTieBreaker(args)).toEqual({
-      sort: { sortBy: ['group_ASC', 'label_DESC', 'id_ASC'] },
+      sort: { sortBy: ['group_ASC', 'label_DESC', 'id_DESC'] },
       first: 2,
+    });
+
+    expect(addIdTieBreaker({ sort: { sortBy: ['label_DESC', 'group_ASC'] } })).toEqual({
+      sort: { sortBy: ['label_DESC', 'group_ASC', 'id_ASC'] },
     });
   });
 
@@ -31,6 +35,15 @@ describe('addIdTieBreaker', () => {
   test('should add "id_ASC" to a sort of "search"', () => {
     expect(addIdTieBreaker({ search: 'word', sort: { sortBy: ['label_ASC'] } })).toEqual({
       search: 'word',
+      sort: { sortBy: ['label_ASC', 'id_ASC'] },
+    });
+  });
+
+  test('should add "id_ASC" to a sort of "near"', () => {
+    const near = { geospatialField: 'position', coordinates: { lng: 0, lat: 0 } };
+
+    expect(addIdTieBreaker({ near, sort: { sortBy: ['label_ASC'] } })).toEqual({
+      near,
       sort: { sortBy: ['label_ASC', 'id_ASC'] },
     });
   });

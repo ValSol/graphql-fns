@@ -12,6 +12,7 @@ import composeLimitingArgs from './composeLimitingArgs';
 import composeProjectionFromArgs from './composeProjectionFromArgs';
 import composeSetWindowFieldsInput from './composeSetWindowFieldsInput';
 
+// used only by "getSkipConnection": for "near" and "search" without "sort"
 const getShift = async (
   _id: string,
   resolverCreatorArg: ResolverCreatorArg,
@@ -44,12 +45,7 @@ const getShift = async (
 
   const limitingArgs = composeLimitingArgs(args, entity);
 
-  const {
-    near,
-    where,
-    search,
-    objectIds_from_parent: objectIdsFromParent, // "objectIds_from_parent" used only to process the call from createChildEntitiesThroughConnectionQueryResolver
-  } = limitingArgs;
+  const { near, where, search } = limitingArgs;
 
   const { mongooseConn } = context;
 
@@ -64,13 +60,6 @@ const getShift = async (
     search,
     sortByTextScore: true,
   });
-
-  if (objectIdsFromParent) {
-    pipeline.push({
-      $set: { index_from_parent_ids: { $indexOfArray: [objectIdsFromParent, '$_id'] } },
-    });
-    pipeline.push({ $sort: { index_from_parent_ids: 1 } });
-  }
 
   pipeline.push({ $setWindowFields: composeSetWindowFieldsInput(limitingArgs) });
 

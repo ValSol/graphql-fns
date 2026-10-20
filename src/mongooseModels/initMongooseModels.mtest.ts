@@ -62,9 +62,9 @@ const collectionNames = async (conn: mongoose.Connection) =>
   (await conn.db!.listCollections().toArray()).map(({ name }) => name).sort();
 
 const expectedIndexes: Record<string, string[]> = {
-  city_things: ['_id_', 'counter_1', 'createdAt_1', 'name_1_country_1', 'updatedAt_1'],
+  city_things: ['_id_', 'counter_1', 'createdAt_1__id_1', 'name_1_country_1', 'updatedAt_1__id_1'],
   counter_variables: ['_id_'],
-  country_things: ['TextIndex', '_id_', 'code_1', 'createdAt_1', 'updatedAt_1'],
+  country_things: ['TextIndex', '_id_', 'code_1', 'createdAt_1__id_1', 'updatedAt_1__id_1'],
 };
 
 const expectIndexes = async (conn: mongoose.Connection) => {

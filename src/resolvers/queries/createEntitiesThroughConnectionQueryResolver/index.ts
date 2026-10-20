@@ -17,16 +17,13 @@ import type {
 } from '@/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
-import fromCursor from '@/resolvers/utils/fromCursor';
 import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import addIdTieBreaker from '../utils/addIdTieBreaker';
-import getFirst from '../utils/getFirst';
-import getShift from '../utils/getShift';
-import getVeryFirst from '../utils/getFirst/getVeryFirst';
-import getLast from '../utils/getLast';
-import getVeryLast from '../utils/getLast/getVeryLast';
+import getSkipConnection from '../utils/getSkipConnection';
+import getKeysetConnection, { type ConnectionPage } from '../utils/keyset/getKeysetConnection';
+import getParentIdsConnection from '../utils/keyset/getParentIdsConnection';
 import modifyConnectionArgsAndInvolvedFilters from '../utils/modifyConnectionArgsAndInvolvedFilters';
 
 type Args = {
@@ -147,7 +144,17 @@ const createEntitiesThroughConnectionQueryResolver = (
       resolverOptions: { ...resolverOptions, involvedFilters },
     } as ResolverArg;
 
-    const { after, before, first, last } = args;
+    const {
+      after,
+      before,
+      first,
+      last,
+      near,
+      sort,
+      objectIds_from_parent: objectIdsFromParent,
+    } = args;
+
+    let page: ConnectionPage;
 
     if (after) {
       if (typeof first === 'undefined') {
@@ -156,111 +163,51 @@ const createEntitiesThroughConnectionQueryResolver = (
         );
       }
 
-      const { _id, shift } = fromCursor(after) || {}; // adding "|| {}" to prevent flowjs error
-
-      let shift2 = shift;
-
-      for (let i = 0; i < 10; i += 1) {
-        const result = await getFirst(
-          _id,
-          shift2,
-          first,
-          resolverArg,
-          involvedFilters,
-          entitiesQueryResolver,
-          entityConfig as TangibleEntityConfig,
-        );
-
-        if (result) return result;
-
-        shift2 = await getShift(
-          _id,
-          resolverCreatorArg,
-          resolverArg,
-          involvedFilters,
-          composeQueryResolver(entityName, generalConfig, serversideConfig),
-        );
-
-        if (shift2 === null) {
-          return getVeryFirst(
-            first,
-            resolverArg,
-            involvedFilters,
-            entitiesQueryResolver,
-            entityConfig as TangibleEntityConfig,
-          );
-        }
-      }
-    }
-
-    if (first) {
-      return getVeryFirst(
-        first,
-        resolverArg,
-        involvedFilters,
-        entitiesQueryResolver,
-        entityConfig as TangibleEntityConfig,
-      );
-    }
-
-    if (before) {
+      page = { cursor: after, count: first, backward: false };
+    } else if (first) {
+      page = { count: first, backward: false };
+    } else if (before) {
       if (typeof last === 'undefined') {
         throw new TypeError(
           `For "before" arg ("${before}", entity: "${entityName}") not found "last" arg!`,
         );
       }
 
-      const { _id, shift } = fromCursor(before) || {}; // adding "|| {}" to prevent flowjs error
-
-      let shift2 = shift;
-
-      for (let i = 0; i < 10; i += 1) {
-        const result = await getLast(
-          _id,
-          shift2,
-          last,
-          resolverArg,
-          involvedFilters,
-          entitiesQueryResolver,
-          entityConfig as TangibleEntityConfig,
-        );
-
-        if (result) return result;
-
-        shift2 = await getShift(
-          _id,
-          resolverCreatorArg,
-          resolverArg,
-          involvedFilters,
-          composeQueryResolver(entityName, generalConfig, serversideConfig),
-        );
-
-        if (shift2 === null) {
-          await getVeryLast(
-            last,
-            resolverArg,
-            involvedFilters,
-            entitiesQueryResolver,
-            entityCountQueryResolver,
-            entityConfig as TangibleEntityConfig,
-          );
-        }
-      }
+      page = { cursor: before, count: last, backward: true };
+    } else if (last) {
+      page = { count: last, backward: true };
+    } else {
+      throw new TypeError(
+        `Incorrect set of args in "entitiesThroughConnection" query, entity: "${entityName}"!`,
+      );
     }
 
-    if (last) {
-      return getVeryLast(
-        last,
+    if (objectIdsFromParent) {
+      return getParentIdsConnection(
+        page,
         resolverArg,
-        involvedFilters,
         entitiesQueryResolver,
-        entityCountQueryResolver,
         entityConfig as TangibleEntityConfig,
       );
     }
 
-    throw new TypeError(
-      `Incorrect set of args in "entitiesThroughConnection" query, entity: "${entityName}"!`,
+    // the order is defined by the values of the sort keys ("id" is the last of them)
+    if (sort?.sortBy.length && !near) {
+      return getKeysetConnection(
+        page,
+        resolverArg,
+        entitiesQueryResolver,
+        entityConfig as TangibleEntityConfig,
+      );
+    }
+
+    return getSkipConnection(
+      page,
+      resolverCreatorArg,
+      resolverArg,
+      involvedFilters,
+      entitiesQueryResolver,
+      entityCountQueryResolver,
     );
   };
   return resolver;

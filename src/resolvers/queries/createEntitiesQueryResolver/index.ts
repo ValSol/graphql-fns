@@ -28,6 +28,7 @@ import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeA
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import composeNearInput from '../utils/composeNearInput';
 import getLimit from '../utils/getLimit';
+import narrowGeoNearToPage from './narrowGeoNearToPage';
 import composeSortForAggregateInput from './composeSortForAggregateInput';
 import composeSortInput from './composeSortInput';
 
@@ -44,6 +45,8 @@ type Args = {
   search?: string;
   // "objectIds_from_parent" used only to process the call from createEntityArrayResolver
   objectIds_from_parent?: Array<any>;
+  // "keysetFilter_from_connection" (a MongoDB filter) used only to process the call from a connection
+  keysetFilter_from_connection?: Record<string, any>;
 };
 
 const createEntitiesQueryResolver = (
@@ -85,6 +88,7 @@ const createEntitiesQueryResolver = (
       where: preWhere,
       search: preSearch,
       objectIds_from_parent: objectIdsFromParent,
+      keysetFilter_from_connection: keysetFilter,
     } = args;
 
     let where = preWhere;
@@ -140,18 +144,48 @@ const createEntitiesQueryResolver = (
       serversideConfig,
     );
 
-    const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
+    const { lookups, where: preWhere2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
-    if (lookups.length > 0 || objectIdsFromParent) {
+    const where2 =
+      keysetFilter && Object.keys(preWhere2).length > 0
+        ? { $and: [preWhere2, keysetFilter] }
+        : keysetFilter || preWhere2;
+
+    // without "sort" documents come in the order of the distance and the ones at the same distance
+    // in the order of "_id": only an aggregate sorts by the distance ("$nearSphere" doesn't add keys)
+    const sortByDistance = Boolean(near) && !sort?.sortBy.length && !objectIdsFromParent;
+
+    if (lookups.length > 0 || objectIdsFromParent || sortByDistance) {
+      let geoNear = near ? composeNearForAggregateInput(near, entityConfig) : undefined;
+
+      if (geoNear && sortByDistance) {
+        const { skip = 0, first = undefined } = pagination || {};
+
+        const limit2 = getLimit(limit, first);
+
+        if (limit2 > 0) {
+          geoNear = await narrowGeoNearToPage(
+            Entity,
+            { where: where2, lookups, geoNear },
+            skip + limit2,
+            session,
+          );
+        }
+      }
+
       const pipeline = composeAggregateHead({
         where: where2,
         lookups,
-        geoNear: near ? composeNearForAggregateInput(near, entityConfig) : undefined,
+        geoNear,
         search,
         sortByTextScore: true,
       });
 
-      if (sort) {
+      if (geoNear && sortByDistance) {
+        pipeline.push({ $sort: { [geoNear.distanceField]: 1, _id: 1 } });
+      }
+
+      if (sort?.sortBy.length) {
         const { sortBy } = sort;
         const sortInputs = composeSortForAggregateInput(sortBy);
         pipeline.push(sortInputs);

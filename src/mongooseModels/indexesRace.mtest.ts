@@ -93,16 +93,16 @@ describe('indexes are built before the first write', () => {
 
       expect(await indexNames(conn, 'city_things')).toEqual([
         '_id_',
-        'createdAt_1',
+        'createdAt_1__id_1',
         'name_1_country_1',
-        'updatedAt_1',
+        'updatedAt_1__id_1',
       ]);
 
       expect(await indexNames(conn, 'country_things')).toEqual([
         '_id_',
         'code_1',
-        'createdAt_1',
-        'updatedAt_1',
+        'createdAt_1__id_1',
+        'updatedAt_1__id_1',
       ]);
     },
   );

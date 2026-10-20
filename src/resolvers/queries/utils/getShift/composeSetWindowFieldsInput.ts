@@ -46,7 +46,8 @@ const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
 
   if (near) {
     return {
-      sortBy: { [`${near.geospatialField}_distance`]: 1 },
+      // the same order as the list resolver's one (see "createEntitiesQueryResolver")
+      sortBy: { [`${near.geospatialField}_distance`]: 1, _id: 1 },
       output: {
         calculated_number: COUNT_UP_TO_CURRENT,
       },
