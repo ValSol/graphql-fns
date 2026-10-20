@@ -1,4 +1,5 @@
 import type { InputCreator, EntityConfig } from '../../tsTypes';
+import wildcardAsIndexed from '../../utils/wildcardAsIndexed';
 
 const defaultFields = `  id_in: [ID!]
   id_nin: [ID!]
@@ -44,8 +45,9 @@ const composeInputFields = (entityConfig: EntityConfig, childChain: ChildChain):
     geospatialFields = [],
     floatFields = [],
     textFields = [],
-    type: entityType,
-  } = entityConfig;
+  } = wildcardAsIndexed(entityConfig);
+
+  const { type: entityType } = entityConfig;
 
   const fields =
     entityType === 'tangible'
@@ -190,7 +192,7 @@ const composeInputFields = (entityConfig: EntityConfig, childChain: ChildChain):
   });
 
   if (entityType === 'tangible') {
-    const { duplexFields = [], relationalFields = [] } = entityConfig;
+    const { duplexFields = [], relationalFields = [] } = wildcardAsIndexed(entityConfig);
 
     relationalFields.forEach(({ name: fieldName, array, index, parent, unique, config }) => {
       if (parent) {
@@ -198,7 +200,7 @@ const composeInputFields = (entityConfig: EntityConfig, childChain: ChildChain):
           ({ oppositeName }) => oppositeName === fieldName,
         );
 
-        if (oppositeField.index) {
+        if (oppositeField.index || oppositeField.wildcardIndex) {
           fields.push(`  ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
 
           childChain[`${config.name}WhereWithoutBooleanOperationsInput`] = [

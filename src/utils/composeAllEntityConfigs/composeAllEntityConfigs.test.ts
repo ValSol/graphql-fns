@@ -1122,6 +1122,58 @@ describe('composeAllEntityConfigs', () => {
     });
   });
 
+  describe('check wildcard index fields', () => {
+    const compose = (fields: Record<string, any>, type = 'tangible') =>
+      composeAllEntityConfigs(
+        [
+          { name: 'Owner', textFields: [{ name: 'name' }] },
+          { name: 'Item', type, ...fields },
+          ...(type === 'embedded'
+            ? [{ name: 'Holder', embeddedFields: [{ name: 'item', configName: 'Item' }] }]
+            : []),
+        ] as SimplifiedEntityConfig[],
+        { ItemKind: ['a', 'b'] },
+      );
+
+    test('should accept text, int, float, dateTime, boolean, enum, relational and duplex fields', () => {
+      expect(() =>
+        compose({
+          textFields: [{ name: 'title', wildcardIndex: true }],
+          intFields: [{ name: 'rank', array: true, wildcardIndex: true }],
+          floatFields: [{ name: 'weight', index: true, wildcardIndex: true }],
+          dateTimeFields: [{ name: 'startedAt', wildcardIndex: true }],
+          booleanFields: [{ name: 'active', wildcardIndex: true }],
+          enumFields: [{ name: 'kind', enumName: 'ItemKind', wildcardIndex: true }],
+          relationalFields: [
+            { name: 'owner', oppositeName: 'items', configName: 'Owner', wildcardIndex: true },
+          ],
+          duplexFields: [
+            { name: 'twin', oppositeName: 'twin', configName: 'Item', wildcardIndex: true },
+          ],
+        }),
+      ).not.toThrow();
+    });
+
+    test('should reject fields of other kinds', () => {
+      expect(() =>
+        compose({
+          geospatialFields: [{ name: 'location', geospatialType: 'Point', wildcardIndex: true }],
+        }),
+      ).toThrow(
+        'Forbidden wildcard index field: "location" of "geospatialFields" in entity: "Item" while only',
+      );
+      expect(() =>
+        compose({ filterFields: [{ name: 'owners', configName: 'Owner', wildcardIndex: true }] }),
+      ).toThrow('Forbidden wildcard index field: "owners" of "filterFields" in entity: "Item"');
+    });
+
+    test('should reject fields of not tangible entities', () => {
+      expect(() =>
+        compose({ textFields: [{ name: 'title', wildcardIndex: true }] }, 'embedded'),
+      ).toThrow('Forbidden wildcard index field: "title" in embedded entity: "Item"!');
+    });
+  });
+
   test.each(['relationalFields', 'duplexFields', 'filterFields', 'calculatedFields'])(
     'should throw for "%s" of an embedded entity',
     (key) => {

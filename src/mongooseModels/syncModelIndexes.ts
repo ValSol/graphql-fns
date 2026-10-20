@@ -54,10 +54,44 @@ const composeSyncError = async (
   return syncError;
 };
 
+const composeProjectionKey = (projection: Record<string, unknown>): string =>
+  JSON.stringify(
+    Object.entries(projection)
+      .map(([key, value]) => [key, value ? 1 : 0])
+      .sort(([a], [b]) => String(a).localeCompare(String(b))),
+  );
+
+// "syncIndexes" of mongoose doesn't compare "wildcardProjection": a wildcard index whose fields
+// differ from the schema ones is dropped here to be created again by "syncIndexes"
+const dropChangedWildcardIndexes = async (model: Model<any>): Promise<void> => {
+  const schemaProjections = model.schema
+    .indexes()
+    .filter(([, options]) => options?.name && options.wildcardProjection)
+    .reduce<Record<string, string>>((prev, [, options]) => {
+      prev[options!.name as string] = composeProjectionKey(options!.wildcardProjection as any);
+
+      return prev;
+    }, {});
+
+  if (Object.keys(schemaProjections).length === 0) return;
+
+  for (const { name, wildcardProjection } of await model.collection.indexes()) {
+    if (
+      name &&
+      wildcardProjection &&
+      schemaProjections[name] &&
+      schemaProjections[name] !== composeProjectionKey(wildcardProjection)
+    ) {
+      await model.collection.dropIndex(name);
+    }
+  }
+};
+
 const runSync = async (model: Model<any>, label: string): Promise<void> => {
   try {
     // the collection is created explicitly: it has to exist before a transaction uses it
     await model.createCollection();
+    await dropChangedWildcardIndexes(model);
     // indexes absent in the schema (so in the config) are dropped, the rest are created
     await model.syncIndexes();
   } catch (error) {

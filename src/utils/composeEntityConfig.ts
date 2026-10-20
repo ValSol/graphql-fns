@@ -6,6 +6,7 @@ import type {
 } from '../tsTypes';
 import compoundIndexFieldKinds from './compoundIndexFieldKinds';
 import isCommonlyAllowedTypeName from './isCommonlyAllowedTypeName';
+import wildcardIndexFieldKinds from './wildcardIndexFieldKinds';
 
 const forbiddenFieldNames = [
   'in',
@@ -135,6 +136,25 @@ const composeEntityConfig = (
             `Forbidden freeze field: "${fieldName}" in ${
               configType === 'embedded' ? 'embedded' : 'virtual'
             } entity: "${name}"!`,
+          );
+        }
+      });
+
+      // check wildcard index fields
+      simplifiedEntityConfig[key].forEach(({ name: fieldName, parent, wildcardIndex }) => {
+        if (!wildcardIndex) return;
+
+        if (configType !== 'tangible') {
+          throw new TypeError(
+            `Forbidden wildcard index field: "${fieldName}" in ${configType} entity: "${name}"!`,
+          );
+        }
+
+        if (!wildcardIndexFieldKinds.includes(key) || (key === 'relationalFields' && parent)) {
+          throw new TypeError(
+            `Forbidden wildcard index field: "${fieldName}" of "${key}" in entity: "${name}" while only ${wildcardIndexFieldKinds.join(
+              ', ',
+            )} (not parent) fields are allowed!`,
           );
         }
       });

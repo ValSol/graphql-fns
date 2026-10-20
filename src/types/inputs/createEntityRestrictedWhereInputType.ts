@@ -1,4 +1,5 @@
 import type { InputCreator, EntityConfig } from '../../tsTypes';
+import wildcardAsIndexed from '../../utils/wildcardAsIndexed';
 
 const defaultFields = `  id_in: [ID!]
   id_nin: [ID!]
@@ -45,8 +46,9 @@ const composeInputFields = (
     geospatialFields = [],
     floatFields = [],
     textFields = [],
-    type: entityType,
-  } = entityConfig;
+  } = wildcardAsIndexed(entityConfig);
+
+  const { type: entityType } = entityConfig;
 
   const fields =
     entityType === 'tangible'
@@ -191,7 +193,7 @@ const composeInputFields = (
   });
 
   if (entityType === 'tangible') {
-    const { duplexFields = [], relationalFields = [] } = entityConfig;
+    const { duplexFields = [], relationalFields = [] } = wildcardAsIndexed(entityConfig);
 
     [...relationalFields, ...duplexFields].forEach(({ name: fieldName, array, index, unique }) => {
       if (unique || index) {

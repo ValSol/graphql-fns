@@ -99,13 +99,18 @@ type FieldCommonProperties = {
   unique?: boolean;
 };
 
-type ArrayBooleanField = Omit<FieldCommonProperties, 'unique'> & {
+// a field with "wildcardIndex" is indexed by the root wildcard index of the entity (not sortable)
+type WildcardIndexableFieldProperties = FieldCommonProperties & {
+  wildcardIndex?: boolean;
+};
+
+type ArrayBooleanField = Omit<WildcardIndexableFieldProperties, 'unique'> & {
   array: true;
   nullable?: boolean;
   default?: boolean[];
   type: 'booleanFields';
 };
-type ScalarBooleanField = Omit<FieldCommonProperties, 'unique'> & {
+type ScalarBooleanField = Omit<WildcardIndexableFieldProperties, 'unique'> & {
   array?: false;
   nullable?: false;
   default?: boolean;
@@ -113,14 +118,14 @@ type ScalarBooleanField = Omit<FieldCommonProperties, 'unique'> & {
 };
 export type BooleanField = ScalarBooleanField | ArrayBooleanField;
 
-type ScalarEnumField = Omit<FieldCommonProperties, 'unique'> & {
+type ScalarEnumField = Omit<WildcardIndexableFieldProperties, 'unique'> & {
   array?: false;
   nullable?: false;
   default?: string;
   enumName: string;
   type: 'enumFields';
 };
-type ArrayEnumField = Omit<FieldCommonProperties, 'unique'> & {
+type ArrayEnumField = Omit<WildcardIndexableFieldProperties, 'unique'> & {
   array: true;
   nullable?: boolean;
   default?: string[];
@@ -143,14 +148,14 @@ type ArrayGeospatialField = Omit<FieldCommonProperties, 'unique'> & {
 };
 export type GeospatialField = ScalarGeospatialField | ArrayGeospatialField;
 
-type ScalarTextField = FieldCommonProperties & {
+type ScalarTextField = WildcardIndexableFieldProperties & {
   array?: false;
   nullable?: false;
   default?: string;
   weight?: number;
   type: 'textFields';
 };
-type ArrayTextField = FieldCommonProperties & {
+type ArrayTextField = WildcardIndexableFieldProperties & {
   array: true;
   nullable?: boolean;
   default?: string[];
@@ -159,13 +164,13 @@ type ArrayTextField = FieldCommonProperties & {
 };
 type TextField = ScalarTextField | ArrayTextField;
 
-type ScalarDateTimeField = FieldCommonProperties & {
+type ScalarDateTimeField = WildcardIndexableFieldProperties & {
   array?: false;
   nullable?: false;
   default?: Date;
   type: 'dateTimeFields';
 };
-type ArrayDateTimeField = FieldCommonProperties & {
+type ArrayDateTimeField = WildcardIndexableFieldProperties & {
   array: true;
   nullable?: boolean;
   default?: Date[];
@@ -173,13 +178,13 @@ type ArrayDateTimeField = FieldCommonProperties & {
 };
 type DateTimeField = ScalarDateTimeField | ArrayDateTimeField;
 
-type ScalarIntField = FieldCommonProperties & {
+type ScalarIntField = WildcardIndexableFieldProperties & {
   array?: false;
   nullable?: false;
   default?: number;
   type: 'intFields';
 };
-type ArrayIntField = FieldCommonProperties & {
+type ArrayIntField = WildcardIndexableFieldProperties & {
   array: true;
   nullable?: boolean;
   default?: number[];
@@ -187,13 +192,13 @@ type ArrayIntField = FieldCommonProperties & {
 };
 type IntField = ScalarIntField | ArrayIntField;
 
-type ScalarFloatField = FieldCommonProperties & {
+type ScalarFloatField = WildcardIndexableFieldProperties & {
   array?: false;
   nullable?: false;
   default?: number;
   type: 'floatFields';
 };
-type ArrayFloatField = FieldCommonProperties & {
+type ArrayFloatField = WildcardIndexableFieldProperties & {
   array: true;
   nullable?: boolean;
   default?: number[];
@@ -214,25 +219,25 @@ type ArraySimplifiedEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
 };
 type SimplifiedEmbeddedField = ArraySimplifiedEmbeddedField | ScalarSimplifiedEmbeddedField;
 
-type ScalarSimplifiedRelationalField = FieldCommonProperties & {
+type ScalarSimplifiedRelationalField = WildcardIndexableFieldProperties & {
   array?: false;
   configName: string;
   oppositeName: string;
 };
-type ArraySimplifiedRelationalField = FieldCommonProperties & {
+type ArraySimplifiedRelationalField = WildcardIndexableFieldProperties & {
   array: true;
   configName: string;
   oppositeName: string;
 };
 type SimplifiedRelationalField = ArraySimplifiedRelationalField | ScalarSimplifiedRelationalField;
 
-type ScalarSimplifiedDuplexField = FieldCommonProperties & {
+type ScalarSimplifiedDuplexField = WildcardIndexableFieldProperties & {
   array?: false;
   configName: string;
   oppositeName: string;
   parent?: boolean;
 };
-type ArraySimplifiedDuplexField = FieldCommonProperties & {
+type ArraySimplifiedDuplexField = WildcardIndexableFieldProperties & {
   array: true;
   configName: string;
   oppositeName: string;
@@ -442,14 +447,14 @@ type ArrayEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
 };
 export type EmbeddedField = ArrayEmbeddedField | ScalarEmbeddedField;
 
-type ScalarRelationalField = FieldCommonProperties & {
+type ScalarRelationalField = WildcardIndexableFieldProperties & {
   array?: false;
   config: TangibleEntityConfig;
   oppositeName: string;
   parent?: false;
   type: 'relationalFields';
 };
-type ArrayRelationalField = FieldCommonProperties & {
+type ArrayRelationalField = WildcardIndexableFieldProperties & {
   array: true;
   config: TangibleEntityConfig;
   oppositeName: string;
@@ -468,19 +473,20 @@ type ArrayParentRelationalField = Omit<
   freeze?: false;
   index?: false;
   unique?: false;
+  wildcardIndex?: false;
   type: 'relationalFields';
 };
 export type RelationalField =
   ArrayRelationalField | ScalarRelationalField | ArrayParentRelationalField;
 
-type ScalarDuplexField = FieldCommonProperties & {
+type ScalarDuplexField = WildcardIndexableFieldProperties & {
   array?: false;
   config: TangibleEntityConfig;
   oppositeName: string;
   parent?: boolean;
   type: 'duplexFields';
 };
-type ArrayDuplexField = FieldCommonProperties & {
+type ArrayDuplexField = WildcardIndexableFieldProperties & {
   array: true;
   config: TangibleEntityConfig;
   oppositeName: string;

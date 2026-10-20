@@ -14,6 +14,7 @@ const loadCopy = (): typeof syncModelIndexesType => {
 const composeModel = (calls: string[]) => ({
   modelName: 'Example_Thing',
   collection: { collectionName: 'example_things' },
+  schema: { indexes: () => [] },
   $init: Promise.resolve(),
   init: () => Promise.resolve(),
   createCollection: async () => {

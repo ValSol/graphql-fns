@@ -5,6 +5,7 @@ import type { Enums, EntityConfig } from '../tsTypes';
 import composeCompoundIndexes from './composeCompoundIndexes';
 import getSortableFieldNames from '../utils/getSortableFieldNames';
 import composeTextIndexProperties from './composeTextIndexProperties';
+import composeWildcardProjection from './composeWildcardProjection';
 import composeEntitySchemaProperties from './composeEntitySchemaProperties';
 import composePolygonOrLineStringIndexProperties from './composePolygonOrLineStringIndexProperties';
 
@@ -44,6 +45,13 @@ const createEntitySchema = (entityConfig: EntityConfig, enums: Enums = {}): any 
     getSortableFieldNames(entityConfig).forEach((fieldName) => {
       EntitySchema.index({ [fieldName]: 1, _id: 1 });
     });
+
+    // fields filtered (not sorted) by are indexed by one root wildcard index instead of own ones
+    const wildcardProjection = composeWildcardProjection(entityConfig);
+
+    if (Object.keys(wildcardProjection).length > 0) {
+      EntitySchema.index({ '$**': 1 }, { wildcardProjection, name: 'WildcardIndex' });
+    }
 
     const polygonIndexProperties = composePolygonOrLineStringIndexProperties(entityConfig);
 

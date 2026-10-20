@@ -203,7 +203,7 @@ const composeEntitySchemaProperties = (
 
     relationalFields
       .filter(({ parent }) => !parent)
-      .reduce((prev, { array, config: { name: relationalEntityName }, name, required, unique }) => {
+      .reduce((prev, { array, config, index, name, required, unique, wildcardIndex }) => {
         if (configType !== 'tangible') {
           throw new TypeError(
             `Must not have an "relational" field in an "${configType}" document!`,
@@ -218,7 +218,7 @@ const composeEntitySchemaProperties = (
           index?: boolean;
           unique?: boolean;
         } = {
-          ref: relationalEntityName,
+          ref: config.name,
           type: 'ObjectId',
         };
         if (!required) obj.required = false; // by default required = true
@@ -226,7 +226,8 @@ const composeEntitySchemaProperties = (
           obj.unique = true;
           if (!required) obj.sparse = true;
         }
-        obj.index = true; // always create index
+        // always create index: an own one or the root wildcard index (see "createEntitySchema")
+        if (index || !wildcardIndex) obj.index = true;
 
         prev[name] = array ? [obj] : obj;
         return prev;

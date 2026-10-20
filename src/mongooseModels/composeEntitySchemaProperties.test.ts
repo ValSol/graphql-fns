@@ -1124,4 +1124,46 @@ describe('composeEntitySchemaProperties', () => {
     const result = composeEntitySchemaProperties(entityConfig, {});
     expect(result).toEqual(expectedResult);
   });
+
+  test('should not index relational fields with "wildcardIndex" by own indexes', () => {
+    const entityConfig = {} as TangibleEntityConfig;
+
+    Object.assign(entityConfig, {
+      name: 'Example',
+      type: 'tangible',
+      relationalFields: [
+        {
+          name: 'owner',
+          oppositeName: 'examples',
+          config: entityConfig,
+          wildcardIndex: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'editors',
+          oppositeName: 'editedExamples',
+          config: entityConfig,
+          array: true,
+          index: true,
+          wildcardIndex: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'author',
+          oppositeName: 'authoredExamples',
+          config: entityConfig,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
+    const expectedResult = {
+      owner: { ref: 'Example', type: 'ObjectId', required: false },
+      editors: [{ ref: 'Example', type: 'ObjectId', required: false, index: true }],
+      author: { ref: 'Example', type: 'ObjectId', required: false, index: true },
+    };
+
+    const result = composeEntitySchemaProperties(entityConfig, {});
+    expect(result).toEqual(expectedResult);
+  });
 });
