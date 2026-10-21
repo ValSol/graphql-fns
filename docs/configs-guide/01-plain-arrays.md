@@ -57,7 +57,7 @@ Field options that matter already for plain data:
 | `required: true` | non-null in the GraphQL type and in `…CreateInput` ✅ |
 | `unique: true` | unique Mongo index; the field appears in `…WhereOneInput` (fetch / update / delete a single entity by it) ✅ |
 | `index: true` | Mongo index; the field appears in `…WhereInput` (filters) and in `…SortEnum` ✅ |
-| `wildcardIndex: true` | the field is put into one common wildcard index of the collection instead of an own index; it appears in `…WhereInput` but not in `…SortEnum` ([wildcard-index.md](../wildcard-index.md)) ✅ |
+| `wildcardIndex: true` | the field is put into one common wildcard index of the collection instead of an own index; it appears in `…WhereInput` but not in `…SortEnum` ([wildcard-index.md](../wildcard-index.md)) ✅; `x_exists: false`, `x: null`, `x_ne`, `x_nin` and the reverse filter `<oppositeName>_` of a relational field don't use it (WI14, WI15); a field that must have `index: true` gets no `wildcardIndex` (WI5) |
 | `default` | value used when the field is absent on create |
 | `array: true` | list field; for arrays `nullable: true` allows `null` instead of `[]` |
 | `weight` (`textFields`) | includes the field into the text index with this weight ([below](#full-text-search-weight)) |
