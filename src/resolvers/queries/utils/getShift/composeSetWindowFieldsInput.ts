@@ -1,10 +1,9 @@
-import type { NearInput, SetWindowFields } from '../../../../tsTypes';
+import type { SetWindowFields } from '../../../../tsTypes';
 
 import parseSortKey from '../parseSortKey';
 
 type Args = {
   where?: any;
-  near?: NearInput;
   sort?: {
     sortBy: Array<string>;
   };
@@ -19,7 +18,7 @@ type Args = {
 const COUNT_UP_TO_CURRENT = { $sum: 1, window: { documents: ['unbounded', 'current'] } } as const;
 
 const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
-  const { near, sort } = arg;
+  const { sort } = arg;
 
   if (sort && sort?.sortBy.length) {
     const sortBy = sort.sortBy.reduce<Record<string, any>>((prev, sortKey) => {
@@ -32,16 +31,6 @@ const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
 
     return {
       sortBy,
-      output: {
-        calculated_number: COUNT_UP_TO_CURRENT,
-      },
-    };
-  }
-
-  if (near) {
-    return {
-      // the same order as the list resolver's one (see "createEntitiesQueryResolver")
-      sortBy: { [`${near.geospatialField}_distance`]: 1, _id: 1 },
       output: {
         calculated_number: COUNT_UP_TO_CURRENT,
       },

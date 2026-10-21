@@ -3,16 +3,13 @@ import mongoose from 'mongoose';
 import type { DataObject, InvolvedFilter, ResolverArg, ResolverCreatorArg } from '@/tsTypes';
 
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
-import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import composeAggregateHead from '@/resolvers/utils/mergeWhereAndFilter/composeAggregateHead';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
-import composeLimitingArgs from './composeLimitingArgs';
-import composeProjectionFromArgs from './composeProjectionFromArgs';
 import composeSetWindowFieldsInput from './composeSetWindowFieldsInput';
 
-// used only by "getSkipConnection": for "near" and "search" without "sort"
+// used only by "getSkipConnection": for "search" without "sort"
 const getShift = async (
   _id: string,
   resolverCreatorArg: ResolverCreatorArg,
@@ -27,8 +24,6 @@ const getShift = async (
 
   const { enums } = generalConfig;
 
-  const projection = composeProjectionFromArgs(args);
-
   const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
   if (!filter) return null;
@@ -37,15 +32,13 @@ const getShift = async (
     parent,
     { whereOne: { id: _id } },
     context,
-    createInfoEssence({ projection }),
+    createInfoEssence({ projection: { _id: 1 } }),
     { ...resolverArg.resolverOptions, involvedFilters },
   );
 
   if (!entity) return null;
 
-  const limitingArgs = composeLimitingArgs(args, entity);
-
-  const { near, where, search } = limitingArgs;
+  const { where, search } = args as { where?: Record<string, any>; search?: string };
 
   const { mongooseConn } = context;
 
@@ -56,12 +49,11 @@ const getShift = async (
   const pipeline = composeAggregateHead({
     where: where2,
     lookups,
-    geoNear: near ? composeNearForAggregateInput(near, entityConfig) : undefined,
     search,
     sortByTextScore: true,
   });
 
-  pipeline.push({ $setWindowFields: composeSetWindowFieldsInput(limitingArgs) });
+  pipeline.push({ $setWindowFields: composeSetWindowFieldsInput(args) });
 
   const $eq = new mongoose.Types.ObjectId(_id);
 

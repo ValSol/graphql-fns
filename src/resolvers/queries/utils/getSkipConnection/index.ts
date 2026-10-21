@@ -16,8 +16,8 @@ import getVeryLast from '../getLast/getVeryLast';
 import getShift from '../getShift';
 import type { ConnectionPage } from '../keyset/getKeysetConnection';
 
-// pages by "skip" the orders that are not defined by the values of fields: by the distance ("near")
-// and by the text score ("search" without "sort"); the cursor keeps the id & the position of its entity,
+// pages by "skip" the order that is not defined by the values of fields: by the text score ("search"
+// without "sort"); the cursor keeps the id & the position of its entity,
 // the position is computed again ("getShift") if the entity isn't found at it
 const getSkipConnection = async (
   { cursor, count, backward }: ConnectionPage,

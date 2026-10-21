@@ -15,7 +15,7 @@ describe('keysetCursor', () => {
 
     expect(values).toEqual([createdAt, 'Київ', null, id]);
 
-    const result = fromKeysetCursor(toKeysetCursor(sortBy, values), sortBy, keys);
+    const result = fromKeysetCursor(toKeysetCursor({ sortBy }, values), { sortBy }, keys);
 
     expect(result).toEqual(values);
     expect((result as unknown[])[0]).toBeInstanceOf(Date);
@@ -23,11 +23,28 @@ describe('keysetCursor', () => {
   });
 
   test('should return null for a cursor of another sort', () => {
-    const cursor = toKeysetCursor(sortBy, [createdAt, 'a', 1, id]);
+    const cursor = toKeysetCursor({ sortBy }, [createdAt, 'a', 1, id]);
 
     const sortBy2 = ['label_ASC', 'id_ASC'];
 
-    expect(fromKeysetCursor(cursor, sortBy2, composeKeysetSortKeys(sortBy2))).toBeNull();
+    expect(
+      fromKeysetCursor(cursor, { sortBy: sortBy2 }, composeKeysetSortKeys(sortBy2)),
+    ).toBeNull();
+  });
+
+  test('should return null for a cursor of another point of "near"', () => {
+    const sortBy2 = ['position_distance_ASC', 'id_ASC'];
+    const keys2 = composeKeysetSortKeys(sortBy2);
+
+    const order = { sortBy: sortBy2, near: ['position', 30.5, 50.4] as [string, number, number] };
+
+    const cursor = toKeysetCursor(order, [12.5, id]);
+
+    expect(fromKeysetCursor(cursor, order, keys2)).toEqual([12.5, id]);
+
+    expect(
+      fromKeysetCursor(cursor, { ...order, near: ['position', 30.6, 50.4] }, keys2),
+    ).toBeNull();
   });
 
   test('should return null for a malformed cursor', () => {
@@ -36,12 +53,15 @@ describe('keysetCursor', () => {
     [
       'not a cursor',
       toBase64(`${id.toString()}:5`),
-      toBase64(JSON.stringify({ sortBy, values: [null, 'a', 1] })),
-      toBase64(JSON.stringify({ sortBy, values: [null, 'a', 1, id.toString()] })),
+      toBase64(JSON.stringify({ order: { sortBy }, values: [null, 'a', 1] })),
+      toBase64(JSON.stringify({ order: { sortBy }, values: [null, 'a', 1, id.toString()] })),
       // a value must not get operators into the filter
       toBase64(
-        JSON.stringify({ sortBy, values: [{ $ne: null }, 'a', 1, { $oid: id.toString() }] }),
+        JSON.stringify({
+          order: { sortBy },
+          values: [{ $ne: null }, 'a', 1, { $oid: id.toString() }],
+        }),
       ),
-    ].forEach((cursor) => expect(fromKeysetCursor(cursor, sortBy, keys)).toBeNull());
+    ].forEach((cursor) => expect(fromKeysetCursor(cursor, { sortBy }, keys)).toBeNull());
   });
 });

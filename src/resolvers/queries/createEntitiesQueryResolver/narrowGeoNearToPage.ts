@@ -12,13 +12,19 @@ const narrowGeoNearToPage = async (
     where,
     lookups,
     geoNear,
-  }: { where: Record<string, any>; lookups: LookupMongoDB[]; geoNear: NearForAggregateMongodb },
+    stages = [],
+  }: {
+    where: Record<string, any>;
+    lookups: LookupMongoDB[];
+    geoNear: NearForAggregateMongodb;
+    stages?: Record<string, any>[]; // that follow the head of the aggregate (a keyset condition)
+  },
   end: number, // the number of the documents up to the end of the page
   session?: any,
 ): Promise<NearForAggregateMongodb> => {
   const { distanceField } = geoNear;
 
-  const pipeline = composeAggregateHead({ where, lookups, geoNear });
+  const pipeline = [...composeAggregateHead({ where, lookups, geoNear }), ...stages];
 
   if (end > 1) pipeline.push({ $skip: end - 1 });
 

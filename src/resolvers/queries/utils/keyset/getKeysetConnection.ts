@@ -1,11 +1,16 @@
-import type { ResolverArg, TangibleEntityConfig } from '@/tsTypes';
+import type { NearInput, ResolverArg, TangibleEntityConfig } from '@/tsTypes';
 
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import composeConnection from './composeConnection';
 import composeKeysetFilter from './composeKeysetFilter';
 import composeKeysetSortKeys from './composeKeysetSortKeys';
-import { fromKeysetCursor, getKeysetValues, toKeysetCursor } from './keysetCursor';
+import {
+  fromKeysetCursor,
+  getKeysetValues,
+  toKeysetCursor,
+  type KeysetOrder,
+} from './keysetCursor';
 
 export type ConnectionPage = {
   cursor?: string; // "after" or "before"
@@ -31,13 +36,50 @@ const getKeysetConnection = async (
   const { parent, args, context, info, resolverOptions } = resolverArg;
 
   const {
+    near,
     sort: { sortBy },
-  } = args as { sort: { sortBy: string[] } };
+  } = args as { near?: NearInput; sort: { sortBy: string[] } };
 
   const keys = composeKeysetSortKeys(sortBy);
 
-  // a malformed cursor or a cursor of another sort is ignored: the very first (last) page is returned
-  const values = cursor ? fromKeysetCursor(cursor, sortBy, keys) : null;
+  const [[firstFieldName]] = keys;
+
+  // the distance of "near" ("<geospatialField>_distance") depends on the point
+  const byDistance = Boolean(near) && firstFieldName === `${near?.geospatialField}_distance`;
+
+  const order: KeysetOrder =
+    near && byDistance
+      ? { sortBy, near: [near.geospatialField, near.coordinates.lng, near.coordinates.lat] }
+      : { sortBy };
+
+  const preValues = cursor ? fromKeysetCursor(cursor, order, keys) : null;
+
+  // a malformed cursor or a cursor of another order is ignored: the very first (last) page is returned;
+  // a distance bounds "$geoNear", which rejects a distance that is not a finite non-negative number
+  const values =
+    preValues &&
+    byDistance &&
+    !(typeof preValues[0] === 'number' && Number.isFinite(preValues[0]) && preValues[0] >= 0)
+      ? null
+      : preValues;
+
+  // "$geoNear" selects only the documents not nearer (farther) than the cursor distance: the margin keeps
+  // the documents at the very distance, the keyset condition selects the ones after the cursor among them
+  const pageNear =
+    near && byDistance && values
+      ? backward
+        ? {
+            ...near,
+            maxDistance: Math.min(
+              near.maxDistance ?? Infinity,
+              (values[0] as number) * (1 + 1e-9) + 1e-9,
+            ),
+          }
+        : {
+            ...near,
+            minDistance: Math.max(near.minDistance ?? 0, (values[0] as number) * (1 - 1e-9)),
+          }
+      : near;
 
   const side = backward ? 'before' : 'after';
 
@@ -61,6 +103,7 @@ const getKeysetConnection = async (
       parent,
       {
         ...args,
+        near: pageNear,
         sort: { sortBy: backward ? reverseSortBy(sortBy) : sortBy },
         pagination: { first: count + 1 },
         keysetFilter_from_connection: values ? composeKeysetFilter(keys, values, side) : undefined,
@@ -105,7 +148,7 @@ const getKeysetConnection = async (
 
   return composeConnection(
     page,
-    (node) => toKeysetCursor(sortBy, getKeysetValues(node, keys)),
+    (node) => toKeysetCursor(order, getKeysetValues(node, keys)),
     backward
       ? { hasNextPage: otherSide, hasPreviousPage: hasMore }
       : { hasNextPage: hasMore, hasPreviousPage: otherSide },

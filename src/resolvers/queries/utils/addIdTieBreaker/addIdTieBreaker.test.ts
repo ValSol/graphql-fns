@@ -36,12 +36,19 @@ describe('addIdTieBreaker', () => {
     expect(addIdTieBreaker({ first: 2 })).toEqual({ sort: { sortBy: ['id_ASC'] }, first: 2 });
   });
 
-  test('should keep the order of "near", "search" and parent ids', () => {
-    const near = { geospatialField: 'position', coordinates: { lng: 0, lat: 0 } };
-
-    [{ near }, { search: 'word' }, { objectIds_from_parent: ['a'] }].forEach((args) =>
+  test('should keep the order of "search" and parent ids', () => {
+    [{ search: 'word' }, { objectIds_from_parent: ['a'] }].forEach((args) =>
       expect(addIdTieBreaker(args)).toBe(args),
     );
+  });
+
+  test('should sort "near" without "sort" by the distance and the id', () => {
+    const near = { geospatialField: 'position', coordinates: { lng: 0, lat: 0 } };
+
+    expect(addIdTieBreaker({ near })).toEqual({
+      near,
+      sort: { sortBy: ['position_distance_ASC', 'id_ASC'] },
+    });
   });
 
   test('should add "id_ASC" to a sort of "search"', () => {

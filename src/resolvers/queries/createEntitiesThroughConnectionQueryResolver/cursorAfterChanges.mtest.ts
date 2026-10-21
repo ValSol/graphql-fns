@@ -8,6 +8,7 @@ import mongoOptions from '@/test/mongo-options';
 import pubsub from '@/resolvers/utils/pubsub';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeTypeDefsAndResolvers from '@/composeTypeDefsAndResolvers';
+import { toKeysetCursor } from '../utils/keyset/keysetCursor';
 
 // A cursor of a sorted connection keeps the values of the sort keys of its entity (keyset): the next page
 // continues right after them whatever happens to the data. A cursor of "near" keeps the position of its entity;
@@ -24,6 +25,7 @@ const declarations: SimplifiedEntityConfig[] = [
     name: 'Place',
     type: 'tangible',
     textFields: [{ name: 'label' }],
+    intFields: [{ name: 'rank', index: true }],
     geospatialFields: [{ name: 'position', geospatialType: 'Point', index: true }],
   },
 ];
@@ -369,5 +371,178 @@ describe('a cursor of "XsThroughConnection" after changes of the data', () => {
     const list = await run(`{ Places(${near}, pagination: { skip: 1, first: 3 }) { label } }`);
 
     expect(list.Places.map(({ label }) => label)).toEqual(['c', 'e', 'b']);
+  });
+
+  describe('"near" pages by the distance', () => {
+    const near = 'near: { geospatialField: position, coordinates: { lng: 30.5, lat: 50.4 } }';
+
+    const createPlace = async (label: string, lng: number, rank = 0): Promise<string> => {
+      const data = await run(
+        `mutation { createPlace(data: { label: "${label}", rank: ${rank}, position: { lng: ${lng}, lat: 50.4 } }) { id } }`,
+      );
+
+      return data.createPlace.id;
+    };
+
+    const readPlaces = async (args: string) => {
+      const data = await run(
+        `{ PlacesThroughConnection(${args}) { pageInfo { startCursor endCursor hasNextPage hasPreviousPage } edges { node { id label } } } }`,
+      );
+
+      const { edges, pageInfo } = data.PlacesThroughConnection;
+
+      return {
+        labels: edges.map(({ node: { label } }) => label) as string[],
+        ids: edges.map(({ node: { id } }) => id) as string[],
+        ...pageInfo,
+      };
+    };
+
+    const readAllPlaces = async (args: string, backward = false): Promise<string[]> => {
+      const result: string[] = [];
+
+      let cursor = '';
+
+      for (let i = 0; i < 20; i += 1) {
+        const page = await readPlaces(
+          backward
+            ? `${args}, last: 2${cursor ? `, before: "${cursor}"` : ''}`
+            : `${args}, first: 2${cursor ? `, after: "${cursor}"` : ''}`,
+        );
+
+        if (backward) {
+          result.unshift(...page.labels);
+        } else {
+          result.push(...page.labels);
+        }
+
+        if (!(backward ? page.hasPreviousPage : page.hasNextPage)) return result;
+
+        cursor = backward ? page.startCursor : page.endCursor;
+      }
+
+      throw new TypeError('Too many pages!');
+    };
+
+    beforeEach(async () => {
+      for (const [label, lng, rank] of [
+        ['a', 30.5, 3],
+        ['b', 30.6, 1],
+        ['c', 30.5, 2],
+        ['d', 30.6, 3],
+        ['e', 30.5, 1],
+        ['f', 30.7, 2],
+        ['g', 30.8, 1],
+      ] as const) {
+        await createPlace(label, lng, rank);
+      }
+    });
+
+    test('should page forward and backward through equal distances', async () => {
+      const expected = ['a', 'c', 'e', 'b', 'd', 'f', 'g'];
+
+      expect(await readAllPlaces(near)).toEqual(expected);
+      expect(await readAllPlaces(near, true)).toEqual(expected);
+
+      expect(await readAllPlaces(`${near}, sort: { sortBy: [rank_DESC] }`)).toEqual([
+        'd',
+        'a',
+        'f',
+        'c',
+        'g',
+        'e',
+        'b',
+      ]);
+
+      expect(await readAllPlaces(`${near}, sort: { sortBy: [rank_DESC] }`, true)).toEqual([
+        'd',
+        'a',
+        'f',
+        'c',
+        'g',
+        'e',
+        'b',
+      ]);
+    });
+
+    test('should respect "maxDistance" and "minDistance"', async () => {
+      // 30.6 is about 7.1 km away from 30.5 at the latitude 50.4
+      expect(await readAllPlaces(near.replace(' }', ' }, maxDistance: 10000'))).toEqual([
+        'a',
+        'c',
+        'e',
+        'b',
+        'd',
+      ]);
+
+      expect(await readAllPlaces(near.replace(' }', ' }, minDistance: 1000'))).toEqual([
+        'b',
+        'd',
+        'f',
+        'g',
+      ]);
+    });
+
+    test('should continue after the cursor entity that is deleted or moved', async () => {
+      const page1 = await readPlaces(`${near}, first: 3`);
+
+      expect(page1.labels).toEqual(['a', 'c', 'e']);
+
+      await run(`mutation { deletePlace(whereOne: { id: "${page1.ids[2]}" }) { id } }`);
+
+      const page2 = await readPlaces(`${near}, first: 2, after: "${page1.endCursor}"`);
+
+      expect(page2.labels).toEqual(['b', 'd']);
+      expect(page2.hasPreviousPage).toBe(true);
+
+      await run(
+        `mutation { updatePlace(whereOne: { id: "${page2.ids[1]}" }, data: { position: { lng: 30.9, lat: 50.4 } }) { id } }`,
+      );
+
+      const page3 = await readPlaces(`${near}, first: 2, after: "${page2.endCursor}"`);
+
+      expect(page3.labels).toEqual(['f', 'g']);
+      expect(page3.hasNextPage).toBe(true);
+    });
+
+    test('should ignore a cursor with an incorrect distance', async () => {
+      const page1 = await readPlaces(`${near}, first: 2`);
+
+      const order = {
+        sortBy: ['position_distance_ASC', 'id_ASC'],
+        near: ['position', 30.5, 50.4] as [string, number, number],
+      };
+
+      const id = new mongoose.Types.ObjectId();
+
+      // a cursor of the very order is accepted
+      expect((await readPlaces(`${near}, first: 2, after: "${page1.endCursor}"`)).labels).toEqual([
+        'e',
+        'b',
+      ]);
+
+      for (const distance of ['far', null, -1, Infinity]) {
+        const cursor = toKeysetCursor(order, [distance, id]);
+
+        const after = await readPlaces(`${near}, first: 2, after: "${cursor}"`);
+
+        expect(after.labels).toEqual(['a', 'c']);
+
+        const before = await readPlaces(`${near}, last: 2, before: "${cursor}"`);
+
+        expect(before.labels).toEqual(['f', 'g']);
+      }
+    });
+
+    test('should ignore a cursor of another point', async () => {
+      const page1 = await readPlaces(`${near}, first: 2`);
+
+      const page2 = await readPlaces(
+        `near: { geospatialField: position, coordinates: { lng: 30.8, lat: 50.4 } }, first: 2, after: "${page1.endCursor}"`,
+      );
+
+      expect(page2.labels).toEqual(['g', 'f']);
+      expect(page2.hasPreviousPage).toBe(false);
+    });
   });
 });

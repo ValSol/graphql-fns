@@ -17,9 +17,15 @@ export const getKeysetValues = (entity: Record<string, any>, keys: KeysetSortKey
     return value === undefined ? null : value;
   });
 
-// EJSON keeps the types of Date & ObjectId values; "sortBy" binds the cursor to the order
-export const toKeysetCursor = (sortBy: string[], values: unknown[]): string =>
-  Buffer.from(EJSON.stringify({ sortBy, values }), 'utf8').toString('base64');
+// what defines the order: "sortBy" and, for a sort by the distance, the point of "near"
+export type KeysetOrder = {
+  sortBy: string[];
+  near?: [geospatialField: string, lng: number, lat: number];
+};
+
+// EJSON keeps the types of Date & ObjectId values; "order" binds the cursor to the order
+export const toKeysetCursor = (order: KeysetOrder, values: unknown[]): string =>
+  Buffer.from(EJSON.stringify({ order, values }), 'utf8').toString('base64');
 
 // a value of a cursor gets into a filter so it must not be an object with query operators
 const isAllowedValue = (value: unknown): boolean =>
@@ -31,7 +37,7 @@ const isAllowedValue = (value: unknown): boolean =>
 // returns null for a cursor that is malformed or composed for another sort
 export const fromKeysetCursor = (
   cursor: string,
-  sortBy: string[],
+  order: KeysetOrder,
   keys: KeysetSortKey[],
 ): null | unknown[] => {
   let parsed: any;
@@ -42,7 +48,7 @@ export const fromKeysetCursor = (
     return null;
   }
 
-  if (!parsed || !deepEqual(parsed.sortBy, sortBy) || !Array.isArray(parsed.values)) return null;
+  if (!parsed || !deepEqual(parsed.order, order) || !Array.isArray(parsed.values)) return null;
 
   const { values } = parsed as { values: unknown[] };
 

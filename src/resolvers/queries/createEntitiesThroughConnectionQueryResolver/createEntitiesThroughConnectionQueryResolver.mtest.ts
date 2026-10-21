@@ -19,10 +19,17 @@ let Example;
 let examplesThroughConnection;
 
 // cursors of the default sort and of "num_DESC" (with the tie-breaker)
-const idCursor = ({ id }) => toKeysetCursor(['id_ASC'], [new mongoose.Types.ObjectId(id)]);
+const idCursor = ({ id }) =>
+  toKeysetCursor({ sortBy: ['id_ASC'] }, [new mongoose.Types.ObjectId(id)]);
+
+// the id of the entity of a cursor of "near" (its values are the distance & the id)
+const cursorId = (cursor: string): string =>
+  mongoose.mongo.BSON.EJSON.parse(
+    Buffer.from(cursor, 'base64').toString('utf8'),
+  ).values[1].toString();
 
 const numDescCursor = ({ id, num }) =>
-  toKeysetCursor(['num_DESC', 'id_DESC'], [num, new mongoose.Types.ObjectId(id)]);
+  toKeysetCursor({ sortBy: ['num_DESC', 'id_DESC'] }, [num, new mongoose.Types.ObjectId(id)]);
 
 const entityConfig: EntityConfig = {
   name: 'Example',
@@ -956,15 +963,15 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage).toBe(false);
     expect(hasNextPage).toBe(true);
 
-    expect(startCursor).toBe(toCursor(createdExamples[10].id, 0));
+    expect(cursorId(startCursor)).toBe(createdExamples[10].id.toString());
     const lastPos = edges.length - 1;
-    expect(endCursor).toBe(toCursor(createdExamples[10 - lastPos].id, lastPos));
+    expect(cursorId(endCursor)).toBe(createdExamples[10 - lastPos].id.toString());
 
     for (let i = 0; i < edges.length; i += 1) {
       const { node, cursor } = edges[i];
 
-      expect(node).toEqual(createdExamples[10 - i]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i].id, i));
+      expect(node).toEqual({ ...createdExamples[10 - i], point_distance: expect.any(Number) });
+      expect(cursorId(cursor)).toBe(createdExamples[10 - i].id.toString());
     }
 
     const examples2 = await examplesThroughConnection(
@@ -989,17 +996,20 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage2).toBe(true);
     expect(hasNextPage2).toBe(true);
-    expect(startCursor2).toBe(toCursor(createdExamples[10 - lastPos - 1].id, lastPos + 1));
+    expect(cursorId(startCursor2)).toBe(createdExamples[10 - lastPos - 1].id.toString());
     const lastPos2 = lastPos + edges2.length;
-    expect(endCursor2).toBe(toCursor(createdExamples[10 - lastPos2].id, lastPos2));
+    expect(cursorId(endCursor2)).toBe(createdExamples[10 - lastPos2].id.toString());
 
     expect(edges2.length).toBe(5);
 
     for (let i = 0; i < edges2.length; i += 1) {
       const { node, cursor } = edges2[i];
 
-      expect(node).toEqual(createdExamples[10 - lastPos - i - 1]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - lastPos - i - 1].id, lastPos + i + 1));
+      expect(node).toEqual({
+        ...createdExamples[10 - lastPos - i - 1],
+        point_distance: expect.any(Number),
+      });
+      expect(cursorId(cursor)).toBe(createdExamples[10 - lastPos - i - 1].id.toString());
     }
 
     const examples3 = await examplesThroughConnection(
@@ -1024,17 +1034,20 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage3).toBe(true);
     expect(hasNextPage3).toBe(false);
-    expect(startCursor3).toBe(toCursor(createdExamples[10 - lastPos2 - 1].id, lastPos2 + 1));
+    expect(cursorId(startCursor3)).toBe(createdExamples[10 - lastPos2 - 1].id.toString());
     const lastPos3 = lastPos2 + edges3.length;
-    expect(endCursor3).toBe(toCursor(createdExamples[10 - lastPos3].id, lastPos3));
+    expect(cursorId(endCursor3)).toBe(createdExamples[10 - lastPos3].id.toString());
 
     expect(edges3.length).toBe(3);
 
     for (let i = 0; i < edges3.length; i += 1) {
       const { node, cursor } = edges3[i];
 
-      expect(node).toEqual(createdExamples[10 - lastPos2 - i - 1]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - lastPos2 - i - 1].id, lastPos2 + i + 1));
+      expect(node).toEqual({
+        ...createdExamples[10 - lastPos2 - i - 1],
+        point_distance: expect.any(Number),
+      });
+      expect(cursorId(cursor)).toBe(createdExamples[10 - lastPos2 - i - 1].id.toString());
     }
 
     const examples4 = await examplesThroughConnection(
@@ -1060,16 +1073,16 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage4).toBe(true);
     expect(hasNextPage4).toBe(true);
 
-    expect(startCursor4).toBe(toCursor(createdExamples[10 - 3].id, 3));
-    expect(endCursor4).toBe(toCursor(createdExamples[10 - 7].id, 7));
+    expect(cursorId(startCursor4)).toBe(createdExamples[10 - 3].id.toString());
+    expect(cursorId(endCursor4)).toBe(createdExamples[10 - 7].id.toString());
 
     expect(edges4.length).toBe(5);
 
     for (let i = 0; i < edges4.length; i += 1) {
       const { node, cursor } = edges4[i];
 
-      expect(node).toEqual(createdExamples[10 - i - 3]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i - 3].id, i + 3));
+      expect(node).toEqual({ ...createdExamples[10 - i - 3], point_distance: expect.any(Number) });
+      expect(cursorId(cursor)).toBe(createdExamples[10 - i - 3].id.toString());
     }
 
     const examples5 = await examplesThroughConnection(
@@ -1095,26 +1108,36 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
     expect(hasPreviousPage5).toBe(false);
     expect(hasNextPage5).toBe(true);
 
-    expect(startCursor5).toBe(toCursor(createdExamples[10].id, 0));
-    expect(endCursor5).toBe(toCursor(createdExamples[10 - 2].id, 2));
+    expect(cursorId(startCursor5)).toBe(createdExamples[10].id.toString());
+    expect(cursorId(endCursor5)).toBe(createdExamples[10 - 2].id.toString());
 
     expect(edges5.length).toBe(3);
 
     for (let i = 0; i < edges5.length; i += 1) {
       const { node, cursor } = edges5[i];
 
-      expect(node).toEqual(createdExamples[10 - i]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i].id, i));
+      expect(node).toEqual({ ...createdExamples[10 - i], point_distance: expect.any(Number) });
+      expect(cursorId(cursor)).toBe(createdExamples[10 - i].id.toString());
     }
   });
 
-  test('should create resolver with "near" sort & dynamic cursor', async () => {
-    const after = toCursor(createdExamples[10 - 1].id, 2);
-
+  test('should create resolver with "near" sort & a cursor of a middle entity', async () => {
     const near: NearInput = {
       geospatialField: 'point',
       coordinates: { lng: 51.1, lat: 31.1 },
     };
+
+    const {
+      edges: [, { cursor: after }],
+    } = await examplesThroughConnection(
+      null,
+      { first: 2, near },
+      { mongooseConn },
+      createInfoEssence({ projection: { num: 1 } }),
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
+    );
+
+    expect(cursorId(after)).toBe(createdExamples[10 - 1].id.toString());
 
     const examples = await examplesThroughConnection(
       null,
@@ -1133,16 +1156,16 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     expect(hasPreviousPage).toBe(true);
     expect(hasNextPage).toBe(true);
-    expect(startCursor).toBe(toCursor(createdExamples[10 - 2].id, 2));
-    expect(endCursor).toBe(toCursor(createdExamples[10 - 4].id, 4));
+    expect(cursorId(startCursor)).toBe(createdExamples[10 - 2].id.toString());
+    expect(cursorId(endCursor)).toBe(createdExamples[10 - 4].id.toString());
 
     expect(edges.length).toBe(3);
 
     for (let i = 0; i < edges.length; i += 1) {
       const { node, cursor } = edges[i];
 
-      expect(node).toEqual(createdExamples[10 - i - 2]);
-      expect(cursor).toBe(toCursor(createdExamples[10 - i - 2].id, i + 2));
+      expect(node).toEqual({ ...createdExamples[10 - i - 2], point_distance: expect.any(Number) });
+      expect(cursorId(cursor)).toBe(createdExamples[10 - i - 2].id.toString());
     }
   });
 });

@@ -144,15 +144,7 @@ const createEntitiesThroughConnectionQueryResolver = (
       resolverOptions: { ...resolverOptions, involvedFilters },
     } as ResolverArg;
 
-    const {
-      after,
-      before,
-      first,
-      last,
-      near,
-      sort,
-      objectIds_from_parent: objectIdsFromParent,
-    } = args;
+    const { after, before, first, last, sort, objectIds_from_parent: objectIdsFromParent } = args;
 
     let page: ConnectionPage;
 
@@ -191,8 +183,9 @@ const createEntitiesThroughConnectionQueryResolver = (
       );
     }
 
-    // the order is defined by the values of the sort keys ("id" is the last of them)
-    if (sort?.sortBy.length && !near) {
+    // the order is defined by the values of the sort keys ("id" is the last of them), "near" without "sort"
+    // is sorted by the distance & "id"
+    if (sort?.sortBy.length) {
       return getKeysetConnection(
         page,
         resolverArg,
