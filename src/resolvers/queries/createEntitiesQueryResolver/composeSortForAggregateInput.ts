@@ -1,17 +1,11 @@
+import parseSortKey from '../utils/parseSortKey';
+
 const composeSortForAggregateInput = (sortBy: Array<string>) =>
   sortBy.reduce(
     (prev, sortKey) => {
-      const [preFieldName, distance] = sortKey.split('_');
+      const [fieldName, direction] = parseSortKey(sortKey);
 
-      const fieldName = preFieldName === 'id' ? '_id' : preFieldName;
-
-      if (distance === 'ASC') {
-        prev.$sort[fieldName] = 1;
-      } else if (distance === 'DESC') {
-        prev.$sort[fieldName] = -1;
-      } else {
-        throw new TypeError(`Incorrect sort key: "${sortKey}!"`);
-      }
+      prev.$sort[fieldName] = direction;
 
       return prev;
     },

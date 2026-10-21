@@ -194,5 +194,43 @@ describe('createEntityConnectionResolver', () => {
     expect(hasNextPage4).toBe(false);
     expect(hasPreviousPage4).toBe(true);
     expect(edges4.map(({ node: { id } }) => id)).toEqual([id3, id1]);
+
+    // a repeated id is the entity at the position of its first occurrence
+    const parentWithRepeatedIds = {
+      friends: [id2, id3, id2, id1].map((id) => toGlobalId(id, 'Place')),
+    };
+
+    const ids: string[] = [];
+
+    let after: string | undefined;
+
+    for (let i = 0; i < 4; i += 1) {
+      const {
+        pageInfo: { hasNextPage: hasNextPage5, endCursor: endCursor5 },
+        edges: edges5,
+      } = await Place(parentWithRepeatedIds, { first: 1, after }, { mongooseConn, pubsub }, info, {
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
+      });
+
+      ids.push(...edges5.map(({ node: { id } }) => id.toString()));
+
+      after = endCursor5;
+
+      if (!hasNextPage5) break;
+    }
+
+    expect(ids).toEqual([id2, id3, id1].map((id) => id.toString()));
+
+    const { edges: edges6 } = await Place(
+      parentWithRepeatedIds,
+      { last: 2, before: after },
+      { mongooseConn, pubsub },
+      info,
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
+    );
+
+    expect(edges6.map(({ node: { id } }) => id.toString())).toEqual(
+      [id2, id3].map((id) => id.toString()),
+    );
   });
 });

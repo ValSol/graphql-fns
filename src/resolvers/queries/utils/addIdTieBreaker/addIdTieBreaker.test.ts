@@ -14,6 +14,18 @@ describe('addIdTieBreaker', () => {
     });
   });
 
+  test('should keep the first position and the last direction of a repeated field', () => {
+    expect(addIdTieBreaker({ sort: { sortBy: ['label_ASC', 'group_ASC', 'label_DESC'] } })).toEqual(
+      {
+        sort: { sortBy: ['label_DESC', 'group_ASC', 'id_ASC'] },
+      },
+    );
+
+    expect(addIdTieBreaker({ sort: { sortBy: ['id_ASC', 'label_ASC', 'id_DESC'] } })).toEqual({
+      sort: { sortBy: ['id_DESC', 'label_ASC'] },
+    });
+  });
+
   test('should keep a sort that already has the id', () => {
     const args = { sort: { sortBy: ['group_ASC', 'id_DESC'] } };
 

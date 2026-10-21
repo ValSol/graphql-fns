@@ -1,5 +1,7 @@
 import type { NearInput, SetWindowFields } from '../../../../tsTypes';
 
+import parseSortKey from '../parseSortKey';
+
 type Args = {
   where?: any;
   near?: NearInput;
@@ -21,17 +23,9 @@ const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
 
   if (sort && sort?.sortBy.length) {
     const sortBy = sort.sortBy.reduce<Record<string, any>>((prev, sortKey) => {
-      const [preFieldName, distance] = sortKey.split('_');
+      const [fieldName, direction] = parseSortKey(sortKey);
 
-      const fieldName = preFieldName === 'id' ? '_id' : preFieldName;
-
-      if (distance === 'ASC') {
-        prev[fieldName] = 1;
-      } else if (distance === 'DESC') {
-        prev[fieldName] = -1;
-      } else {
-        throw new TypeError(`Incorrect sort key: "${sortKey}!"`);
-      }
+      prev[fieldName] = direction;
 
       return prev;
     }, {});

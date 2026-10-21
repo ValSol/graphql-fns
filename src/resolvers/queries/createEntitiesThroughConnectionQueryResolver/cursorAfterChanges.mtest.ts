@@ -291,6 +291,27 @@ describe('a cursor of "XsThroughConnection" after changes of the data', () => {
     }
   });
 
+  test('should page by a sort with a repeated field as MongoDB sorts by it', async () => {
+    for (const label of ['b', 'd', 'a', 'c']) {
+      await create(1, label);
+    }
+
+    // the field takes the direction of its last key
+    expect(await readAll('sort: { sortBy: [label_ASC, label_DESC] }')).toEqual([
+      '1d',
+      '1c',
+      '1b',
+      '1a',
+    ]);
+
+    expect(await readAll('sort: { sortBy: [label_ASC, label_DESC] }', true)).toEqual([
+      '1d',
+      '1c',
+      '1b',
+      '1a',
+    ]);
+  });
+
   test('should ignore a cursor of another sort', async () => {
     for (const label of ['a', 'b', 'c', 'd']) {
       await create(1, label);

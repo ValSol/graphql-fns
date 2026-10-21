@@ -18,15 +18,21 @@ const getParentIdsConnection = async (
 ): Promise<any> => {
   const { parent, args, context, info, resolverOptions } = resolverArg;
 
-  const { objectIds_from_parent: objectIds } = args as { objectIds_from_parent: any[] };
+  const { objectIds_from_parent: preObjectIds } = args as { objectIds_from_parent: any[] };
 
-  const positions = objectIds.reduce<Map<string, number>>((prev, id, i) => {
+  // an id repeated in the array is an entity at the position of its first occurrence ("$indexOfArray"):
+  // the ids are deduplicated so that the ids after a position never contain an entity before it
+  const positions = new Map<string, number>();
+
+  const objectIds = preObjectIds.filter((id) => {
     const key = id.toString();
 
-    if (!prev.has(key)) prev.set(key, i);
+    if (positions.has(key)) return false;
 
-    return prev;
-  }, new Map());
+    positions.set(key, positions.size);
+
+    return true;
+  });
 
   const decoded = cursor ? fromCursor(cursor) : null;
 

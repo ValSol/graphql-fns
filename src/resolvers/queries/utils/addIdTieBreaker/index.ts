@@ -1,5 +1,7 @@
 import type { NearInput } from '@/tsTypes';
 
+import parseSortKey from '../parseSortKey';
+
 type Args = {
   where?: any;
   near?: NearInput;
@@ -15,6 +17,20 @@ type Args = {
   objectIds_from_parent?: Array<any>;
 };
 
+// a field repeated in "sortBy" takes the position of its first key and the direction of its last key:
+// the same order MongoDB uses (a repeated key of a sort object only changes its value)
+const normalizeSortBy = (sortBy: string[]): string[] => {
+  const directions = sortBy.reduce<Map<string, string>>((prev, sortKey) => {
+    const [fieldName, direction] = parseSortKey(sortKey);
+
+    prev.set(fieldName === '_id' ? 'id' : fieldName, direction === 1 ? 'ASC' : 'DESC');
+
+    return prev;
+  }, new Map());
+
+  return [...directions].map(([fieldName, direction]) => `${fieldName}_${direction}`);
+};
+
 // a connection pages by the values of the sort keys ("getKeysetConnection") or by "skip" (with "near" or
 // "search" without "sort"), so documents with equal sort values must come in the same order on every page:
 // "id" is added as the last sort key in the direction of the previous key (so the index of a sortable field
@@ -27,11 +43,15 @@ const addIdTieBreaker = (args: Args): Args => {
   if (objectIdsFromParent) return args;
 
   if (sort?.sortBy.length) {
-    if (sort.sortBy.some((sortKey) => sortKey.startsWith('id_'))) return args;
+    const sortBy = normalizeSortBy(sort.sortBy);
 
-    const direction = sort.sortBy[sort.sortBy.length - 1].endsWith('_DESC') ? 'DESC' : 'ASC';
+    if (sortBy.some((sortKey) => parseSortKey(sortKey)[0] === '_id')) {
+      return sortBy.length === sort.sortBy.length ? args : { ...args, sort: { ...sort, sortBy } };
+    }
 
-    return { ...args, sort: { ...sort, sortBy: [...sort.sortBy, `id_${direction}`] } };
+    const direction = sortBy[sortBy.length - 1].endsWith('_DESC') ? 'DESC' : 'ASC';
+
+    return { ...args, sort: { ...sort, sortBy: [...sortBy, `id_${direction}`] } };
   }
 
   if (near || search) return args;

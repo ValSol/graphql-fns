@@ -1,3 +1,5 @@
+import parseSortKey from '../parseSortKey';
+
 export type KeysetSortKey = [fieldName: string, direction: 1 | -1];
 
 // the keys that define the order of a connection: the keys after "id" are dropped (ids are unique),
@@ -6,17 +8,11 @@ const composeKeysetSortKeys = (sortBy: string[]): KeysetSortKey[] => {
   const keys: KeysetSortKey[] = [];
 
   for (const sortKey of sortBy) {
-    const [preFieldName, direction] = sortKey.split('_');
+    const key = parseSortKey(sortKey);
 
-    const fieldName = preFieldName === 'id' ? '_id' : preFieldName;
+    keys.push(key);
 
-    if (direction === 'ASC') {
-      keys.push([fieldName, 1]);
-    } else if (direction === 'DESC') {
-      keys.push([fieldName, -1]);
-    } else {
-      throw new TypeError(`Incorrect sort key: "${sortKey}"!`);
-    }
+    const [fieldName] = key;
 
     if (fieldName === '_id') return keys;
   }
