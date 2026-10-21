@@ -61,6 +61,9 @@ const composeProjectionKey = (projection: Record<string, unknown>): string =>
       .sort(([a], [b]) => String(a).localeCompare(String(b))),
   );
 
+// an index is already dropped by a concurrent sync (e.g. of another instance of the application)
+const isIndexNotFound = (error: any): boolean => error?.codeName === 'IndexNotFound';
+
 const isRootWildcardKey = (key: Record<string, unknown>): boolean => {
   const keys = Object.keys(key);
 
@@ -87,9 +90,8 @@ const dropChangedWildcardIndexes = async (model: Model<any>): Promise<void> => {
     ) {
       try {
         await model.collection.dropIndex(dbIndex.name as string);
-      } catch (error: any) {
-        // already dropped by a concurrent sync (e.g. of another instance of the application)
-        if (error?.codeName !== 'IndexNotFound') throw error;
+      } catch (error) {
+        if (!isIndexNotFound(error)) throw error;
       }
     }
   }
@@ -101,7 +103,14 @@ const runSync = async (model: Model<any>, label: string): Promise<void> => {
     await model.createCollection();
     await dropChangedWildcardIndexes(model);
     // indexes absent in the schema (so in the config) are dropped, the rest are created
-    await model.syncIndexes();
+    try {
+      await model.syncIndexes();
+    } catch (error) {
+      if (!isIndexNotFound(error)) throw error;
+
+      // the indexes to drop and to create are taken again: one of them is already dropped
+      await model.syncIndexes();
+    }
   } catch (error) {
     throw await composeSyncError(model, label, error);
   }

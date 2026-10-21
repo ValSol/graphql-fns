@@ -28,7 +28,7 @@
 | ID | Fact |
 |---|---|
 | MM10 | ✅ If `createCollection`/`syncIndexes` fails, a `TypeError` is thrown with the original error as `cause`: `Failed to sync indexes of "City" entity (collection "city_things"), not created: "name_1_country_1": E11000 duplicate key error …`. The not created indexes are the ones still in `diffIndexes().toCreate` after the failure (name: `options.name` or `key1_dir1_key2_dir2…` as MongoDB names them); counters are named `counters`. The error reaches every request that needs the model (e.g. `{ Cities { … } }` returns it as a GraphQL error) and `initMongooseModels`. |
-| MM11 | 📖 `syncIndexes` drops indexes before it creates the missing ones: while an index with changed options is rebuilt (or if its creation fails) the collection has no such index. That's why indexes should be synced on the start of an application (MM12), before any write. |
+| MM11 | 📖 `syncIndexes` drops indexes before it creates the missing ones: while an index with changed options is rebuilt (or if its creation fails) the collection has no such index. That's why indexes should be synced on the start of an application (MM12), before any write. ✅ Several instances of an application started at once may drop the same index (e.g. one removed from the config): `syncIndexes` of the late one fails with `IndexNotFound`, so `syncModelIndexes` repeats `syncIndexes` once, with a new diff. |
 
 ## 4. `initMongooseModels`
 

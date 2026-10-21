@@ -11,6 +11,7 @@ import createCounter from './createCounter';
 import createMongooseModel from './createMongooseModel';
 import createEntitySchema from './createEntitySchema';
 import initMongooseModels from './initMongooseModels';
+import syncModelIndexes from './syncModelIndexes';
 
 const declarations: SimplifiedEntityConfig[] = [
   {
@@ -170,6 +171,36 @@ describe('initMongooseModels', () => {
     expect(errors2).toBeUndefined();
 
     expect(await indexNames(conn, 'city_things')).toEqual(expectedIndexes.city_things);
+  });
+
+  test('should sync indexes if an index is dropped by a concurrent sync', async () => {
+    const conn = await connect('jest-init-models-race');
+
+    const models = await initMongooseModels(conn, generalConfig);
+
+    // an index that is not in the config, e.g. removed from it before a new release
+    await conn.db!.collection('city_things').createIndex({ name: 1 });
+
+    // another instance of the application drops it between "diffIndexes" and "dropIndex"
+    const collection = (models.City as any).$__collection;
+    const dropIndex = collection.dropIndex.bind(collection);
+    const dropIndexSpy = jest
+      .spyOn(collection, 'dropIndex')
+      .mockImplementationOnce(async (name: any) => {
+        await conn.db!.collection('city_things').dropIndex(name);
+
+        return dropIndex(name);
+      });
+    const syncIndexesSpy = jest.spyOn(models.City, 'syncIndexes');
+
+    await syncModelIndexes(conn, models.City, '"City" entity', true);
+
+    expect(dropIndexSpy).toHaveBeenCalledWith('name_1');
+    expect(syncIndexesSpy).toHaveBeenCalledTimes(2);
+    await expectIndexes(conn);
+
+    dropIndexSpy.mockRestore();
+    syncIndexesSpy.mockRestore();
   });
 
   test('should sync indexes again after the database is dropped', async () => {
