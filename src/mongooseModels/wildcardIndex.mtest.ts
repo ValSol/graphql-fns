@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { jest } from '@jest/globals';
 
 import type { SimplifiedEntityConfig, TangibleEntityConfig } from '@/tsTypes';
 
@@ -65,6 +66,26 @@ const getIndexSince = async (conn: mongoose.Connection, collectionName: string, 
 
   return stats[0].accesses.since.getTime();
 };
+
+const composeProbeConfig = (name: string, wildcardFieldNames: string[]) =>
+  composeAllEntityConfigs([
+    {
+      name,
+      type: 'tangible',
+      textFields: ['a', 'b', 'c'].map((fieldName) => ({
+        name: fieldName,
+        wildcardIndex: wildcardFieldNames.includes(fieldName),
+      })),
+    },
+  ])[name] as TangibleEntityConfig;
+
+// a model of a probe entity with "wildcardIndex" on "fieldNames" of the fields "a", "b", "c"
+const createProbeModel = (
+  conn: mongoose.Connection,
+  name: string,
+  fieldNames: string[],
+  collectionName: string,
+) => conn.model(name, createEntitySchema(composeProbeConfig(name, fieldNames)), collectionName);
 
 afterAll(async () => {
   for (const conn of connections) {
@@ -194,29 +215,9 @@ describe('wildcard index', () => {
   test('should rebuild the wildcard index only when its fields change', async () => {
     const conn = await connect('jest-wildcard-index-sync');
 
-    const composeConfig = (name: string, wildcardFieldNames: string[]) =>
-      composeAllEntityConfigs([
-        {
-          name,
-          type: 'tangible',
-          textFields: ['a', 'b', 'c'].map((fieldName) => ({
-            name: fieldName,
-            wildcardIndex: wildcardFieldNames.includes(fieldName),
-          })),
-        },
-      ])[name] as TangibleEntityConfig;
-
     // different entity names: schemas are cached by name, both are used for one collection
-    const ProbeA = conn.model(
-      'ProbeA',
-      createEntitySchema(composeConfig('ProbeA', ['a', 'b'])),
-      'probes',
-    );
-    const ProbeB = conn.model(
-      'ProbeB',
-      createEntitySchema(composeConfig('ProbeB', ['b', 'c'])),
-      'probes',
-    );
+    const ProbeA = createProbeModel(conn, 'ProbeA', ['a', 'b'], 'probes');
+    const ProbeB = createProbeModel(conn, 'ProbeB', ['b', 'c'], 'probes');
 
     await syncModelIndexes(conn, ProbeA, '"ProbeA" entity');
 
@@ -238,5 +239,65 @@ describe('wildcard index', () => {
 
     expect(wildcardIndex?.wildcardProjection).toEqual({ b: 1, c: 1 });
     expect(await getIndexSince(conn, 'probes', 'WildcardIndex')).toBeGreaterThan(since);
+  });
+
+  test('should drop root wildcard indexes with other names or without projection', async () => {
+    const conn = await connect('jest-wildcard-index-legacy');
+
+    const collection = conn.db!.collection('legacy_probes');
+
+    await collection.createIndex(
+      { '$**': 1 },
+      { name: 'LegacyWildcard', wildcardProjection: { b: 1, c: 1 } },
+    );
+
+    const ProbeC = createProbeModel(conn, 'ProbeC', ['b', 'c'], 'legacy_probes');
+
+    await syncModelIndexes(conn, ProbeC, '"ProbeC" entity');
+
+    let wildcardIndexes = (await getIndexes(conn, 'legacy_probes')).filter(({ key }) => key['$**']);
+
+    // the same fields but another name: replaced by "WildcardIndex"
+    expect(
+      wildcardIndexes.map(({ name, wildcardProjection }) => [name, wildcardProjection]),
+    ).toEqual([['WildcardIndex', { b: 1, c: 1 }]]);
+
+    await collection.dropIndex('WildcardIndex');
+    await collection.createIndex({ '$**': 1 }, { name: 'WildcardIndex' });
+
+    await syncModelIndexes(conn, ProbeC, '"ProbeC" entity', true);
+
+    wildcardIndexes = (await getIndexes(conn, 'legacy_probes')).filter(({ key }) => key['$**']);
+
+    // the schema name but all the fields: replaced by the one with projection
+    expect(
+      wildcardIndexes.map(({ name, wildcardProjection }) => [name, wildcardProjection]),
+    ).toEqual([['WildcardIndex', { b: 1, c: 1 }]]);
+  });
+
+  test('should rebuild the wildcard index already dropped by a concurrent sync', async () => {
+    const conn = await connect('jest-wildcard-index-race');
+
+    const ProbeD = createProbeModel(conn, 'ProbeD', ['a', 'b'], 'race_probes');
+    const ProbeE = createProbeModel(conn, 'ProbeE', ['b', 'c'], 'race_probes');
+
+    await syncModelIndexes(conn, ProbeD, '"ProbeD" entity');
+
+    // another instance listed the old index too and has already dropped it
+    const staleIndexes = await ProbeE.collection.indexes();
+    await conn.db!.collection('race_probes').dropIndex('WildcardIndex');
+
+    const indexesSpy = jest.spyOn(ProbeE.collection, 'indexes').mockResolvedValueOnce(staleIndexes);
+
+    await syncModelIndexes(conn, ProbeE, '"ProbeE" entity');
+
+    expect(indexesSpy).toHaveBeenCalled();
+    indexesSpy.mockRestore();
+
+    const wildcardIndex = (await getIndexes(conn, 'race_probes')).find(
+      ({ name }) => name === 'WildcardIndex',
+    );
+
+    expect(wildcardIndex?.wildcardProjection).toEqual({ b: 1, c: 1 });
   });
 });

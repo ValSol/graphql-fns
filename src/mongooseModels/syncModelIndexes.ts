@@ -61,28 +61,36 @@ const composeProjectionKey = (projection: Record<string, unknown>): string =>
       .sort(([a], [b]) => String(a).localeCompare(String(b))),
   );
 
-// "syncIndexes" of mongoose doesn't compare "wildcardProjection": a wildcard index whose fields
-// differ from the schema ones is dropped here to be created again by "syncIndexes"
+const isRootWildcardKey = (key: Record<string, unknown>): boolean => {
+  const keys = Object.keys(key);
+
+  return keys.length === 1 && keys[0] === '$**';
+};
+
+// "syncIndexes" of mongoose compares neither names nor "wildcardProjection", so it takes any root
+// wildcard index of the collection for the schema one: every root wildcard index with another
+// name or other fields is dropped here, "syncIndexes" creates the schema one again
 const dropChangedWildcardIndexes = async (model: Model<any>): Promise<void> => {
-  const schemaProjections = model.schema
-    .indexes()
-    .filter(([, options]) => options?.name && options.wildcardProjection)
-    .reduce<Record<string, string>>((prev, [, options]) => {
-      prev[options!.name as string] = composeProjectionKey(options!.wildcardProjection as any);
+  const schemaIndex = model.schema.indexes().find(([key]) => isRootWildcardKey(key));
 
-      return prev;
-    }, {});
+  // without the schema one a root wildcard index is dropped by "syncIndexes" itself
+  if (!schemaIndex) return;
 
-  if (Object.keys(schemaProjections).length === 0) return;
+  const [, { name, wildcardProjection = {} } = {}] = schemaIndex;
+  const projectionKey = composeProjectionKey(wildcardProjection as Record<string, unknown>);
 
-  for (const { name, wildcardProjection } of await model.collection.indexes()) {
+  for (const dbIndex of await model.collection.indexes()) {
     if (
-      name &&
-      wildcardProjection &&
-      schemaProjections[name] &&
-      schemaProjections[name] !== composeProjectionKey(wildcardProjection)
+      isRootWildcardKey(dbIndex.key) &&
+      (dbIndex.name !== name ||
+        composeProjectionKey(dbIndex.wildcardProjection || {}) !== projectionKey)
     ) {
-      await model.collection.dropIndex(name);
+      try {
+        await model.collection.dropIndex(dbIndex.name as string);
+      } catch (error: any) {
+        // already dropped by a concurrent sync (e.g. of another instance of the application)
+        if (error?.codeName !== 'IndexNotFound') throw error;
+      }
     }
   }
 };
