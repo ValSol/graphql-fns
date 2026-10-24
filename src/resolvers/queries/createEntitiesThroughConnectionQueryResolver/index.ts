@@ -6,7 +6,6 @@ import type {
   InventoryChain,
   NearInput,
   ServersideConfig,
-  ResolverCreatorArg,
   EntityConfig,
   GraphqlScalar,
   GraphqlObject,
@@ -21,7 +20,6 @@ import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import addIdTieBreaker from '../utils/addIdTieBreaker';
-import getSkipConnection from '../utils/getSkipConnection';
 import getKeysetConnection, { type ConnectionPage } from '../utils/keyset/getKeysetConnection';
 import getParentIdsConnection from '../utils/keyset/getParentIdsConnection';
 import modifyConnectionArgsAndInvolvedFilters from '../utils/modifyConnectionArgsAndInvolvedFilters';
@@ -58,19 +56,6 @@ const createEntitiesThroughConnectionQueryResolver = (
     generalConfig,
     serversideConfig,
   );
-
-  const entityCountQueryResolver = composeQueryResolver(
-    `${entityName}_Count`,
-    generalConfig,
-    serversideConfig,
-  );
-
-  const resolverCreatorArg: ResolverCreatorArg = {
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    inAnyCase,
-  };
 
   const resolver = async (
     parent: null | GraphqlObject,
@@ -144,7 +129,7 @@ const createEntitiesThroughConnectionQueryResolver = (
       resolverOptions: { ...resolverOptions, involvedFilters },
     } as ResolverArg;
 
-    const { after, before, first, last, sort, objectIds_from_parent: objectIdsFromParent } = args;
+    const { after, before, first, last, objectIds_from_parent: objectIdsFromParent } = args;
 
     let page: ConnectionPage;
 
@@ -183,24 +168,13 @@ const createEntitiesThroughConnectionQueryResolver = (
       );
     }
 
-    // the order is defined by the values of the sort keys ("id" is the last of them), "near" without "sort"
-    // is sorted by the distance & "id"
-    if (sort?.sortBy.length) {
-      return getKeysetConnection(
-        page,
-        resolverArg,
-        entitiesQueryResolver,
-        entityConfig as TangibleEntityConfig,
-      );
-    }
-
-    return getSkipConnection(
+    // the order is defined by the values of the sort keys ("addIdTieBreaker" gives a sort to every order:
+    // "id" is the last key, "near" without "sort" is sorted by the distance, "search" by the relevance)
+    return getKeysetConnection(
       page,
-      resolverCreatorArg,
       resolverArg,
-      involvedFilters,
       entitiesQueryResolver,
-      entityCountQueryResolver,
+      entityConfig as TangibleEntityConfig,
     );
   };
   return resolver;

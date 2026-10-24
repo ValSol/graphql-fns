@@ -31,22 +31,27 @@ const normalizeSortBy = (sortBy: string[]): string[] => {
   return [...directions].map(([fieldName, direction]) => `${fieldName}_${direction}`);
 };
 
-// a connection pages by the values of the sort keys ("getKeysetConnection") or by "skip" ("search" without
-// "sort"), so documents with equal sort values must come in the same order on every page: "id" is added as
-// the last sort key in the direction of the previous key (so the index of a sortable field with "_id" serves
-// the sort in the both directions), and is the sort when no order is given at all; "near" without "sort" is
-// sorted by the distance ("<geospatialField>_distance", added by "$geoNear" of the list resolver) & "id";
-// "search" without "sort" and the order of the parent ids keep their own order
+// a connection pages by the values of the sort keys ("getKeysetConnection"), so documents with equal sort
+// values must come in the same order on every page: "id" is added as the last sort key in the direction of
+// the previous key (so the index of a sortable field with "_id" serves the sort in the both directions), and
+// is the sort when no order is given at all; "near" without "sort" is sorted by the distance
+// ("<geospatialField>_distance", added by "$geoNear" of the list resolver) & "id", "search" without "sort"
+// by the "relevance" (the text score) & "id" from the newest; "relevance" without "search" is dropped;
+// the order of the parent ids is kept
 const addIdTieBreaker = (args: Args): Args => {
   const { near, search, sort, objectIds_from_parent: objectIdsFromParent } = args;
 
   if (objectIdsFromParent) return args;
 
-  if (sort?.sortBy.length) {
-    const sortBy = normalizeSortBy(sort.sortBy);
+  const sortBy = sort?.sortBy.length
+    ? normalizeSortBy(sort.sortBy).filter(
+        (sortKey) => search || parseSortKey(sortKey)[0] !== 'relevance',
+      )
+    : [];
 
+  if (sortBy.length > 0) {
     if (sortBy.some((sortKey) => parseSortKey(sortKey)[0] === '_id')) {
-      return sortBy.length === sort.sortBy.length ? args : { ...args, sort: { ...sort, sortBy } };
+      return sortBy.length === sort?.sortBy.length ? args : { ...args, sort: { ...sort, sortBy } };
     }
 
     const direction = sortBy[sortBy.length - 1].endsWith('_DESC') ? 'DESC' : 'ASC';
@@ -58,7 +63,7 @@ const addIdTieBreaker = (args: Args): Args => {
     return { ...args, sort: { sortBy: [`${near.geospatialField}_distance_ASC`, 'id_ASC'] } };
   }
 
-  if (search) return args;
+  if (search) return { ...args, sort: { sortBy: ['relevance_DESC', 'id_DESC'] } };
 
   return { ...args, sort: { sortBy: ['id_ASC'] } };
 };

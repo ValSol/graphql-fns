@@ -1105,18 +1105,6 @@ export type LookupMongoDB = {
   };
 };
 
-export type SetWindowFields = {
-  sortBy: {
-    [calculated_distance: string]: 1 | -1;
-  };
-  output: {
-    calculated_number: {
-      $sum: 1;
-      window: { documents: readonly ['unbounded', 'current'] };
-    };
-  };
-};
-
 export type PipelineMongoDB = Array<
   | LookupMongoDB
   | { $match: DataObject }
@@ -1126,10 +1114,9 @@ export type PipelineMongoDB = Array<
   | { $limit: number }
   | { $sort: Record<string, 1 | -1> }
   | { $sort: { index_from_parent_ids: 1 } }
-  | { $sort: { score: { $meta: 'textScore' } } }
+  | { $set: { relevance: { $meta: 'textScore' } } }
   | { $set: { index_from_parent_ids: { $indexOfArray: [DataObject[], '$_id'] } } }
   | { $count: 'count' }
-  | { $setWindowFields: SetWindowFields }
 >;
 
 export type Subscription = {

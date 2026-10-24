@@ -118,9 +118,6 @@ const createEntitiesQueryResolver = (
       search = undefined;
     }
 
-    // very same code as ...
-    // ...at: src/resolvers/queries/createEntitiesThroughConnectionQueryResolver/getShift/index.js
-
     const { mongooseConn } = context;
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
@@ -147,36 +144,56 @@ const createEntitiesQueryResolver = (
 
     const { lookups, where: preWhere2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
-    // with "near" the keyset condition of a connection may use the distance that "$geoNear" adds, so it's
-    // matched after "$geoNear" (not in its "query"), otherwise it's a part of "where"
-    const keysetAfterGeoNear = Boolean(near) && Boolean(keysetFilter);
+    // with "near" or "search" the keyset condition of a connection may use the distance that "$geoNear"
+    // adds or the "relevance" (the text score), so it's matched after the head of the aggregate (not in
+    // the "query" of "$geoNear" or in the "$text" match), otherwise it's a part of "where"
+    const keysetAfterHead = Boolean(keysetFilter) && (Boolean(near) || Boolean(search));
 
     const where2 =
-      keysetFilter && !near
+      keysetFilter && !keysetAfterHead
         ? Object.keys(preWhere2).length > 0
           ? { $and: [preWhere2, keysetFilter] }
           : keysetFilter
         : preWhere2;
 
+    // "relevance" is the text score of "search": without "search" its keys are dropped
+    const preSortBy = (sort?.sortBy || []).filter(
+      (sortKey) => search || parseSortKey(sortKey)[0] !== 'relevance',
+    );
+
     // without "sort" documents come in the order of the distance and the ones at the same distance
-    // in the order of "_id" (a connection sorts by "<geospatialField>_distance" explicitly): only
-    // an aggregate sorts by the distance ("$nearSphere" doesn't add keys)
-    const sortBy = sort?.sortBy.length
-      ? sort.sortBy
-      : near && !objectIdsFromParent
-        ? [`${near.geospatialField}_distance_ASC`, 'id_ASC']
-        : undefined;
+    // in the order of "_id" (a connection sorts by "<geospatialField>_distance" explicitly), "search"
+    // comes in the order of the relevance and then of "_id" from the newest: only an aggregate sorts
+    // by the distance ("$nearSphere" doesn't add keys) and by the relevance
+    const sortBy =
+      preSortBy.length > 0
+        ? preSortBy
+        : objectIdsFromParent
+          ? undefined
+          : near
+            ? [`${near.geospatialField}_distance_ASC`, 'id_ASC']
+            : search
+              ? ['relevance_DESC', 'id_DESC']
+              : undefined;
 
     const [firstSortField, firstSortDirection] = sortBy ? parseSortKey(sortBy[0]) : [];
 
     const sortByDistance = Boolean(near) && firstSortField === `${near?.geospatialField}_distance`;
 
-    if (lookups.length > 0 || objectIdsFromParent || sortByDistance || keysetAfterGeoNear) {
+    const sortByRelevance =
+      Boolean(search) &&
+      Boolean(sortBy?.some((sortKey) => parseSortKey(sortKey)[0] === 'relevance'));
+
+    if (
+      lookups.length > 0 ||
+      objectIdsFromParent ||
+      sortByDistance ||
+      sortByRelevance ||
+      keysetAfterHead
+    ) {
       let geoNear = near ? composeNearForAggregateInput(near, entityConfig) : undefined;
 
-      const keysetStages = keysetAfterGeoNear
-        ? [{ $match: keysetFilter as Record<string, any> }]
-        : [];
+      const keysetStages = keysetAfterHead ? [{ $match: keysetFilter as Record<string, any> }] : [];
 
       // "$geoNear" gives the documents by the ascending distance
       if (geoNear && sortByDistance && firstSortDirection === 1) {
@@ -199,7 +216,7 @@ const createEntitiesQueryResolver = (
         lookups,
         geoNear,
         search,
-        sortByTextScore: true,
+        relevance: sortByRelevance,
       });
 
       pipeline.push(...keysetStages);
@@ -231,10 +248,7 @@ const createEntitiesQueryResolver = (
         pipeline.push({ $limit: limit });
       }
 
-      if (!search) {
-        // not use "$project" if used "search" to prevent error: field names may not start with '$'
-        pipeline.push({ $project: projection as { [fieldName: string]: 1 } });
-      }
+      pipeline.push({ $project: projection as { [fieldName: string]: 1 } });
 
       const preEntities = await (session
         ? Entity.aggregate(pipeline).session(session).exec()
@@ -275,8 +289,7 @@ const createEntitiesQueryResolver = (
 
     if (search) query = query.where({ $text: { $search: search } });
 
-    if (sort) {
-      const { sortBy } = sort;
+    if (sortBy) {
       const composedSortBy = composeSortInput(sortBy);
       composedSortBy.forEach((sortItem) => query.sort(sortItem));
     }

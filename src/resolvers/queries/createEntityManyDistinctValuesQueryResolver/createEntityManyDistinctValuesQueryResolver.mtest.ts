@@ -39,7 +39,7 @@ const oldDistinctValues = async (
 
   const { lookups, where: where2 } = mergeWhereAndFilter([], where, entityConfig);
 
-  const pipeline = composeAggregateHead({ where: where2, lookups, search, sortByTextScore: true });
+  const pipeline = composeAggregateHead({ where: where2, lookups, search });
 
   if (!search) pipeline.push({ $project: { _id: 1 } });
 

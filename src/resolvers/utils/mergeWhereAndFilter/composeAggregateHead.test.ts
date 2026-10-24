@@ -32,11 +32,11 @@ describe('composeAggregateHead', () => {
   });
 
   test('merges the pre-match into the "$text" match', () => {
-    const result = composeAggregateHead({ where, lookups, search: 'abc', sortByTextScore: true });
+    const result = composeAggregateHead({ where, lookups, search: 'abc', relevance: true });
 
     const expectedResult = [
       { $match: { $text: { $search: 'abc' }, show: { $eq: true } } },
-      { $sort: { score: { $meta: 'textScore' } } },
+      { $set: { relevance: { $meta: 'textScore' } } },
       ...lookups,
       { $match: where },
     ];
@@ -44,7 +44,7 @@ describe('composeAggregateHead', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('doesn\'t sort by text score if not asked', () => {
+  test("doesn't add the text score if not asked", () => {
     const result = composeAggregateHead({ where, lookups, search: 'abc' });
 
     const expectedResult = [

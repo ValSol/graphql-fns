@@ -822,14 +822,22 @@ describe('createEntityQueryResolver', () => {
 
     expect(items2.length).toBe(4);
 
-    expect(items2[0].first).toBe('arnold');
-    expect(items2[0].second).toBe('kislyi');
-    expect(items2[1].first).toBe('arnold');
-    expect(items2[1].second).toBe('ivanov & petrov');
-    expect(items2[2].first).toBe('vasya & masha');
-    expect(items2[2].second).toBe('pupkin');
-    expect(items2[3].first).toBe('masha');
-    expect(items2[3].second).toBe('nikman & pupkin');
+    // by the relevance (the text score: "second" has the bigger weight) and then by the id from the newest
+    const scored = await mongooseConn.connection.db
+      .collection('tableitem_things')
+      .aggregate([
+        { $match: { $text: { $search: search } } },
+        { $set: { score: { $meta: 'textScore' } } },
+        { $sort: { score: -1, _id: -1 } },
+      ])
+      .toArray();
+
+    expect(items2.map(({ first, second }) => `${first}/${second}`)).toEqual(
+      scored.map(({ first, second }) => `${first}/${second}`),
+    );
+
+    expect(items2.slice(0, 2).map(({ second }) => second)).toEqual(['pupkin', 'nikman & pupkin']);
+    expect(items2.slice(2).map(({ first }) => first)).toEqual(['arnold', 'arnold']);
   });
 
   test('should create query entities resolver to aggregate result', async () => {

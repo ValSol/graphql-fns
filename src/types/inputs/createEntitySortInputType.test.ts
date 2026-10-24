@@ -292,4 +292,32 @@ input ExampleSortInput {
     const result = createEntitySortInputType(entityConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should add "relevance_DESC" for an entity with "search"', () => {
+    const entityConfig: EntityConfig = {
+      name: 'Article',
+      type: 'tangible',
+      textFields: [
+        { name: 'title', weight: 1, type: 'textFields' },
+        { name: 'slug', index: true, type: 'textFields' },
+      ],
+    };
+
+    const [, inputDefinition] = createEntitySortInputType(entityConfig);
+
+    expect(inputDefinition).toBe(`enum ArticleSortEnum {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  slug_ASC
+  slug_DESC
+  relevance_DESC
+}
+input ArticleSortInput {
+  sortBy: [ArticleSortEnum]
+}`);
+  });
 });

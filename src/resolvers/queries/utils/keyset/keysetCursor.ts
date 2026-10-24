@@ -17,10 +17,12 @@ export const getKeysetValues = (entity: Record<string, any>, keys: KeysetSortKey
     return value === undefined ? null : value;
   });
 
-// what defines the order: "sortBy" and, for a sort by the distance, the point of "near"
+// what defines the order: "sortBy" and, for a sort by the distance, the point of "near", for a sort by
+// the relevance, the text of "search"
 export type KeysetOrder = {
   sortBy: string[];
   near?: [geospatialField: string, lng: number, lat: number];
+  search?: string;
 };
 
 // EJSON keeps the types of Date & ObjectId values; "order" binds the cursor to the order

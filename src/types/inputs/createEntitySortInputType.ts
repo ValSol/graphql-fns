@@ -3,7 +3,7 @@ import type { InputCreator } from '../../tsTypes';
 import getSortableFieldNames from '../../utils/getSortableFieldNames';
 
 const createEntitySortInputType: InputCreator = (entityConfig) => {
-  const { name } = entityConfig;
+  const { name, textFields = [] } = entityConfig;
 
   const inputName = `${name}SortInput`;
 
@@ -20,6 +20,12 @@ const createEntitySortInputType: InputCreator = (entityConfig) => {
     fieldLines.push(`  ${fieldName}_ASC
   ${fieldName}_DESC`);
   });
+
+  // the text score of "search" (an entity has "search" if a text field has "weight"), from the most
+  // relevant; ignored without "search"
+  if (textFields.some(({ weight }) => weight)) {
+    fieldLines.push('  relevance_DESC');
+  }
 
   const inputDefinition = `enum ${name}SortEnum {
 ${fieldLines.join('\n')}

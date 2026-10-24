@@ -1007,6 +1007,18 @@ describe('composeAllEntityConfigs', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should throw for the reserved field name "relevance"', () => {
+    expect(() =>
+      composeAllEntityConfigs([
+        { name: 'Article', textFields: [{ name: 'relevance', index: true }] },
+      ] as any),
+    ).toThrow('Forbidden field name: "relevance" in entity: "Article"!');
+
+    expect(() =>
+      composeAllEntityConfigs([{ name: 'Article', intFields: [{ name: 'relevance' }] }] as any),
+    ).toThrow('Forbidden field name: "relevance"');
+  });
+
   describe('checks of relations (Q11)', () => {
     test('should throw for relational field that refers to not tangible config', () => {
       expect(() =>

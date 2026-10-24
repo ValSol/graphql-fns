@@ -46,7 +46,7 @@ Do not declare `id`, `createdAt`, `updatedAt`: every entity gets them automatica
 **Field names.** A general rule worth following: a field with `array: true` has a **plural** name (`languages`, `names`, `cities`), a field without it has a **singular** one (`name`, `currency`, `capital`, `territory`). It applies to every field kind, including the `oppositeName` of a relational field (the added field is always an array: `countries`, `neighbourOfCountries`) and the halves of a duplex link (`Country.cities` ↔ `City.country`). The reader of the schema then sees at once whether a field returns one value or a list. Names checked by `composeAllEntityConfigs` (it throws otherwise) 📖:
 
 - no `_` (underscore);
-- not `id`, `createdAt`, `updatedAt`, `counter`, `connect`, `create`, `pageInfo`, `in`, `nin`, `ne`, `gt`, `gte`, `lt`, `lte`, `re` (allowed only in virtual entities);
+- not `id`, `createdAt`, `updatedAt`, `counter`, `connect`, `create`, `pageInfo`, `relevance`, `in`, `nin`, `ne`, `gt`, `gte`, `lt`, `lte`, `re` (allowed only in virtual entities);
 - no endings `ThroughConnection`, `DistinctValues`; an array field must not end with `Count`, a filter field with `Stringified` (these suffixes are used by the generated fields);
 - unique within the entity, including the fields added to it as opposites of relational links.
 

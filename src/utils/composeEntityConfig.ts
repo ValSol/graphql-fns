@@ -24,6 +24,7 @@ const forbiddenFieldNames = [
   'connect',
   'create',
   'pageInfo',
+  'relevance', // the text score of "search" ("relevance_DESC" of "XSortEnum")
 ];
 
 const allowedConfigTypes = ['embedded', 'tangible', 'virtual'];

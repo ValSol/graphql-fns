@@ -4,19 +4,20 @@ import composePreMatch from './composePreMatch';
 
 // composes the stages that begin an aggregate: "$text" / "$geoNear" (have to be first), the part of
 // "where" that doesn't depend on the lookups (lets MongoDB use indexes before the lookups), the lookups
-// and the whole "where"
+// and the whole "where"; "relevance" adds the text score of "search" as the field "relevance" (a sort key
+// of "XSortEnum"): the score is available only right after the "$text" match
 const composeAggregateHead = ({
   where,
   lookups,
   geoNear,
   search,
-  sortByTextScore,
+  relevance,
 }: {
   where: Record<string, any>;
   lookups: LookupMongoDB[];
   geoNear?: NearForAggregateMongodb;
   search?: string;
-  sortByTextScore?: boolean;
+  relevance?: boolean;
 }): Record<string, any>[] => {
   const preMatch = composePreMatch(where, lookups);
 
@@ -29,8 +30,8 @@ const composeAggregateHead = ({
 
     preMatchUsed = true;
 
-    if (sortByTextScore) {
-      pipeline.push({ $sort: { score: { $meta: 'textScore' } } });
+    if (relevance) {
+      pipeline.push({ $set: { relevance: { $meta: 'textScore' } } });
     }
   }
 

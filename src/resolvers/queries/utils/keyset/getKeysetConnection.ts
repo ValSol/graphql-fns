@@ -37,8 +37,9 @@ const getKeysetConnection = async (
 
   const {
     near,
+    search,
     sort: { sortBy },
-  } = args as { near?: NearInput; sort: { sortBy: string[] } };
+  } = args as { near?: NearInput; search?: string; sort: { sortBy: string[] } };
 
   const keys = composeKeysetSortKeys(sortBy);
 
@@ -47,19 +48,29 @@ const getKeysetConnection = async (
   // the distance of "near" ("<geospatialField>_distance") depends on the point
   const byDistance = Boolean(near) && firstFieldName === `${near?.geospatialField}_distance`;
 
-  const order: KeysetOrder =
-    near && byDistance
-      ? { sortBy, near: [near.geospatialField, near.coordinates.lng, near.coordinates.lat] }
-      : { sortBy };
+  // the relevance (the text score) depends on the text of "search"
+  const relevanceIndex = keys.findIndex(([fieldName]) => fieldName === 'relevance');
+
+  const order: KeysetOrder = {
+    sortBy,
+    ...(near && byDistance
+      ? { near: [near.geospatialField, near.coordinates.lng, near.coordinates.lat] }
+      : {}),
+    ...(search && relevanceIndex !== -1 ? { search } : {}),
+  };
 
   const preValues = cursor ? fromKeysetCursor(cursor, order, keys) : null;
 
+  const isScore = (value: unknown) =>
+    typeof value === 'number' && Number.isFinite(value) && value >= 0;
+
   // a malformed cursor or a cursor of another order is ignored: the very first (last) page is returned;
-  // a distance bounds "$geoNear", which rejects a distance that is not a finite non-negative number
+  // a distance bounds "$geoNear", which rejects a distance that is not a finite non-negative number,
+  // and a relevance is a non-negative number too
   const values =
     preValues &&
-    byDistance &&
-    !(typeof preValues[0] === 'number' && Number.isFinite(preValues[0]) && preValues[0] >= 0)
+    ((byDistance && !isScore(preValues[0])) ||
+      (relevanceIndex !== -1 && !isScore(preValues[relevanceIndex])))
       ? null
       : preValues;
 

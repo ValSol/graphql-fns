@@ -36,10 +36,34 @@ describe('addIdTieBreaker', () => {
     expect(addIdTieBreaker({ first: 2 })).toEqual({ sort: { sortBy: ['id_ASC'] }, first: 2 });
   });
 
-  test('should keep the order of "search" and parent ids', () => {
-    [{ search: 'word' }, { objectIds_from_parent: ['a'] }].forEach((args) =>
-      expect(addIdTieBreaker(args)).toBe(args),
-    );
+  test('should keep the order of parent ids', () => {
+    const args = { objectIds_from_parent: ['a'] };
+
+    expect(addIdTieBreaker(args)).toBe(args);
+  });
+
+  test('should sort "search" without "sort" by the relevance and the id from the newest', () => {
+    expect(addIdTieBreaker({ search: 'word' })).toEqual({
+      search: 'word',
+      sort: { sortBy: ['relevance_DESC', 'id_DESC'] },
+    });
+  });
+
+  test('should drop "relevance" without "search"', () => {
+    expect(addIdTieBreaker({ sort: { sortBy: ['relevance_DESC', 'label_ASC'] } })).toEqual({
+      sort: { sortBy: ['label_ASC', 'id_ASC'] },
+    });
+
+    expect(addIdTieBreaker({ sort: { sortBy: ['relevance_DESC'] } })).toEqual({
+      sort: { sortBy: ['id_ASC'] },
+    });
+
+    expect(
+      addIdTieBreaker({ search: 'word', sort: { sortBy: ['relevance_DESC', 'label_ASC'] } }),
+    ).toEqual({
+      search: 'word',
+      sort: { sortBy: ['relevance_DESC', 'label_ASC', 'id_ASC'] },
+    });
   });
 
   test('should sort "near" without "sort" by the distance and the id', () => {

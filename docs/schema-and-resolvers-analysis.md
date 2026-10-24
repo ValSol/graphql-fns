@@ -44,7 +44,7 @@ Caching: outside jest intermediate results are cached, but separately for every 
 | E8 | `XCreatedOrDeletedPayload` (virtual) | auto for tangible | `node: X!`, `[actor: Actor]` | return type of `createdX` / `deletedX` |
 | E9 | **representation** config `X{Key}` (or with `representationNameSlicePosition`, e.g. `XKeyConnection`) | `generalConfig.representations[Key]` | a copy of X with include/exclude/add/freeze/unfreeze fields and relational/duplex/filter/child references replaced by `Y{Key}` | `…{Key}` actions from `allow[X]` |
 
-Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no plural (`pluralize(name) === name`), not `DateTime/Node/node/PageInfo`. Fields cannot contain `_`, cannot end with `ThroughConnection` / `DistinctValues` / (for arrays) `Count`, and filter fields cannot end with `Stringified`. Reserved names `id, createdAt, updatedAt, counter, in, nin, …, connect, create, pageInfo` are forbidden (except in virtual entities). `freeze` is forbidden in embedded/virtual entities.
+Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no plural (`pluralize(name) === name`), not `DateTime/Node/node/PageInfo`. Fields cannot contain `_`, cannot end with `ThroughConnection` / `DistinctValues` / (for arrays) `Count`, and filter fields cannot end with `Stringified`. Reserved names `id, createdAt, updatedAt, counter, in, nin, …, connect, create, pageInfo, relevance` are forbidden (except in virtual entities). `freeze` is forbidden in embedded/virtual entities.
 
 ---
 

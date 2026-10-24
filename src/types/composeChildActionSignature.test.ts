@@ -91,6 +91,7 @@ describe('composeChildActionSignature util', () => {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  relevance_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
